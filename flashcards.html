@@ -246,6 +246,8 @@
     <div class="shortcuts-info">
         <kbd>Espacio</kbd> girar &nbsp; <kbd>&#8592;</kbd> anterior &nbsp; <kbd>&#8594;</kbd> siguiente &nbsp; <kbd>1</kbd> lo se &nbsp; <kbd>2</kbd> no lo se
     </div>
+
+    <div id="fcSummary" style="display:none;"></div>
 </div>
 
 <div class="footer">CrowdStrike Falcon Administrator - Material de estudio</div>
@@ -322,32 +324,44 @@ const allCards = [
 
 let currentCards = [];
 let currentIdx = 0;
-let known = 0;
-let unknown = 0;
+let marked = {}; // track which cards have been marked: { index: 'known' | 'unknown' }
 
 function filterCards(cat) {
     currentCards = cat === 'all' ? [...allCards] : allCards.filter(c => c.cat === cat);
     currentCards.sort(() => Math.random() - 0.5);
     currentIdx = 0;
-    known = 0;
-    unknown = 0;
+    marked = {};
     renderCard();
     updateStats();
+    document.getElementById('fcSummary').style.display = 'none';
+    document.getElementById('flashcardContainer').style.display = '';
+    document.querySelector('.fc-actions').style.display = '';
+    document.querySelector('.fc-controls').style.display = '';
 }
 
 function renderCard() {
     if (currentCards.length === 0) return;
     const c = currentCards[currentIdx];
+    const isMarked = marked[currentIdx] !== undefined;
+
     document.getElementById('flashcard').classList.remove('flipped');
     setTimeout(() => {
         document.getElementById('fcFront').innerHTML = `
             <div class="term">${c.front}</div>
             <div class="hint">${c.hint}</div>
-            <div class="flip-hint">Clic para girar</div>
+            <div class="flip-hint">${isMarked ? (marked[currentIdx] === 'known' ? '&#10003; Lo sabes' : '&#10007; No lo sabes') : 'Clic para girar'}</div>
         `;
         document.getElementById('fcBack').innerHTML = `<div class="answer">${c.back}</div>`;
     }, 150);
     document.getElementById('fcCounter').textContent = `${currentIdx + 1} / ${currentCards.length}`;
+
+    // Disable/enable action buttons
+    const btns = document.querySelectorAll('.fc-actions button');
+    btns.forEach(b => {
+        b.disabled = isMarked;
+        b.style.opacity = isMarked ? '0.4' : '1';
+        b.style.cursor = isMarked ? 'default' : 'pointer';
+    });
 }
 
 function flipCard() {
@@ -363,15 +377,93 @@ function prevCard() {
 }
 
 function markCard(isKnown) {
-    if (isKnown) known++; else unknown++;
+    if (marked[currentIdx] !== undefined) return; // already marked
+    marked[currentIdx] = isKnown ? 'known' : 'unknown';
     updateStats();
-    nextCard();
+
+    // Check if all cards are marked
+    if (Object.keys(marked).length === currentCards.length) {
+        setTimeout(showSummary, 300);
+        return;
+    }
+
+    // Auto-advance to next unmarked card
+    let next = currentIdx + 1;
+    while (next < currentCards.length && marked[next] !== undefined) next++;
+    if (next < currentCards.length) {
+        currentIdx = next;
+        renderCard();
+    } else {
+        // Go back to find unmarked
+        next = 0;
+        while (next < currentCards.length && marked[next] !== undefined) next++;
+        if (next < currentCards.length) { currentIdx = next; renderCard(); }
+    }
 }
 
 function updateStats() {
+    let known = 0, unknown = 0;
+    Object.values(marked).forEach(v => { if (v === 'known') known++; else unknown++; });
     document.getElementById('knownCount').textContent = known;
     document.getElementById('unknownCount').textContent = unknown;
     document.getElementById('remainCount').textContent = currentCards.length - known - unknown;
+}
+
+function showSummary() {
+    let known = 0, unknown = 0;
+    const wrongCards = [];
+    Object.entries(marked).forEach(([idx, val]) => {
+        if (val === 'known') known++;
+        else { unknown++; wrongCards.push(currentCards[idx]); }
+    });
+
+    document.getElementById('flashcardContainer').style.display = 'none';
+    document.querySelector('.fc-actions').style.display = 'none';
+    document.querySelector('.fc-controls').style.display = 'none';
+
+    const pct = Math.round((known / currentCards.length) * 100);
+
+    let wrongHtml = '';
+    if (wrongCards.length > 0) {
+        wrongHtml = '<div style="text-align:left;margin-top:25px;"><h3 style="color:#e94560;margin-bottom:12px;">Tarjetas para repasar:</h3>' +
+            wrongCards.map(c => `<div style="background:#0f1923;border-radius:10px;padding:14px 18px;margin-bottom:8px;border-left:3px solid #e94560;">
+                <div style="color:#fff;font-weight:700;margin-bottom:6px;">${c.front} <span style="color:#5dade2;font-size:0.8rem;">(${c.hint})</span></div>
+                <div style="color:#b0bec5;font-size:0.9rem;">${c.back}</div>
+            </div>`).join('') + '</div>';
+    }
+
+    const summary = document.getElementById('fcSummary');
+    summary.style.display = 'block';
+    summary.innerHTML = `
+        <div style="text-align:center;padding:30px 0;">
+            <div style="font-size:3.5rem;font-weight:700;color:${pct >= 70 ? '#27ae60' : '#e74c3c'};margin-bottom:8px;">${pct}%</div>
+            <div style="color:#8892a4;font-size:1rem;margin-bottom:25px;">${known} de ${currentCards.length} tarjetas correctas</div>
+            <div style="display:flex;justify-content:center;gap:25px;margin-bottom:25px;">
+                <div><div style="font-size:2rem;font-weight:700;color:#27ae60;">${known}</div><div style="color:#8892a4;font-size:0.8rem;">Lo se</div></div>
+                <div><div style="font-size:2rem;font-weight:700;color:#e74c3c;">${unknown}</div><div style="color:#8892a4;font-size:0.8rem;">No lo se</div></div>
+            </div>
+            <button class="btn btn-primary" onclick="filterCards(document.querySelector('.category-selector .active').dataset.cat)" style="margin-right:10px;">Repetir</button>
+            ${wrongCards.length > 0 ? '<button class="btn btn-secondary" onclick="retryWrong()" style="border-color:#e94560;color:#e94560;">Solo las que falle (' + wrongCards.length + ')</button>' : ''}
+            ${wrongHtml}
+        </div>
+    `;
+}
+
+function retryWrong() {
+    // Get wrong cards
+    const wrongCards = [];
+    Object.entries(marked).forEach(([idx, val]) => {
+        if (val === 'unknown') wrongCards.push(currentCards[idx]);
+    });
+    currentCards = wrongCards.sort(() => Math.random() - 0.5);
+    currentIdx = 0;
+    marked = {};
+    document.getElementById('fcSummary').style.display = 'none';
+    document.getElementById('flashcardContainer').style.display = '';
+    document.querySelector('.fc-actions').style.display = '';
+    document.querySelector('.fc-controls').style.display = '';
+    renderCard();
+    updateStats();
 }
 
 // Category selector

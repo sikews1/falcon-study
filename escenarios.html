@@ -249,6 +249,17 @@
         }
 
         .back-btn:hover { text-decoration: underline; }
+
+        .lang-hint {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            margin-top: 4px;
+            font-style: italic;
+            border-left: 2px solid var(--border-subtle);
+            padding-left: 8px;
+        }
     </style>
 </head>
 <body>
@@ -272,7 +283,9 @@
     <!-- LISTA DE ESCENARIOS -->
     <div id="scenarioList" class="scenario-list">
 
-        <div class="scenario-card" onclick="showScenario(0)">
+        <div class="scenario-card" onclick="showScenario(0)"
+             data-title-en="Ransomware detected on a server"
+             data-desc-en="On a Friday afternoon, Falcon generates a Critical alert on a production server. The Process Tree shows suspicious file encryption activity.">
             <div class="scenario-header">
                 <div class="scenario-icon">&#x1F6A8;</div>
                 <div>
@@ -284,7 +297,9 @@
             <div class="scenario-tags"><span>Detecciones</span><span>Containment</span><span>RTR</span><span>Respuesta a incidentes</span></div>
         </div>
 
-        <div class="scenario-card" onclick="showScenario(1)">
+        <div class="scenario-card" onclick="showScenario(1)"
+             data-title-en="Deploy Falcon on 200 new machines"
+             data-desc-en="Your company just opened a new office with 200 PCs. You need to deploy the Falcon sensor, organize them into groups, and apply the correct policies.">
             <div class="scenario-header">
                 <div class="scenario-icon">&#x1F4E6;</div>
                 <div>
@@ -296,7 +311,9 @@
             <div class="scenario-tags"><span>Onboarding</span><span>Host Groups</span><span>Policies</span><span>Sensor</span></div>
         </div>
 
-        <div class="scenario-card" onclick="showScenario(2)">
+        <div class="scenario-card" onclick="showScenario(2)"
+             data-title-en="False positive blocking critical software"
+             data-desc-en="The accounting department reports that Falcon blocks their invoicing software every time they try to run it. It is legitimate software.">
             <div class="scenario-header">
                 <div class="scenario-icon">&#x26A0;&#xFE0F;</div>
                 <div>
@@ -308,7 +325,9 @@
             <div class="scenario-tags"><span>Exclusiones</span><span>Prevention Policy</span><span>Falsos positivos</span></div>
         </div>
 
-        <div class="scenario-card" onclick="showScenario(3)">
+        <div class="scenario-card" onclick="showScenario(3)"
+             data-title-en="Lateral movement detected in the network"
+             data-desc-en="Falcon detects that an attacker is using stolen credentials to move between machines on the network. Multiple High detections appear on different hosts.">
             <div class="scenario-header">
                 <div class="scenario-icon">&#x1F47E;</div>
                 <div>
@@ -320,7 +339,9 @@
             <div class="scenario-tags"><span>Lateral Movement</span><span>Investigacion</span><span>Identity</span><span>Containment</span></div>
         </div>
 
-        <div class="scenario-card" onclick="showScenario(4)">
+        <div class="scenario-card" onclick="showScenario(4)"
+             data-title-en="Set up automation with Falcon Fusion"
+             data-desc-en="Your boss wants Critical detections on production servers to be automatically contained and the security team notified by email.">
             <div class="scenario-header">
                 <div class="scenario-icon">&#x1F4CA;</div>
                 <div>
@@ -332,7 +353,9 @@
             <div class="scenario-tags"><span>Falcon Fusion</span><span>SOAR</span><span>Workflows</span><span>Automatizacion</span></div>
         </div>
 
-        <div class="scenario-card" onclick="showScenario(5)">
+        <div class="scenario-card" onclick="showScenario(5)"
+             data-title-en="Investigate a suspicious phishing attempt"
+             data-desc-en="An employee reports clicking a link in a suspicious email. Falcon shows a Medium detection on their machine with PowerShell activity.">
             <div class="scenario-header">
                 <div class="scenario-icon">&#x1F50D;</div>
                 <div>
@@ -361,6 +384,7 @@ const scenarios = [
     // 0 - Ransomware
     {
         title: "Ransomware detectado en un servidor de produccion",
+        title_en: "Ransomware detected on a production server",
         situation: `<p>Es viernes a las 17:30. Estas a punto de irte cuando recibes una notificacion de Falcon: <strong>deteccion Critical en PROD-SRV-DB01</strong>, un servidor de base de datos de produccion.</p>
         <p>Abres la consola y ves la alerta. El Process Tree muestra:</p>
         <div class="alert-info">
@@ -369,36 +393,84 @@ const scenarios = [
         Severity: Critical | IOA: Ransomware behavior detected
         </div>
         <p>El usuario del servidor abrio un documento de Word que llego por email. Ese documento lanzo PowerShell, que descargo y ejecuto un binario que esta cifrando archivos.</p>`,
+        situation_en: `<p>It's Friday at 5:30 PM. You're about to leave when you receive a Falcon notification: <strong>Critical detection on PROD-SRV-DB01</strong>, a production database server.</p>
+        <p>You open the console and see the alert. The Process Tree shows:</p>
+        <div class="alert-info">
+        explorer.exe → outlook.exe → WINWORD.EXE → cmd.exe → powershell.exe → encrypt.exe<br>
+        Tactic: Impact | Technique: Data Encrypted for Impact (T1486)<br>
+        Severity: Critical | IOA: Ransomware behavior detected
+        </div>
+        <p>The server user opened a Word document that arrived by email. That document launched PowerShell, which downloaded and executed a binary that is encrypting files.</p>`,
         steps: [
-            { title: "CONTENER INMEDIATAMENTE - Network Containment", content: `<p>Lo primero es <strong>aislar el servidor de la red</strong> para evitar que el ransomware se propague a otros equipos.</p><p>En la Falcon Console:</p><div class="console-path">Host Management → busca PROD-SRV-DB01 → Network Containment → Contain</div><p>Esto aisla el equipo de toda la red pero <strong>mantiene la conexion con CrowdStrike</strong>, asi puedes seguir investigando remotamente.</p><p><em>Tiempo critico: cada segundo cuenta. El ransomware puede estar cifrando archivos y moviéndose lateralmente.</em></p>` },
-            { title: "VERIFICAR el alcance - ¿Hay mas equipos afectados?", content: `<p>Busca en la consola si hay <strong>detecciones similares en otros equipos</strong>:</p><div class="console-path">Activity → Detections → Filtrar por: "Ransomware" o la misma tecnica T1486</div><p>Comprueba tambien si el email de phishing se envio a mas personas. Si es asi, <strong>contén esos equipos tambien</strong> como medida preventiva.</p><p>Revisa si hay detecciones de <strong>lateral movement</strong> desde este servidor a otros.</p>` },
-            { title: "INVESTIGAR con Process Tree", content: `<p>Haz clic en la deteccion para ver el <strong>Process Tree completo</strong>:</p><p>Busca:</p><p>- <strong>Que proceso inicio todo</strong>: en este caso, un documento de Word (phishing)</p><p>- <strong>Que descargo</strong>: PowerShell descargo encrypt.exe desde una URL (esa URL es el C2)</p><p>- <strong>Que archivos toco</strong>: que archivos se han cifrado</p><p>- <strong>Conexiones de red</strong>: a que IPs se conecto (identifica el C2)</p><p>Anota todos los <strong>IOCs</strong>: hash del malware, IPs del C2, dominio del email de phishing.</p>` },
-            { title: "RESPONDER - Usar RTR para limpiar", content: `<p>Conectate al servidor via <strong>RTR (Real Time Response)</strong>:</p><div class="console-path">Host Management → PROD-SRV-DB01 → Connect (RTR)</div><p>Desde RTR puedes:</p><p>- <strong>Matar el proceso</strong> malicioso si sigue ejecutandose: <em>kill encrypt.exe</em></p><p>- <strong>Recopilar archivos</strong> para analisis forense: el binario malicioso, logs, etc.</p><p>- <strong>Ver el registro</strong> de Windows por cambios de persistencia</p><p>- <strong>Comprobar</strong> que archivos se han cifrado y cuales se pueden recuperar del backup</p>` },
-            { title: "DOCUMENTAR y cerrar la deteccion", content: `<p>Actualiza el estado de la deteccion:</p><div class="console-path">Detection → Set Status: True Positive → Assign to: tu nombre → Add comment</div><p>Documenta:</p><p>- Que paso (phishing → Word → PowerShell → ransomware)</p><p>- Que acciones tomaste (containment, RTR, kill process)</p><p>- IOCs encontrados (hashes, IPs, dominios)</p><p>- Impacto (que archivos se cifraron, si hay backup disponible)</p>` },
-            { title: "PREVENIR - Acciones post-incidente", content: `<p>Despues del incidente:</p><p>- <strong>Bloquear los IOCs</strong>: anadir el hash del malware y las IPs del C2 a las listas de bloqueo</p><p>- <strong>Revisar las Prevention Policies</strong>: asegurarte de que las politicas del grupo de servidores son suficientemente agresivas</p><p>- <strong>Crear un workflow en Falcon Fusion</strong>: si se detecta ransomware en servidores, contener automaticamente</p><p>- <strong>Avisar a los usuarios</strong>: recordar que no abran adjuntos sospechosos</p><p>- <strong>Verificar backups</strong>: restaurar los archivos cifrados desde el backup</p>` }
+            { title: "CONTENER INMEDIATAMENTE - Network Containment",
+              title_en: "CONTAIN IMMEDIATELY - Network Containment",
+              content: `<p>Lo primero es <strong>aislar el servidor de la red</strong> para evitar que el ransomware se propague a otros equipos.</p><p>En la Falcon Console:</p><div class="console-path">Host Management → busca PROD-SRV-DB01 → Network Containment → Contain</div><p>Esto aisla el equipo de toda la red pero <strong>mantiene la conexion con CrowdStrike</strong>, asi puedes seguir investigando remotamente.</p><p><em>Tiempo critico: cada segundo cuenta. El ransomware puede estar cifrando archivos y moviendose lateralmente.</em></p>`,
+              content_en: `<p>The first thing is to <strong>isolate the server from the network</strong> to prevent the ransomware from spreading to other machines.</p><p>In the Falcon Console:</p><div class="console-path">Host Management → search PROD-SRV-DB01 → Network Containment → Contain</div><p>This isolates the machine from the entire network but <strong>maintains the connection to CrowdStrike</strong>, so you can continue investigating remotely.</p><p><em>Critical time: every second counts. The ransomware may be encrypting files and moving laterally.</em></p>` },
+            { title: "VERIFICAR el alcance - ¿Hay mas equipos afectados?",
+              title_en: "VERIFY the scope - Are more machines affected?",
+              content: `<p>Busca en la consola si hay <strong>detecciones similares en otros equipos</strong>:</p><div class="console-path">Activity → Detections → Filtrar por: "Ransomware" o la misma tecnica T1486</div><p>Comprueba tambien si el email de phishing se envio a mas personas. Si es asi, <strong>contén esos equipos tambien</strong> como medida preventiva.</p><p>Revisa si hay detecciones de <strong>lateral movement</strong> desde este servidor a otros.</p>`,
+              content_en: `<p>Search the console for <strong>similar detections on other machines</strong>:</p><div class="console-path">Activity → Detections → Filter by: "Ransomware" or the same technique T1486</div><p>Also check if the phishing email was sent to more people. If so, <strong>contain those machines too</strong> as a preventive measure.</p><p>Check for <strong>lateral movement</strong> detections from this server to others.</p>` },
+            { title: "INVESTIGAR con Process Tree",
+              title_en: "INVESTIGATE with Process Tree",
+              content: `<p>Haz clic en la deteccion para ver el <strong>Process Tree completo</strong>:</p><p>Busca:</p><p>- <strong>Que proceso inicio todo</strong>: en este caso, un documento de Word (phishing)</p><p>- <strong>Que descargo</strong>: PowerShell descargo encrypt.exe desde una URL (esa URL es el C2)</p><p>- <strong>Que archivos toco</strong>: que archivos se han cifrado</p><p>- <strong>Conexiones de red</strong>: a que IPs se conecto (identifica el C2)</p><p>Anota todos los <strong>IOCs</strong>: hash del malware, IPs del C2, dominio del email de phishing.</p>`,
+              content_en: `<p>Click on the detection to see the <strong>full Process Tree</strong>:</p><p>Look for:</p><p>- <strong>Which process started everything</strong>: in this case, a Word document (phishing)</p><p>- <strong>What it downloaded</strong>: PowerShell downloaded encrypt.exe from a URL (that URL is the C2)</p><p>- <strong>What files it touched</strong>: which files have been encrypted</p><p>- <strong>Network connections</strong>: which IPs it connected to (identify the C2)</p><p>Note down all the <strong>IOCs</strong>: malware hash, C2 IPs, phishing email domain.</p>` },
+            { title: "RESPONDER - Usar RTR para limpiar",
+              title_en: "RESPOND - Use RTR to clean up",
+              content: `<p>Conectate al servidor via <strong>RTR (Real Time Response)</strong>:</p><div class="console-path">Host Management → PROD-SRV-DB01 → Connect (RTR)</div><p>Desde RTR puedes:</p><p>- <strong>Matar el proceso</strong> malicioso si sigue ejecutandose: <em>kill encrypt.exe</em></p><p>- <strong>Recopilar archivos</strong> para analisis forense: el binario malicioso, logs, etc.</p><p>- <strong>Ver el registro</strong> de Windows por cambios de persistencia</p><p>- <strong>Comprobar</strong> que archivos se han cifrado y cuales se pueden recuperar del backup</p>`,
+              content_en: `<p>Connect to the server via <strong>RTR (Real Time Response)</strong>:</p><div class="console-path">Host Management → PROD-SRV-DB01 → Connect (RTR)</div><p>From RTR you can:</p><p>- <strong>Kill the process</strong> if it is still running: <em>kill encrypt.exe</em></p><p>- <strong>Collect files</strong> for forensic analysis: the malicious binary, logs, etc.</p><p>- <strong>Check the Windows registry</strong> for persistence changes</p><p>- <strong>Verify</strong> which files have been encrypted and which can be recovered from backup</p>` },
+            { title: "DOCUMENTAR y cerrar la deteccion",
+              title_en: "DOCUMENT and close the detection",
+              content: `<p>Actualiza el estado de la deteccion:</p><div class="console-path">Detection → Set Status: True Positive → Assign to: tu nombre → Add comment</div><p>Documenta:</p><p>- Que paso (phishing → Word → PowerShell → ransomware)</p><p>- Que acciones tomaste (containment, RTR, kill process)</p><p>- IOCs encontrados (hashes, IPs, dominios)</p><p>- Impacto (que archivos se cifraron, si hay backup disponible)</p>`,
+              content_en: `<p>Update the detection status:</p><div class="console-path">Detection → Set Status: True Positive → Assign to: your name → Add comment</div><p>Document:</p><p>- What happened (phishing → Word → PowerShell → ransomware)</p><p>- What actions you took (containment, RTR, kill process)</p><p>- IOCs found (hashes, IPs, domains)</p><p>- Impact (which files were encrypted, whether backup is available)</p>` },
+            { title: "PREVENIR - Acciones post-incidente",
+              title_en: "PREVENT - Post-incident actions",
+              content: `<p>Despues del incidente:</p><p>- <strong>Bloquear los IOCs</strong>: anadir el hash del malware y las IPs del C2 a las listas de bloqueo</p><p>- <strong>Revisar las Prevention Policies</strong>: asegurarte de que las politicas del grupo de servidores son suficientemente agresivas</p><p>- <strong>Crear un workflow en Falcon Fusion</strong>: si se detecta ransomware en servidores, contener automaticamente</p><p>- <strong>Avisar a los usuarios</strong>: recordar que no abran adjuntos sospechosos</p><p>- <strong>Verificar backups</strong>: restaurar los archivos cifrados desde el backup</p>`,
+              content_en: `<p>After the incident:</p><p>- <strong>Block the IOCs</strong>: add the malware hash and C2 IPs to blocklists</p><p>- <strong>Review Prevention Policies</strong>: ensure the server group policies are aggressive enough</p><p>- <strong>Create a Falcon Fusion workflow</strong>: if ransomware is detected on servers, contain automatically</p><p>- <strong>Warn users</strong>: remind them not to open suspicious attachments</p><p>- <strong>Verify backups</strong>: restore encrypted files from backup</p>` }
         ],
-        learnings: ["Network Containment es tu primera accion ante una amenaza critica", "El Process Tree te cuenta toda la historia del ataque", "RTR te permite actuar remotamente sin necesidad de estar fisicamente en el servidor", "Siempre documenta: quien, que, cuando, como, impacto", "Despues del incidente: bloquear IOCs, reforzar politicas, automatizar con Fusion"]
+        learnings: ["Network Containment es tu primera accion ante una amenaza critica", "El Process Tree te cuenta toda la historia del ataque", "RTR te permite actuar remotamente sin necesidad de estar fisicamente en el servidor", "Siempre documenta: quien, que, cuando, como, impacto", "Despues del incidente: bloquear IOCs, reforzar politicas, automatizar con Fusion"],
+        learnings_en: ["Network Containment is your first action against a critical threat", "The Process Tree tells you the entire story of the attack", "RTR allows you to act remotely without needing to be physically at the server", "Always document: who, what, when, how, impact", "After the incident: block IOCs, strengthen policies, automate with Fusion"]
     },
 
     // 1 - Despliegue
     {
         title: "Desplegar Falcon en 200 equipos de nueva oficina",
+        title_en: "Deploy Falcon on 200 machines in a new office",
         situation: `<p>Tu empresa ha abierto una nueva oficina en Barcelona con <strong>200 equipos nuevos</strong>: 180 portatiles Windows para empleados y 20 servidores Windows Server.</p>
         <p>Tu tarea: desplegar el sensor de Falcon en todos, organizarlos correctamente y asegurar que las politicas adecuadas estan aplicadas. Los equipos ya estan en el dominio de Active Directory bajo la OU "Barcelona".</p>
         <div class="alert-info">Requisitos: Portatiles con politica estandar, servidores con politica mas restrictiva. Todos deben estar protegidos antes del lunes.</div>`,
+        situation_en: `<p>Your company has opened a new office in Barcelona with <strong>200 new machines</strong>: 180 Windows laptops for employees and 20 Windows Server machines.</p>
+        <p>Your task: deploy the Falcon sensor on all of them, organize them properly, and ensure the right policies are applied. The machines are already in the Active Directory domain under the OU "Barcelona".</p>
+        <div class="alert-info">Requirements: Laptops with standard policy, servers with a more restrictive policy. All must be protected before Monday.</div>`,
         steps: [
-            { title: "PLANIFICAR - Preparar Host Groups", content: `<p>Antes de instalar sensores, crea los grupos donde iran los equipos:</p><div class="console-path">Host setup and management → Groups → Create Group</div><p>Crea dos <strong>Host Groups dinamicos</strong>:</p><p>- <strong>"Barcelona - Portatiles"</strong>: regla = OU contains "Barcelona" AND Type = "Workstation"</p><p>- <strong>"Barcelona - Servidores"</strong>: regla = OU contains "Barcelona" AND Type = "Server"</p><p>Usa <em>grupos dinamicos</em>, no estaticos. Asi cuando los sensores se instalen, los equipos se asignaran <strong>automaticamente</strong> al grupo correcto.</p><p>Tambien puedes usar <strong>Sensor Tags</strong>: anadir el tag "barcelona" durante la instalacion.</p>` },
-            { title: "CONFIGURAR - Asignar Prevention Policies", content: `<p>Asigna las politicas de prevencion a cada grupo:</p><div class="console-path">Configuration → Prevention Policies → Assign to Group</div><p>- <strong>"Barcelona - Portatiles"</strong> → Prevention Policy estandar (la misma que el resto de portatiles)</p><p>- <strong>"Barcelona - Servidores"</strong> → Prevention Policy de servidores (mas restrictiva: bloquea mas cosas, menos exclusiones)</p><p>Haz lo mismo con <strong>Sensor Update Policies</strong>: pon los servidores en canal <em>N-1</em> (una version atras, mas estable) y los portatiles en <em>N</em> (ultima version).</p>` },
-            { title: "DESPLEGAR - Instalar sensores via GPO", content: `<p>Para 200 equipos, la instalacion manual no es viable. Usa <strong>GPO (Group Policy)</strong>:</p><p>1. Descarga el instalador del sensor desde la Falcon Console:</p><div class="console-path">Host setup and management → Sensor Downloads → descarga el .exe para Windows</div><p>2. Obten tu <strong>CID</strong> desde la consola (Host setup → Sensor Downloads)</p><p>3. Crea una GPO en Active Directory que ejecute el instalador con el CID como parametro en todos los equipos de la OU "Barcelona"</p><p>4. Opcionalmente, anade <strong>Sensor Tags</strong> durante la instalacion: <em>--tags="barcelona"</em></p><p><em>Los equipos instalaran el sensor automaticamente la proxima vez que apliquen las Group Policies.</em></p>` },
-            { title: "VERIFICAR - Comprobar el despliegue", content: `<p>Espera unas horas y verifica que los sensores estan reportando:</p><div class="console-path">Host setup and management → Host Management → Filtrar por Group "Barcelona"</div><p>Comprueba:</p><p>- <strong>Numero de hosts</strong>: deben aparecer los 200 equipos</p><p>- <strong>Estado del sensor</strong>: todos deben estar "Online" (el ultimo check-in debe ser reciente)</p><p>- <strong>Politica asignada</strong>: verifica que cada equipo tiene la politica correcta</p><p>- <strong>Version del sensor</strong>: confirma que tienen la version esperada segun la Sensor Update Policy</p><p>Si algun equipo no aparece, revisa: conectividad a internet, firewall bloqueando CrowdStrike, error en la GPO.</p>` },
-            { title: "VALIDAR - Test de deteccion", content: `<p>Haz una prueba para confirmar que Falcon esta funcionando correctamente en los nuevos equipos:</p><p>Selecciona un equipo de prueba y genera una <strong>deteccion de test</strong> (CrowdStrike proporciona scripts de prueba seguros).</p><p>Verifica que:</p><p>- La deteccion aparece en la consola</p><p>- Se asigna al Host Group correcto</p><p>- La Prevention Policy bloquea la amenaza simulada</p><p><em>Esto confirma que toda la cadena funciona: sensor → nube → deteccion → politica.</em></p>` }
+            { title: "PLANIFICAR - Preparar Host Groups",
+              title_en: "PLAN - Prepare Host Groups",
+              content: `<p>Antes de instalar sensores, crea los grupos donde iran los equipos:</p><div class="console-path">Host setup and management → Groups → Create Group</div><p>Crea dos <strong>Host Groups dinamicos</strong>:</p><p>- <strong>"Barcelona - Portatiles"</strong>: regla = OU contains "Barcelona" AND Type = "Workstation"</p><p>- <strong>"Barcelona - Servidores"</strong>: regla = OU contains "Barcelona" AND Type = "Server"</p><p>Usa <em>grupos dinamicos</em>, no estaticos. Asi cuando los sensores se instalen, los equipos se asignaran <strong>automaticamente</strong> al grupo correcto.</p><p>Tambien puedes usar <strong>Sensor Tags</strong>: anadir el tag "barcelona" durante la instalacion.</p>`,
+              content_en: `<p>Before installing sensors, create the groups where the machines will go:</p><div class="console-path">Host setup and management → Groups → Create Group</div><p>Create two <strong>dynamic Host Groups</strong>:</p><p>- <strong>"Barcelona - Laptops"</strong>: rule = OU contains "Barcelona" AND Type = "Workstation"</p><p>- <strong>"Barcelona - Servers"</strong>: rule = OU contains "Barcelona" AND Type = "Server"</p><p>Use <em>dynamic groups</em>, not static ones. This way when sensors are installed, machines will be <strong>automatically</strong> assigned to the correct group.</p><p>You can also use <strong>Sensor Tags</strong>: add the tag "barcelona" during installation.</p>` },
+            { title: "CONFIGURAR - Asignar Prevention Policies",
+              title_en: "CONFIGURE - Assign Prevention Policies",
+              content: `<p>Asigna las politicas de prevencion a cada grupo:</p><div class="console-path">Configuration → Prevention Policies → Assign to Group</div><p>- <strong>"Barcelona - Portatiles"</strong> → Prevention Policy estandar (la misma que el resto de portatiles)</p><p>- <strong>"Barcelona - Servidores"</strong> → Prevention Policy de servidores (mas restrictiva: bloquea mas cosas, menos exclusiones)</p><p>Haz lo mismo con <strong>Sensor Update Policies</strong>: pon los servidores en canal <em>N-1</em> (una version atras, mas estable) y los portatiles en <em>N</em> (ultima version).</p>`,
+              content_en: `<p>Assign prevention policies to each group:</p><div class="console-path">Configuration → Prevention Policies → Assign to Group</div><p>- <strong>"Barcelona - Laptops"</strong> → standard Prevention Policy (same as the rest of the laptops)</p><p>- <strong>"Barcelona - Servers"</strong> → server Prevention Policy (more restrictive: blocks more things, fewer exclusions)</p><p>Do the same with <strong>Sensor Update Policies</strong>: set servers to channel <em>N-1</em> (one version behind, more stable) and laptops to <em>N</em> (latest version).</p>` },
+            { title: "DESPLEGAR - Instalar sensores via GPO",
+              title_en: "DEPLOY - Install sensors via GPO",
+              content: `<p>Para 200 equipos, la instalacion manual no es viable. Usa <strong>GPO (Group Policy)</strong>:</p><p>1. Descarga el instalador del sensor desde la Falcon Console:</p><div class="console-path">Host setup and management → Sensor Downloads → descarga el .exe para Windows</div><p>2. Obten tu <strong>CID</strong> desde la consola (Host setup → Sensor Downloads)</p><p>3. Crea una GPO en Active Directory que ejecute el instalador con el CID como parametro en todos los equipos de la OU "Barcelona"</p><p>4. Opcionalmente, anade <strong>Sensor Tags</strong> durante la instalacion: <em>--tags="barcelona"</em></p><p><em>Los equipos instalaran el sensor automaticamente la proxima vez que apliquen las Group Policies.</em></p>`,
+              content_en: `<p>For 200 machines, manual installation is not feasible. Use <strong>GPO (Group Policy)</strong>:</p><p>1. Download the sensor installer from the Falcon Console:</p><div class="console-path">Host setup and management → Sensor Downloads → download the .exe for Windows</div><p>2. Get your <strong>CID</strong> from the console (Host setup → Sensor Downloads)</p><p>3. Create a GPO in Active Directory that runs the installer with the CID as a parameter on all machines in the "Barcelona" OU</p><p>4. Optionally, add <strong>Sensor Tags</strong> during installation: <em>--tags="barcelona"</em></p><p><em>The machines will install the sensor automatically the next time they apply Group Policies.</em></p>` },
+            { title: "VERIFICAR - Comprobar el despliegue",
+              title_en: "VERIFY - Check the deployment",
+              content: `<p>Espera unas horas y verifica que los sensores estan reportando:</p><div class="console-path">Host setup and management → Host Management → Filtrar por Group "Barcelona"</div><p>Comprueba:</p><p>- <strong>Numero de hosts</strong>: deben aparecer los 200 equipos</p><p>- <strong>Estado del sensor</strong>: todos deben estar "Online" (el ultimo check-in debe ser reciente)</p><p>- <strong>Politica asignada</strong>: verifica que cada equipo tiene la politica correcta</p><p>- <strong>Version del sensor</strong>: confirma que tienen la version esperada segun la Sensor Update Policy</p><p>Si algun equipo no aparece, revisa: conectividad a internet, firewall bloqueando CrowdStrike, error en la GPO.</p>`,
+              content_en: `<p>Wait a few hours and verify that the sensors are reporting:</p><div class="console-path">Host setup and management → Host Management → Filter by Group "Barcelona"</div><p>Check:</p><p>- <strong>Number of hosts</strong>: all 200 machines should appear</p><p>- <strong>Sensor status</strong>: all should be "Online" (the last check-in should be recent)</p><p>- <strong>Assigned policy</strong>: verify each machine has the correct policy</p><p>- <strong>Sensor version</strong>: confirm they have the expected version according to the Sensor Update Policy</p><p>If any machine is missing, check: internet connectivity, firewall blocking CrowdStrike, GPO error.</p>` },
+            { title: "VALIDAR - Test de deteccion",
+              title_en: "VALIDATE - Detection test",
+              content: `<p>Haz una prueba para confirmar que Falcon esta funcionando correctamente en los nuevos equipos:</p><p>Selecciona un equipo de prueba y genera una <strong>deteccion de test</strong> (CrowdStrike proporciona scripts de prueba seguros).</p><p>Verifica que:</p><p>- La deteccion aparece en la consola</p><p>- Se asigna al Host Group correcto</p><p>- La Prevention Policy bloquea la amenaza simulada</p><p><em>Esto confirma que toda la cadena funciona: sensor → nube → deteccion → politica.</em></p>`,
+              content_en: `<p>Run a test to confirm that Falcon is working correctly on the new machines:</p><p>Select a test machine and generate a <strong>test detection</strong> (CrowdStrike provides safe test scripts).</p><p>Verify that:</p><p>- The detection appears in the console</p><p>- It is assigned to the correct Host Group</p><p>- The Prevention Policy blocks the simulated threat</p><p><em>This confirms the entire chain works: sensor → cloud → detection → policy.</em></p>` }
         ],
-        learnings: ["Host Groups dinamicos son la clave para escalar sin esfuerzo manual", "Sensor Tags ayudan a organizar automaticamente desde la instalacion", "GPO es el metodo mas eficiente para despliegues masivos en Windows con AD", "Siempre verifica: numero de hosts, estado online, politica correcta, version del sensor", "Canal N-1 para servidores (estabilidad) y N para portatiles (ultima version)"]
+        learnings: ["Host Groups dinamicos son la clave para escalar sin esfuerzo manual", "Sensor Tags ayudan a organizar automaticamente desde la instalacion", "GPO es el metodo mas eficiente para despliegues masivos en Windows con AD", "Siempre verifica: numero de hosts, estado online, politica correcta, version del sensor", "Canal N-1 para servidores (estabilidad) y N para portatiles (ultima version)"],
+        learnings_en: ["Dynamic Host Groups are the key to scaling without manual effort", "Sensor Tags help organize automatically from installation", "GPO is the most efficient method for mass deployments on Windows with AD", "Always verify: number of hosts, online status, correct policy, sensor version", "N-1 channel for servers (stability) and N for laptops (latest version)"]
     },
 
     // 2 - Falso positivo
     {
         title: "Falso positivo bloqueando software de contabilidad",
+        title_en: "False positive blocking accounting software",
         situation: `<p>Lunes por la manana. El departamento de contabilidad abre un ticket urgente: <strong>"El antivirus nos bloquea FacturaPlus cada vez que lo abrimos"</strong>.</p>
         <p>Abres la consola de Falcon y ves multiples detecciones Medium en los 5 equipos de contabilidad, todas relacionadas con el proceso <em>facturaplus.exe</em>.</p>
         <div class="alert-info">
@@ -407,19 +479,44 @@ const scenarios = [
         Action: Process blocked (Prevention Policy)<br>
         Hash (SHA256): a1b2c3d4e5f6...
         </div>`,
+        situation_en: `<p>Monday morning. The accounting department opens an urgent ticket: <strong>"The antivirus blocks FacturaPlus every time we open it"</strong>.</p>
+        <p>You open the Falcon console and see multiple Medium detections on the 5 accounting machines, all related to the process <em>facturaplus.exe</em>.</p>
+        <div class="alert-info">
+        Process: C:\\Program Files\\FacturaPlus\\facturaplus.exe<br>
+        Detection: Suspicious process behavior<br>
+        Action: Process blocked (Prevention Policy)<br>
+        Hash (SHA256): a1b2c3d4e5f6...
+        </div>`,
         steps: [
-            { title: "CONFIRMAR que es un falso positivo", content: `<p><strong>Nunca crees una exclusion sin verificar primero.</strong> Comprueba:</p><p>1. <strong>El software es legitimo</strong>: ¿FacturaPlus es un software conocido y aprobado por la empresa?</p><p>2. <strong>El hash</strong>: busca el hash SHA256 en VirusTotal u otros servicios. Si ningun motor lo marca como malicioso, es buena senal.</p><p>3. <strong>El comportamiento</strong>: lee la deteccion en detalle. ¿Que hizo exactamente el proceso para que Falcon lo bloqueara? Quizas accede al registro de una forma que parece sospechosa pero es normal para software de facturacion.</p><p>4. <strong>El origen</strong>: ¿Se descargo de la web oficial? ¿Lo instalo TI o el usuario?</p>` },
-            { title: "CREAR una exclusion apropiada", content: `<p>Una vez confirmado que es legitimo, crea la exclusion:</p><div class="console-path">Configuration → Prevention Policies → Exclusions → Add Exclusion</div><p>Tienes varias opciones:</p><p>- <strong>Por ruta</strong>: excluir <em>C:\\Program Files\\FacturaPlus\\</em> (excluye todo lo que este en esa carpeta)</p><p>- <strong>Por hash</strong>: excluir el hash SHA256 especifico de facturaplus.exe (mas seguro, solo excluye ese archivo exacto)</p><p>- <strong>Por proceso</strong>: excluir el proceso <em>facturaplus.exe</em></p><p><em>Recomendacion: usa la exclusion por hash cuando sea posible. Es la mas precisa y segura.</em></p>` },
-            { title: "APLICAR solo donde sea necesario", content: `<p>No apliques la exclusion a TODOS los equipos. Aplícala solo al grupo que la necesita:</p><div class="console-path">Exclusion → Assign to Host Group: "Contabilidad"</div><p>Si no tienes un Host Group de contabilidad, crea uno o aplica la exclusion solo a la Prevention Policy de ese grupo.</p><p><em>Principio: cada exclusion reduce tu superficie de deteccion. Aplícala solo donde sea estrictamente necesario.</em></p>` },
-            { title: "MARCAR las detecciones como False Positive", content: `<p>Vuelve a las detecciones y actualiza su estado:</p><div class="console-path">Activity → Detections → selecciona las detecciones de FacturaPlus → Update Status: False Positive</div><p>Anade un comentario explicando: "Software legitimo de facturacion del departamento de contabilidad. Exclusion creada por hash. Verificado en VirusTotal."</p>` },
-            { title: "VERIFICAR y comunicar", content: `<p>Pide a contabilidad que <strong>prueben a abrir FacturaPlus de nuevo</strong>. Deberia funcionar sin problemas.</p><p>Verifica en la consola que <strong>no se generan nuevas detecciones</strong> para ese proceso.</p><p>Responde al ticket documentando: que era un falso positivo, que exclusion creaste, y que esta resuelto.</p>` }
+            { title: "CONFIRMAR que es un falso positivo",
+              title_en: "CONFIRM it is a false positive",
+              content: `<p><strong>Nunca crees una exclusion sin verificar primero.</strong> Comprueba:</p><p>1. <strong>El software es legitimo</strong>: ¿FacturaPlus es un software conocido y aprobado por la empresa?</p><p>2. <strong>El hash</strong>: busca el hash SHA256 en VirusTotal u otros servicios. Si ningun motor lo marca como malicioso, es buena senal.</p><p>3. <strong>El comportamiento</strong>: lee la deteccion en detalle. ¿Que hizo exactamente el proceso para que Falcon lo bloqueara? Quizas accede al registro de una forma que parece sospechosa pero es normal para software de facturacion.</p><p>4. <strong>El origen</strong>: ¿Se descargo de la web oficial? ¿Lo instalo TI o el usuario?</p>`,
+              content_en: `<p><strong>Never create an exclusion without verifying first.</strong> Check:</p><p>1. <strong>The software is legitimate</strong>: Is FacturaPlus a known and company-approved software?</p><p>2. <strong>The hash</strong>: look up the SHA256 hash on VirusTotal or other services. If no engine flags it as malicious, that's a good sign.</p><p>3. <strong>The behavior</strong>: read the detection in detail. What exactly did the process do that caused Falcon to block it? Perhaps it accesses the registry in a way that looks suspicious but is normal for invoicing software.</p><p>4. <strong>The origin</strong>: Was it downloaded from the official website? Was it installed by IT or by the user?</p>` },
+            { title: "CREAR una exclusion apropiada",
+              title_en: "CREATE an appropriate exclusion",
+              content: `<p>Una vez confirmado que es legitimo, crea la exclusion:</p><div class="console-path">Configuration → Prevention Policies → Exclusions → Add Exclusion</div><p>Tienes varias opciones:</p><p>- <strong>Por ruta</strong>: excluir <em>C:\\Program Files\\FacturaPlus\\</em> (excluye todo lo que este en esa carpeta)</p><p>- <strong>Por hash</strong>: excluir el hash SHA256 especifico de facturaplus.exe (mas seguro, solo excluye ese archivo exacto)</p><p>- <strong>Por proceso</strong>: excluir el proceso <em>facturaplus.exe</em></p><p><em>Recomendacion: usa la exclusion por hash cuando sea posible. Es la mas precisa y segura.</em></p>`,
+              content_en: `<p>Once confirmed legitimate, create the exclusion:</p><div class="console-path">Configuration → Prevention Policies → Exclusions → Add Exclusion</div><p>You have several options:</p><p>- <strong>By path</strong>: exclude <em>C:\\Program Files\\FacturaPlus\\</em> (excludes everything in that folder)</p><p>- <strong>By hash</strong>: exclude the specific SHA256 hash of facturaplus.exe (more secure, only excludes that exact file)</p><p>- <strong>By process</strong>: exclude the process <em>facturaplus.exe</em></p><p><em>Recommendation: use hash-based exclusion when possible. It is the most precise and secure.</em></p>` },
+            { title: "APLICAR solo donde sea necesario",
+              title_en: "APPLY only where needed",
+              content: `<p>No apliques la exclusion a TODOS los equipos. Aplícala solo al grupo que la necesita:</p><div class="console-path">Exclusion → Assign to Host Group: "Contabilidad"</div><p>Si no tienes un Host Group de contabilidad, crea uno o aplica la exclusion solo a la Prevention Policy de ese grupo.</p><p><em>Principio: cada exclusion reduce tu superficie de deteccion. Aplícala solo donde sea estrictamente necesario.</em></p>`,
+              content_en: `<p>Do not apply the exclusion to ALL machines. Apply it only to the group that needs it:</p><div class="console-path">Exclusion → Assign to Host Group: "Accounting"</div><p>If you don't have an Accounting Host Group, create one or apply the exclusion only to that group's Prevention Policy.</p><p><em>Principle: every exclusion reduces your detection surface. Apply it only where strictly necessary.</em></p>` },
+            { title: "MARCAR las detecciones como False Positive",
+              title_en: "MARK the detections as False Positive",
+              content: `<p>Vuelve a las detecciones y actualiza su estado:</p><div class="console-path">Activity → Detections → selecciona las detecciones de FacturaPlus → Update Status: False Positive</div><p>Anade un comentario explicando: "Software legitimo de facturacion del departamento de contabilidad. Exclusion creada por hash. Verificado en VirusTotal."</p>`,
+              content_en: `<p>Go back to the detections and update their status:</p><div class="console-path">Activity → Detections → select the FacturaPlus detections → Update Status: False Positive</div><p>Add a comment explaining: "Legitimate invoicing software from the accounting department. Hash-based exclusion created. Verified on VirusTotal."</p>` },
+            { title: "VERIFICAR y comunicar",
+              title_en: "VERIFY and communicate",
+              content: `<p>Pide a contabilidad que <strong>prueben a abrir FacturaPlus de nuevo</strong>. Deberia funcionar sin problemas.</p><p>Verifica en la consola que <strong>no se generan nuevas detecciones</strong> para ese proceso.</p><p>Responde al ticket documentando: que era un falso positivo, que exclusion creaste, y que esta resuelto.</p>`,
+              content_en: `<p>Ask accounting to <strong>try opening FacturaPlus again</strong>. It should work without issues.</p><p>Verify in the console that <strong>no new detections are generated</strong> for that process.</p><p>Reply to the ticket documenting: that it was a false positive, what exclusion you created, and that it is resolved.</p>` }
         ],
-        learnings: ["SIEMPRE verifica antes de crear una exclusion: puede ser malware real", "Usa exclusiones por hash cuando sea posible (mas seguras que por ruta)", "Aplica exclusiones solo al grupo que las necesita, nunca a todos los equipos", "Marca las detecciones como False Positive y documenta el motivo", "Cada exclusion es un punto ciego potencial: menos es mejor"]
+        learnings: ["SIEMPRE verifica antes de crear una exclusion: puede ser malware real", "Usa exclusiones por hash cuando sea posible (mas seguras que por ruta)", "Aplica exclusiones solo al grupo que las necesita, nunca a todos los equipos", "Marca las detecciones como False Positive y documenta el motivo", "Cada exclusion es un punto ciego potencial: menos es mejor"],
+        learnings_en: ["ALWAYS verify before creating an exclusion: it could be real malware", "Use hash-based exclusions when possible (more secure than path-based)", "Apply exclusions only to the group that needs them, never to all machines", "Mark detections as False Positive and document the reason", "Every exclusion is a potential blind spot: less is better"]
     },
 
     // 3 - Lateral Movement
     {
         title: "Movimiento lateral detectado en la red",
+        title_en: "Lateral movement detected in the network",
         situation: `<p>Martes a las 14:00. Falcon muestra <strong>5 detecciones High en 3 equipos diferentes</strong> en los ultimos 30 minutos. Todas estan relacionadas con el uso de credenciales de administrador de dominio.</p>
         <div class="alert-info">
         Host: WKS-RRHH-05 → Tactic: Lateral Movement | Technique: Pass-the-Hash (T1550.002)<br>
@@ -428,35 +525,80 @@ const scenarios = [
         Common user: DOMAIN\\admin_jgarcia (Domain Admin account)
         </div>
         <p>Parece que alguien esta usando la cuenta de administrador de dominio <em>admin_jgarcia</em> para moverse entre equipos. Juan Garcia (el admin) esta de vacaciones.</p>`,
+        situation_en: `<p>Tuesday at 2:00 PM. Falcon shows <strong>5 High detections on 3 different machines</strong> in the last 30 minutes. All are related to the use of domain administrator credentials.</p>
+        <div class="alert-info">
+        Host: WKS-RRHH-05 → Tactic: Lateral Movement | Technique: Pass-the-Hash (T1550.002)<br>
+        Host: WKS-FIN-12 → Tactic: Credential Access | Technique: OS Credential Dumping (T1003)<br>
+        Host: SRV-FILE-01 → Tactic: Lateral Movement | Technique: Remote Services (T1021)<br>
+        Common user: DOMAIN\\admin_jgarcia (Domain Admin account)
+        </div>
+        <p>It appears someone is using the domain administrator account <em>admin_jgarcia</em> to move between machines. Juan Garcia (the admin) is on vacation.</p>`,
         steps: [
-            { title: "CONTENER - Aislar los equipos afectados", content: `<p>Inmediatamente aplica <strong>Network Containment</strong> a los 3 equipos afectados:</p><div class="console-path">Host Management → selecciona WKS-RRHH-05, WKS-FIN-12, SRV-FILE-01 → Contain</div><p>Aislalos de la red para detener el movimiento lateral. El atacante no podra seguir saltando entre equipos.</p><p><em>Prioridad: contener primero, investigar despues. Cada minuto que pasa el atacante puede comprometer mas equipos.</em></p>` },
-            { title: "INVESTIGAR - Rastrear el origen", content: `<p>Analiza las detecciones para reconstruir la cadena:</p><p>1. <strong>¿Donde empezo todo?</strong> Mira los timestamps: el equipo con la primera deteccion es probablemente el punto de entrada (patient zero).</p><p>2. <strong>Process Tree</strong>: en WKS-RRHH-05 (probablemente el primero), busca como se obtuvieron las credenciales. ¿Hay evidencia de <em>Mimikatz</em> o herramientas de dump de credenciales?</p><p>3. <strong>Conexiones</strong>: mira las conexiones de red entre los equipos para ver el camino del atacante.</p><p>4. <strong>Credential Dumping</strong>: la deteccion T1003 indica que el atacante extrajo credenciales. Busca que herramienta uso.</p>` },
-            { title: "RESPONDER - Credenciales comprometidas", content: `<p>Las credenciales de <em>admin_jgarcia</em> estan comprometidas. Acciones inmediatas:</p><p>1. <strong>Deshabilitar la cuenta</strong> en Active Directory (coordinalo con el equipo de TI)</p><p>2. <strong>Resetear la contrasena</strong> de esa cuenta y de cualquier otra cuenta de admin de dominio como precaucion</p><p>3. <strong>Revocar tickets Kerberos</strong>: si el atacante tiene tickets Golden/Silver, cambiar la contrasena del KRBTGT (esto es critico y debe hacerse con cuidado)</p><p>4. Buscar en Falcon si esas credenciales se usaron en <strong>otros equipos que no generaron alerta</strong></p>` },
-            { title: "BUSCAR mas equipos afectados", content: `<p>El atacante pudo haber llegado a mas equipos sin generar detecciones:</p><div class="console-path">Investigate → Search: user:admin_jgarcia | ultimos 7 dias</div><p>Busca todos los equipos donde esa cuenta se autentico recientemente. Si hay equipos donde se uso pero no genero alerta, <strong>conténlos tambien y revisalos</strong>.</p><p>Usa <strong>Falcon Identity Protection</strong> (si lo tienes) para ver un mapa completo de la actividad de esa cuenta.</p>` },
-            { title: "REMEDIAR - Limpiar y restaurar", content: `<p>Una vez contenida la amenaza:</p><p>1. <strong>Usa RTR</strong> en cada equipo afectado para: buscar persistencia (registro, tareas programadas, servicios), eliminar herramientas del atacante, recopilar evidencia forense.</p><p>2. <strong>Reimaginar</strong> los equipos si no puedes garantizar que estan limpios (especialmente el patient zero).</p><p>3. <strong>Liberar del containment</strong> los equipos limpios, uno por uno, monitorizando de cerca.</p><p>4. <strong>Crear reglas en Falcon Fusion</strong>: si se detecta lateral movement, contener automaticamente.</p>` }
+            { title: "CONTENER - Aislar los equipos afectados",
+              title_en: "CONTAIN - Isolate the affected machines",
+              content: `<p>Inmediatamente aplica <strong>Network Containment</strong> a los 3 equipos afectados:</p><div class="console-path">Host Management → selecciona WKS-RRHH-05, WKS-FIN-12, SRV-FILE-01 → Contain</div><p>Aislalos de la red para detener el movimiento lateral. El atacante no podra seguir saltando entre equipos.</p><p><em>Prioridad: contener primero, investigar despues. Cada minuto que pasa el atacante puede comprometer mas equipos.</em></p>`,
+              content_en: `<p>Immediately apply <strong>Network Containment</strong> to the 3 affected machines:</p><div class="console-path">Host Management → select WKS-RRHH-05, WKS-FIN-12, SRV-FILE-01 → Contain</div><p>Isolate them from the network to stop lateral movement. The attacker will not be able to keep jumping between machines.</p><p><em>Priority: contain first, investigate later. Every minute that passes the attacker can compromise more machines.</em></p>` },
+            { title: "INVESTIGAR - Rastrear el origen",
+              title_en: "INVESTIGATE - Trace the origin",
+              content: `<p>Analiza las detecciones para reconstruir la cadena:</p><p>1. <strong>¿Donde empezo todo?</strong> Mira los timestamps: el equipo con la primera deteccion es probablemente el punto de entrada (patient zero).</p><p>2. <strong>Process Tree</strong>: en WKS-RRHH-05 (probablemente el primero), busca como se obtuvieron las credenciales. ¿Hay evidencia de <em>Mimikatz</em> o herramientas de dump de credenciales?</p><p>3. <strong>Conexiones</strong>: mira las conexiones de red entre los equipos para ver el camino del atacante.</p><p>4. <strong>Credential Dumping</strong>: la deteccion T1003 indica que el atacante extrajo credenciales. Busca que herramienta uso.</p>`,
+              content_en: `<p>Analyze the detections to reconstruct the chain:</p><p>1. <strong>Where did it all start?</strong> Look at the timestamps: the machine with the first detection is likely the entry point (patient zero).</p><p>2. <strong>Process Tree</strong>: on WKS-RRHH-05 (probably the first one), look for how credentials were obtained. Is there evidence of <em>Mimikatz</em> or credential dumping tools?</p><p>3. <strong>Connections</strong>: look at network connections between machines to see the attacker's path.</p><p>4. <strong>Credential Dumping</strong>: the T1003 detection indicates the attacker extracted credentials. Find out which tool was used.</p>` },
+            { title: "RESPONDER - Credenciales comprometidas",
+              title_en: "RESPOND - Compromised credentials",
+              content: `<p>Las credenciales de <em>admin_jgarcia</em> estan comprometidas. Acciones inmediatas:</p><p>1. <strong>Deshabilitar la cuenta</strong> en Active Directory (coordinalo con el equipo de TI)</p><p>2. <strong>Resetear la contrasena</strong> de esa cuenta y de cualquier otra cuenta de admin de dominio como precaucion</p><p>3. <strong>Revocar tickets Kerberos</strong>: si el atacante tiene tickets Golden/Silver, cambiar la contrasena del KRBTGT (esto es critico y debe hacerse con cuidado)</p><p>4. Buscar en Falcon si esas credenciales se usaron en <strong>otros equipos que no generaron alerta</strong></p>`,
+              content_en: `<p>The credentials of <em>admin_jgarcia</em> are compromised. Immediate actions:</p><p>1. <strong>Disable the account</strong> in Active Directory (coordinate with the IT team)</p><p>2. <strong>Reset the password</strong> of that account and any other domain admin accounts as a precaution</p><p>3. <strong>Revoke Kerberos tickets</strong>: if the attacker has Golden/Silver tickets, change the KRBTGT password (this is critical and must be done carefully)</p><p>4. Search in Falcon whether those credentials were used on <strong>other machines that did not generate an alert</strong></p>` },
+            { title: "BUSCAR mas equipos afectados",
+              title_en: "SEARCH for more affected machines",
+              content: `<p>El atacante pudo haber llegado a mas equipos sin generar detecciones:</p><div class="console-path">Investigate → Search: user:admin_jgarcia | ultimos 7 dias</div><p>Busca todos los equipos donde esa cuenta se autentico recientemente. Si hay equipos donde se uso pero no genero alerta, <strong>conténlos tambien y revisalos</strong>.</p><p>Usa <strong>Falcon Identity Protection</strong> (si lo tienes) para ver un mapa completo de la actividad de esa cuenta.</p>`,
+              content_en: `<p>The attacker may have reached more machines without generating detections:</p><div class="console-path">Investigate → Search: user:admin_jgarcia | last 7 days</div><p>Search for all machines where that account authenticated recently. If there are machines where it was used but no alert was generated, <strong>contain them too and review them</strong>.</p><p>Use <strong>Falcon Identity Protection</strong> (if available) to see a complete map of that account's activity.</p>` },
+            { title: "REMEDIAR - Limpiar y restaurar",
+              title_en: "REMEDIATE - Clean up and restore",
+              content: `<p>Una vez contenida la amenaza:</p><p>1. <strong>Usa RTR</strong> en cada equipo afectado para: buscar persistencia (registro, tareas programadas, servicios), eliminar herramientas del atacante, recopilar evidencia forense.</p><p>2. <strong>Reimaginar</strong> los equipos si no puedes garantizar que estan limpios (especialmente el patient zero).</p><p>3. <strong>Liberar del containment</strong> los equipos limpios, uno por uno, monitorizando de cerca.</p><p>4. <strong>Crear reglas en Falcon Fusion</strong>: si se detecta lateral movement, contener automaticamente.</p>`,
+              content_en: `<p>Once the threat is contained:</p><p>1. <strong>Use RTR</strong> on each affected machine to: search for persistence (registry, scheduled tasks, services), remove attacker tools, collect forensic evidence.</p><p>2. <strong>Reimage</strong> machines if you cannot guarantee they are clean (especially patient zero).</p><p>3. <strong>Release from containment</strong> the clean machines, one by one, monitoring closely.</p><p>4. <strong>Create Falcon Fusion rules</strong>: if lateral movement is detected, contain automatically.</p>` }
         ],
-        learnings: ["Contener primero, investigar despues: cada minuto cuenta en lateral movement", "Si las credenciales de un admin de dominio estan comprometidas, es una emergencia maxima", "El Process Tree y los timestamps te ayudan a reconstruir la cadena del ataque", "Busca TODOS los equipos donde se usaron las credenciales comprometidas, no solo los que generaron alerta", "Post-incidente: cambiar credenciales, revisar permisos, automatizar respuesta con Fusion"]
+        learnings: ["Contener primero, investigar despues: cada minuto cuenta en lateral movement", "Si las credenciales de un admin de dominio estan comprometidas, es una emergencia maxima", "El Process Tree y los timestamps te ayudan a reconstruir la cadena del ataque", "Busca TODOS los equipos donde se usaron las credenciales comprometidas, no solo los que generaron alerta", "Post-incidente: cambiar credenciales, revisar permisos, automatizar respuesta con Fusion"],
+        learnings_en: ["Contain first, investigate later: every minute counts in lateral movement", "If domain admin credentials are compromised, it is a maximum emergency", "The Process Tree and timestamps help you reconstruct the attack chain", "Search ALL machines where the compromised credentials were used, not just those that generated alerts", "Post-incident: change credentials, review permissions, automate response with Fusion"]
     },
 
     // 4 - Fusion SOAR
     {
         title: "Configurar automatizacion con Falcon Fusion",
+        title_en: "Set up automation with Falcon Fusion",
         situation: `<p>Tu responsable de seguridad te pide: <strong>"Quiero que cuando haya una deteccion Critical en cualquier servidor de produccion, se aisle automaticamente el equipo y se envie un email al equipo de seguridad"</strong>.</p>
         <p>Tienes un Host Group llamado "Servidores Produccion" con 50 servidores. El email del equipo es <em>soc@empresa.com</em>.</p>
         <div class="alert-info">Objetivo: Reducir el tiempo de respuesta de horas (esperar a que alguien vea la alerta) a segundos (accion automatica inmediata).</div>`,
+        situation_en: `<p>Your security manager asks you: <strong>"I want Critical detections on any production server to automatically isolate the machine and send an email to the security team"</strong>.</p>
+        <p>You have a Host Group called "Production Servers" with 50 servers. The team email is <em>soc@company.com</em>.</p>
+        <div class="alert-info">Goal: Reduce response time from hours (waiting for someone to see the alert) to seconds (immediate automatic action).</div>`,
         steps: [
-            { title: "CREAR el workflow en Falcon Fusion", content: `<p>Accede a Falcon Fusion:</p><div class="console-path">Configuration → Falcon Fusion → Workflows → Create Workflow</div><p>Dale un nombre descriptivo: <em>"Auto-contain servidores produccion - Critical"</em></p><p>Un workflow tiene 3 partes: <strong>Trigger → Condicion → Accion</strong>.</p>` },
-            { title: "CONFIGURAR el Trigger (disparador)", content: `<p>El trigger define QUE evento inicia el workflow:</p><p><strong>Trigger: Detection</strong> (se activa cuando hay una nueva deteccion)</p><p>Esto hara que el workflow se ejecute cada vez que Falcon genere una nueva deteccion. Pero no queremos que se ejecute para TODAS las detecciones, solo para las Critical en servidores. Por eso necesitamos condiciones.</p>` },
-            { title: "CONFIGURAR las Condiciones (filtros)", content: `<p>Las condiciones filtran cuando se aplica la accion:</p><p><strong>Condicion 1:</strong> Severity = Critical</p><p><strong>Condicion 2:</strong> Host Group = "Servidores Produccion"</p><p>Con estas dos condiciones, el workflow solo se activara cuando haya una deteccion <em>Critical</em> en un servidor que pertenezca al grupo <em>"Servidores Produccion"</em>.</p><p><em>Si no pones condiciones, el workflow se ejecutaria para TODAS las detecciones, lo que seria un desastre.</em></p>` },
-            { title: "CONFIGURAR las Acciones", content: `<p>Las acciones son lo que hace el workflow cuando se cumplen las condiciones:</p><p><strong>Accion 1: Contain Host</strong> - Aisla automaticamente el servidor de la red (Network Containment)</p><p><strong>Accion 2: Send Email</strong> - Envia un email a soc@empresa.com con los detalles de la deteccion: host afectado, severidad, tecnica MITRE, proceso involucrado</p><p>Opcionalmente puedes anadir mas acciones:</p><p>- <strong>Update Detection Status</strong>: cambiar el estado a "In Progress"</p><p>- <strong>Assign Detection</strong>: asignarlo a un analista especifico</p>` },
-            { title: "PROBAR antes de activar", content: `<p><strong>Nunca actives un workflow sin probarlo.</strong></p><p>1. Crea el workflow en estado <strong>deshabilitado</strong> primero.</p><p>2. Revisa las condiciones con tu equipo: ¿esta bien el filtro de severidad? ¿El grupo es correcto?</p><p>3. Haz una prueba controlada en un servidor de TEST (no de produccion): genera una deteccion de prueba y verifica que el workflow lo contendria.</p><p>4. Una vez validado, <strong>habilita el workflow</strong>.</p><p><em>Un workflow mal configurado podria aislar servidores de produccion por falsos positivos. Prueba siempre primero.</em></p>` }
+            { title: "CREAR el workflow en Falcon Fusion",
+              title_en: "CREATE the workflow in Falcon Fusion",
+              content: `<p>Accede a Falcon Fusion:</p><div class="console-path">Configuration → Falcon Fusion → Workflows → Create Workflow</div><p>Dale un nombre descriptivo: <em>"Auto-contain servidores produccion - Critical"</em></p><p>Un workflow tiene 3 partes: <strong>Trigger → Condicion → Accion</strong>.</p>`,
+              content_en: `<p>Access Falcon Fusion:</p><div class="console-path">Configuration → Falcon Fusion → Workflows → Create Workflow</div><p>Give it a descriptive name: <em>"Auto-contain production servers - Critical"</em></p><p>A workflow has 3 parts: <strong>Trigger → Condition → Action</strong>.</p>` },
+            { title: "CONFIGURAR el Trigger (disparador)",
+              title_en: "CONFIGURE the Trigger",
+              content: `<p>El trigger define QUE evento inicia el workflow:</p><p><strong>Trigger: Detection</strong> (se activa cuando hay una nueva deteccion)</p><p>Esto hara que el workflow se ejecute cada vez que Falcon genere una nueva deteccion. Pero no queremos que se ejecute para TODAS las detecciones, solo para las Critical en servidores. Por eso necesitamos condiciones.</p>`,
+              content_en: `<p>The trigger defines WHAT event starts the workflow:</p><p><strong>Trigger: Detection</strong> (activates when there is a new detection)</p><p>This will cause the workflow to run every time Falcon generates a new detection. But we don't want it to run for ALL detections, only for Critical ones on servers. That's why we need conditions.</p>` },
+            { title: "CONFIGURAR las Condiciones (filtros)",
+              title_en: "CONFIGURE the Conditions (filters)",
+              content: `<p>Las condiciones filtran cuando se aplica la accion:</p><p><strong>Condicion 1:</strong> Severity = Critical</p><p><strong>Condicion 2:</strong> Host Group = "Servidores Produccion"</p><p>Con estas dos condiciones, el workflow solo se activara cuando haya una deteccion <em>Critical</em> en un servidor que pertenezca al grupo <em>"Servidores Produccion"</em>.</p><p><em>Si no pones condiciones, el workflow se ejecutaria para TODAS las detecciones, lo que seria un desastre.</em></p>`,
+              content_en: `<p>Conditions filter when the action is applied:</p><p><strong>Condition 1:</strong> Severity = Critical</p><p><strong>Condition 2:</strong> Host Group = "Production Servers"</p><p>With these two conditions, the workflow will only activate when there is a <em>Critical</em> detection on a server belonging to the <em>"Production Servers"</em> group.</p><p><em>If you don't set conditions, the workflow would run for ALL detections, which would be a disaster.</em></p>` },
+            { title: "CONFIGURAR las Acciones",
+              title_en: "CONFIGURE the Actions",
+              content: `<p>Las acciones son lo que hace el workflow cuando se cumplen las condiciones:</p><p><strong>Accion 1: Contain Host</strong> - Aisla automaticamente el servidor de la red (Network Containment)</p><p><strong>Accion 2: Send Email</strong> - Envia un email a soc@empresa.com con los detalles de la deteccion: host afectado, severidad, tecnica MITRE, proceso involucrado</p><p>Opcionalmente puedes anadir mas acciones:</p><p>- <strong>Update Detection Status</strong>: cambiar el estado a "In Progress"</p><p>- <strong>Assign Detection</strong>: asignarlo a un analista especifico</p>`,
+              content_en: `<p>Actions are what the workflow does when conditions are met:</p><p><strong>Action 1: Contain Host</strong> - Automatically isolates the server from the network (Network Containment)</p><p><strong>Action 2: Send Email</strong> - Sends an email to soc@company.com with detection details: affected host, severity, MITRE technique, involved process</p><p>Optionally you can add more actions:</p><p>- <strong>Update Detection Status</strong>: change status to "In Progress"</p><p>- <strong>Assign Detection</strong>: assign it to a specific analyst</p>` },
+            { title: "PROBAR antes de activar",
+              title_en: "TEST before activating",
+              content: `<p><strong>Nunca actives un workflow sin probarlo.</strong></p><p>1. Crea el workflow en estado <strong>deshabilitado</strong> primero.</p><p>2. Revisa las condiciones con tu equipo: ¿esta bien el filtro de severidad? ¿El grupo es correcto?</p><p>3. Haz una prueba controlada en un servidor de TEST (no de produccion): genera una deteccion de prueba y verifica que el workflow lo contendria.</p><p>4. Una vez validado, <strong>habilita el workflow</strong>.</p><p><em>Un workflow mal configurado podria aislar servidores de produccion por falsos positivos. Prueba siempre primero.</em></p>`,
+              content_en: `<p><strong>Never activate a workflow without testing it.</strong></p><p>1. Create the workflow in a <strong>disabled</strong> state first.</p><p>2. Review the conditions with your team: is the severity filter correct? Is the group correct?</p><p>3. Run a controlled test on a TEST server (not production): generate a test detection and verify the workflow would contain it.</p><p>4. Once validated, <strong>enable the workflow</strong>.</p><p><em>A misconfigured workflow could isolate production servers due to false positives. Always test first.</em></p>` }
         ],
-        learnings: ["Falcon Fusion sigue la estructura: Trigger → Condicion → Accion", "Las condiciones son CRITICAS: sin filtros adecuados puedes causar mas dano que beneficio", "SIEMPRE prueba un workflow antes de activarlo en produccion", "La automatizacion reduce el tiempo de respuesta de horas a segundos", "Combinar containment automatico + notificacion es el patron mas comun"]
+        learnings: ["Falcon Fusion sigue la estructura: Trigger → Condicion → Accion", "Las condiciones son CRITICAS: sin filtros adecuados puedes causar mas dano que beneficio", "SIEMPRE prueba un workflow antes de activarlo en produccion", "La automatizacion reduce el tiempo de respuesta de horas a segundos", "Combinar containment automatico + notificacion es el patron mas comun"],
+        learnings_en: ["Falcon Fusion follows the structure: Trigger → Condition → Action", "Conditions are CRITICAL: without proper filters you can cause more harm than good", "ALWAYS test a workflow before activating it in production", "Automation reduces response time from hours to seconds", "Combining automatic containment + notification is the most common pattern"]
     },
 
     // 5 - Phishing
     {
         title: "Investigar un phishing sospechoso",
+        title_en: "Investigate a suspicious phishing attempt",
         situation: `<p>Miercoles a las 10:15. Un empleado del departamento de marketing llama nervioso: <strong>"He hecho clic en un enlace de un email que creo que era falso. La pagina me pedia mi contrasena de Office 365 y la puse..."</strong>.</p>
         <p>Abres la consola de Falcon y encuentras una deteccion Medium en su equipo (WKS-MKT-08):</p>
         <div class="alert-info">
@@ -466,54 +608,168 @@ const scenarios = [
         Severity: Medium
         </div>
         <p>Parece que la pagina de phishing no solo robo la contrasena, sino que tambien ejecuto un script malicioso en el navegador.</p>`,
+        situation_en: `<p>Wednesday at 10:15 AM. An employee from the marketing department calls nervously: <strong>"I clicked a link in an email that I think was fake. The page asked for my Office 365 password and I entered it..."</strong>.</p>
+        <p>You open the Falcon console and find a Medium detection on their machine (WKS-MKT-08):</p>
+        <div class="alert-info">
+        Process: chrome.exe → powershell.exe -encodedCommand [base64...]<br>
+        Tactic: Execution | Technique: PowerShell (T1059.001)<br>
+        Network: Connection to 185.234.xx.xx (known malicious IP)<br>
+        Severity: Medium
+        </div>
+        <p>It appears the phishing page not only stole the password but also executed a malicious script in the browser.</p>`,
         steps: [
-            { title: "EVALUAR la situacion", content: `<p>Antes de actuar, entiende el alcance:</p><p>1. <strong>¿Se ejecuto algo?</strong> Si, el Process Tree muestra que PowerShell se ejecuto con un comando codificado en Base64. Esto es sospechoso: software legitimo no usa -encodedCommand.</p><p>2. <strong>¿Se robo la contrasena?</strong> Si, el usuario confirma que la introdujo en la pagina falsa.</p><p>3. <strong>¿Falcon bloqueo algo?</strong> Revisa la deteccion: ¿la Prevention Policy bloqueo el PowerShell o solo detecto? Si esta en modo "detect only", el script pudo ejecutarse completo.</p><p><em>Tenemos dos problemas: credenciales robadas + posible ejecucion de malware.</em></p>` },
-            { title: "CONTENER y proteger las credenciales", content: `<p>Dos acciones en paralelo:</p><p><strong>1. Contener el equipo</strong> (si el PowerShell se ejecuto):</p><div class="console-path">Host Management → WKS-MKT-08 → Network Containment → Contain</div><p><strong>2. Resetear credenciales</strong> (coordinalo con IT inmediatamente):</p><p>- Cambiar la contrasena de Office 365 del usuario</p><p>- Revocar todas las sesiones activas de O365</p><p>- Activar MFA si no lo tenia (deberia tenerlo)</p><p>- Revisar si hay reglas de reenvio de email sospechosas en su buzon (los atacantes suelen crear reglas para reenviar emails a su cuenta)</p>` },
-            { title: "INVESTIGAR el Process Tree", content: `<p>Analiza que hizo el PowerShell malicioso:</p><div class="console-path">Detection → Process Tree → Expande powershell.exe</div><p>Busca:</p><p>- <strong>¿Que comando ejecuto?</strong> Decodifica el Base64 para ver el comando real</p><p>- <strong>¿Descargo algo?</strong> Si descargo un archivo, busca el hash</p><p>- <strong>¿Creo persistencia?</strong> Busca cambios en el registro, tareas programadas, o servicios nuevos</p><p>- <strong>¿Contacto un C2?</strong> La conexion a 185.234.xx.xx es sospechosa. Anota la IP como IOC</p><p><em>El -encodedCommand es una tecnica clasica para ofuscar comandos maliciosos. Los atacantes lo usan para evitar deteccion basica.</em></p>` },
-            { title: "VERIFICAR alcance - ¿Otros afectados?", content: `<p>El email de phishing pudo enviarse a mas personas:</p><p>1. <strong>Busca en Falcon</strong> detecciones similares (misma IP, mismo PowerShell)</p><p>2. <strong>Busca el email</strong>: pregunta al equipo de email si pueden buscar quien mas recibio ese correo</p><p>3. <strong>Busca la IP maliciosa</strong> en Falcon: ¿algun otro equipo contacto esa IP?</p><div class="console-path">Investigate → Network → IP: 185.234.xx.xx</div><p>Si hay mas afectados, contén sus equipos y resetea sus credenciales tambien.</p>` },
-            { title: "REMEDIAR y prevenir", content: `<p>Post-incidente:</p><p>1. <strong>Bloquear IOCs</strong>: IP del C2, dominio de phishing, hash del script</p><p>2. <strong>Limpiar el equipo</strong>: via RTR, elimina cualquier persistencia. Si no estas seguro, reimagina el equipo</p><p>3. <strong>Reforzar politicas</strong>: si PowerShell se ejecuto, revisa si la Prevention Policy deberia bloquearlo</p><p>4. <strong>Concienciacion</strong>: envia un aviso al equipo sobre este phishing especifico (sin culpar al usuario)</p><p>5. <strong>MFA obligatorio</strong>: si no lo tenian, implementalo. Con MFA, aunque roben la contrasena, no pueden acceder</p><p><em>El phishing es el vector de ataque #1. La mejor defensa es MFA + concienciacion + deteccion.</em></p>` }
+            { title: "EVALUAR la situacion",
+              title_en: "ASSESS the situation",
+              content: `<p>Antes de actuar, entiende el alcance:</p><p>1. <strong>¿Se ejecuto algo?</strong> Si, el Process Tree muestra que PowerShell se ejecuto con un comando codificado en Base64. Esto es sospechoso: software legitimo no usa -encodedCommand.</p><p>2. <strong>¿Se robo la contrasena?</strong> Si, el usuario confirma que la introdujo en la pagina falsa.</p><p>3. <strong>¿Falcon bloqueo algo?</strong> Revisa la deteccion: ¿la Prevention Policy bloqueo el PowerShell o solo detecto? Si esta en modo "detect only", el script pudo ejecutarse completo.</p><p><em>Tenemos dos problemas: credenciales robadas + posible ejecucion de malware.</em></p>`,
+              content_en: `<p>Before acting, understand the scope:</p><p>1. <strong>Was anything executed?</strong> Yes, the Process Tree shows PowerShell ran with a Base64-encoded command. This is suspicious: legitimate software does not use -encodedCommand.</p><p>2. <strong>Was the password stolen?</strong> Yes, the user confirms they entered it on the fake page.</p><p>3. <strong>Did Falcon block anything?</strong> Review the detection: did the Prevention Policy block PowerShell or only detect it? If it's in "detect only" mode, the script may have fully executed.</p><p><em>We have two problems: stolen credentials + possible malware execution.</em></p>` },
+            { title: "CONTENER y proteger las credenciales",
+              title_en: "CONTAIN and protect the credentials",
+              content: `<p>Dos acciones en paralelo:</p><p><strong>1. Contener el equipo</strong> (si el PowerShell se ejecuto):</p><div class="console-path">Host Management → WKS-MKT-08 → Network Containment → Contain</div><p><strong>2. Resetear credenciales</strong> (coordinalo con IT inmediatamente):</p><p>- Cambiar la contrasena de Office 365 del usuario</p><p>- Revocar todas las sesiones activas de O365</p><p>- Activar MFA si no lo tenia (deberia tenerlo)</p><p>- Revisar si hay reglas de reenvio de email sospechosas en su buzon (los atacantes suelen crear reglas para reenviar emails a su cuenta)</p>`,
+              content_en: `<p>Two actions in parallel:</p><p><strong>1. Contain the machine</strong> (if PowerShell executed):</p><div class="console-path">Host Management → WKS-MKT-08 → Network Containment → Contain</div><p><strong>2. Reset credentials</strong> (coordinate with IT immediately):</p><p>- Change the user's Office 365 password</p><p>- Revoke all active O365 sessions</p><p>- Enable MFA if they didn't have it (they should)</p><p>- Check for suspicious email forwarding rules in their mailbox (attackers often create rules to forward emails to their own account)</p>` },
+            { title: "INVESTIGAR el Process Tree",
+              title_en: "INVESTIGATE the Process Tree",
+              content: `<p>Analiza que hizo el PowerShell malicioso:</p><div class="console-path">Detection → Process Tree → Expande powershell.exe</div><p>Busca:</p><p>- <strong>¿Que comando ejecuto?</strong> Decodifica el Base64 para ver el comando real</p><p>- <strong>¿Descargo algo?</strong> Si descargo un archivo, busca el hash</p><p>- <strong>¿Creo persistencia?</strong> Busca cambios en el registro, tareas programadas, o servicios nuevos</p><p>- <strong>¿Contacto un C2?</strong> La conexion a 185.234.xx.xx es sospechosa. Anota la IP como IOC</p><p><em>El -encodedCommand es una tecnica clasica para ofuscar comandos maliciosos. Los atacantes lo usan para evitar deteccion basica.</em></p>`,
+              content_en: `<p>Analyze what the malicious PowerShell did:</p><div class="console-path">Detection → Process Tree → Expand powershell.exe</div><p>Look for:</p><p>- <strong>What command did it run?</strong> Decode the Base64 to see the actual command</p><p>- <strong>Did it download anything?</strong> If it downloaded a file, look up the hash</p><p>- <strong>Did it create persistence?</strong> Look for registry changes, scheduled tasks, or new services</p><p>- <strong>Did it contact a C2?</strong> The connection to 185.234.xx.xx is suspicious. Note the IP as an IOC</p><p><em>The -encodedCommand is a classic technique for obfuscating malicious commands. Attackers use it to avoid basic detection.</em></p>` },
+            { title: "VERIFICAR alcance - ¿Otros afectados?",
+              title_en: "VERIFY scope - Others affected?",
+              content: `<p>El email de phishing pudo enviarse a mas personas:</p><p>1. <strong>Busca en Falcon</strong> detecciones similares (misma IP, mismo PowerShell)</p><p>2. <strong>Busca el email</strong>: pregunta al equipo de email si pueden buscar quien mas recibio ese correo</p><p>3. <strong>Busca la IP maliciosa</strong> en Falcon: ¿algun otro equipo contacto esa IP?</p><div class="console-path">Investigate → Network → IP: 185.234.xx.xx</div><p>Si hay mas afectados, contén sus equipos y resetea sus credenciales tambien.</p>`,
+              content_en: `<p>The phishing email may have been sent to more people:</p><p>1. <strong>Search Falcon</strong> for similar detections (same IP, same PowerShell)</p><p>2. <strong>Search the email</strong>: ask the email team if they can find who else received that email</p><p>3. <strong>Search for the malicious IP</strong> in Falcon: did any other machine contact that IP?</p><div class="console-path">Investigate → Network → IP: 185.234.xx.xx</div><p>If there are more affected users, contain their machines and reset their credentials too.</p>` },
+            { title: "REMEDIAR y prevenir",
+              title_en: "REMEDIATE and prevent",
+              content: `<p>Post-incidente:</p><p>1. <strong>Bloquear IOCs</strong>: IP del C2, dominio de phishing, hash del script</p><p>2. <strong>Limpiar el equipo</strong>: via RTR, elimina cualquier persistencia. Si no estas seguro, reimagina el equipo</p><p>3. <strong>Reforzar politicas</strong>: si PowerShell se ejecuto, revisa si la Prevention Policy deberia bloquearlo</p><p>4. <strong>Concienciacion</strong>: envia un aviso al equipo sobre este phishing especifico (sin culpar al usuario)</p><p>5. <strong>MFA obligatorio</strong>: si no lo tenian, implementalo. Con MFA, aunque roben la contrasena, no pueden acceder</p><p><em>El phishing es el vector de ataque #1. La mejor defensa es MFA + concienciacion + deteccion.</em></p>`,
+              content_en: `<p>Post-incident:</p><p>1. <strong>Block IOCs</strong>: C2 IP, phishing domain, script hash</p><p>2. <strong>Clean the machine</strong>: via RTR, remove any persistence. If you're not sure, reimage the machine</p><p>3. <strong>Strengthen policies</strong>: if PowerShell executed, review whether the Prevention Policy should block it</p><p>4. <strong>Awareness training</strong>: send a notice to the team about this specific phishing (without blaming the user)</p><p>5. <strong>Mandatory MFA</strong>: if they didn't have it, implement it. With MFA, even if the password is stolen, they can't access the account</p><p><em>Phishing is the #1 attack vector. The best defense is MFA + awareness + detection.</em></p>` }
         ],
-        learnings: ["Phishing + ejecucion de codigo = dos problemas: credenciales robadas + posible malware", "PowerShell con -encodedCommand es un indicador clasico de actividad maliciosa", "Siempre resetea credenciales inmediatamente si se confirmaron robadas", "Busca otros afectados: el mismo email se envio probablemente a mas personas", "MFA es la mejor defensa contra phishing de credenciales: aunque las roben, no sirven sin el segundo factor"]
+        learnings: ["Phishing + ejecucion de codigo = dos problemas: credenciales robadas + posible malware", "PowerShell con -encodedCommand es un indicador clasico de actividad maliciosa", "Siempre resetea credenciales inmediatamente si se confirmaron robadas", "Busca otros afectados: el mismo email se envio probablemente a mas personas", "MFA es la mejor defensa contra phishing de credenciales: aunque las roben, no sirven sin el segundo factor"],
+        learnings_en: ["Phishing + code execution = two problems: stolen credentials + possible malware", "PowerShell with -encodedCommand is a classic indicator of malicious activity", "Always reset credentials immediately if confirmed stolen", "Search for other affected users: the same email was probably sent to more people", "MFA is the best defense against credential phishing: even if stolen, they are useless without the second factor"]
     }
 ];
 
 function showScenario(idx) {
     const s = scenarios[idx];
+    const lang = typeof getLang === 'function' ? getLang() : 'es';
+    const isEn = lang === 'en';
+    const helpOn = typeof isHelpOn === 'function' ? isHelpOn() : false;
+
     document.getElementById('scenarioList').style.display = 'none';
     const detail = document.getElementById('scenarioDetail');
     detail.classList.add('active');
 
-    let stepsHtml = s.steps.map((step, i) => `
+    const title = isEn ? s.title_en : s.title;
+    const titleHint = helpOn ? (isEn ? s.title : s.title_en) : '';
+    const situation = isEn ? s.situation_en : s.situation;
+    const situationHint = helpOn ? (isEn ? s.situation : s.situation_en) : '';
+    const situationLabel = isEn ? 'The Situation' : 'La situacion';
+    const stepsLabel = isEn ? 'What do you do? (click each step to see the solution)' : '¿Que haces? (haz clic en cada paso para ver la solucion)';
+    const learningsLabel = isEn ? 'What you learn from this scenario' : 'Lo que aprendes de este escenario';
+    const backLabel = isEn ? 'Back to scenarios' : 'Volver a escenarios';
+
+    document.querySelector('.back-btn').innerHTML = `&#9664; ${backLabel}`;
+
+    let stepsHtml = s.steps.map((step, i) => {
+        const stepTitle = isEn ? step.title_en : step.title;
+        const stepTitleHint = helpOn ? (isEn ? step.title : step.title_en) : '';
+        const stepContent = isEn ? step.content_en : step.content;
+        const stepContentHint = helpOn ? (isEn ? step.content : step.content_en) : '';
+        return `
         <div class="step" onclick="this.classList.toggle('open')">
             <div class="step-header">
                 <div class="step-number">${i + 1}</div>
-                <div class="step-title">${step.title}</div>
+                <div class="step-title">${stepTitle}${stepTitleHint ? '<span class="lang-hint">' + stepTitleHint + '</span>' : ''}</div>
                 <div class="step-toggle">&#9660;</div>
             </div>
-            <div class="step-content">${step.content}</div>
+            <div class="step-content">${stepContent}${stepContentHint ? '<div class="lang-hint" style="margin-top:10px;font-size:0.8rem;line-height:1.5;">' + stepContentHint + '</div>' : ''}</div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 
-    let learningsHtml = s.learnings.map(l => `<li>${l}</li>`).join('');
+    const learnings = isEn ? s.learnings_en : s.learnings;
+    const learningsHint = helpOn ? (isEn ? s.learnings : s.learnings_en) : null;
+
+    let learningsHtml = learnings.map((l, i) => {
+        let hint = '';
+        if (learningsHint && learningsHint[i]) {
+            hint = '<span class="lang-hint">' + learningsHint[i] + '</span>';
+        }
+        return `<li>${l}${hint}</li>`;
+    }).join('');
 
     document.getElementById('scenarioContent').innerHTML = `
-        <h2 style="color: var(--text-primary); margin-bottom: 20px; font-size: 1.3rem;">${s.title}</h2>
+        <h2 style="color: var(--text-primary); margin-bottom: 20px; font-size: 1.3rem;">${title}${titleHint ? '<span class="lang-hint" style="font-size:0.85rem;font-weight:400;">' + titleHint + '</span>' : ''}</h2>
         <div class="situation-box">
-            <h3>La situacion</h3>
-            ${s.situation}
+            <h3>${situationLabel}</h3>
+            ${situation}
+            ${situationHint ? '<div class="lang-hint" style="margin-top:12px;font-size:0.82rem;line-height:1.6;">' + situationHint + '</div>' : ''}
         </div>
-        <h3 style="color: var(--accent); margin-bottom: 15px;">¿Que haces? (haz clic en cada paso para ver la solucion)</h3>
+        <h3 style="color: var(--accent); margin-bottom: 15px;">${stepsLabel}</h3>
         <div class="steps-container">${stepsHtml}</div>
         <div class="learning-box">
-            <h4>Lo que aprendes de este escenario</h4>
+            <h4>${learningsLabel}</h4>
             <ul>${learningsHtml}</ul>
         </div>
     `;
 }
 
+function updateScenarioCards() {
+    const lang = typeof getLang === 'function' ? getLang() : 'es';
+    const isEn = lang === 'en';
+    const helpOn = typeof isHelpOn === 'function' ? isHelpOn() : false;
+
+    document.querySelectorAll('.scenario-card').forEach(card => {
+        const titleEl = card.querySelector('.scenario-title');
+        const descEl = card.querySelector('.scenario-desc');
+        const diffEl = card.querySelector('.scenario-diff');
+
+        if (!titleEl.dataset.es) {
+            titleEl.dataset.es = titleEl.textContent;
+            descEl.dataset.es = descEl.textContent;
+            diffEl.dataset.es = diffEl.textContent;
+        }
+
+        const titleEn = card.dataset.titleEn || titleEl.dataset.es;
+        const descEn = card.dataset.descEn || descEl.dataset.es;
+
+        const diffMap = { 'Avanzado': 'Advanced', 'Intermedio': 'Intermediate', 'Basico': 'Basic' };
+        const diffMapReverse = { 'Advanced': 'Avanzado', 'Intermediate': 'Intermedio', 'Basic': 'Basico' };
+        const diffEs = diffEl.dataset.es;
+        const diffEnText = diffMap[diffEs] || diffEs;
+
+        titleEl.innerHTML = isEn ? titleEn : titleEl.dataset.es;
+        descEl.innerHTML = isEn ? descEn : descEl.dataset.es;
+        diffEl.textContent = isEn ? diffEnText : diffEs;
+
+        if (helpOn) {
+            const hintTitle = isEn ? titleEl.dataset.es : titleEn;
+            const hintDesc = isEn ? descEl.dataset.es : descEn;
+            titleEl.innerHTML += '<span class="lang-hint">' + hintTitle + '</span>';
+            descEl.innerHTML += '<span class="lang-hint">' + hintDesc + '</span>';
+        }
+    });
+}
+
+// Listen for language/help changes
+if (typeof window !== 'undefined') {
+    const origGetLang = typeof getLang === 'function' ? getLang : null;
+    let lastLang = origGetLang ? origGetLang() : 'es';
+    let lastHelp = typeof isHelpOn === 'function' ? isHelpOn() : false;
+
+    setInterval(() => {
+        const curLang = typeof getLang === 'function' ? getLang() : 'es';
+        const curHelp = typeof isHelpOn === 'function' ? isHelpOn() : false;
+        if (curLang !== lastLang || curHelp !== lastHelp) {
+            lastLang = curLang;
+            lastHelp = curHelp;
+            updateScenarioCards();
+        }
+    }, 300);
+
+    // Initial update after a short delay to ensure DOM is ready
+    setTimeout(updateScenarioCards, 100);
+}
+
 function backToList() {
     document.getElementById('scenarioList').style.display = 'grid';
     document.getElementById('scenarioDetail').classList.remove('active');
+    updateScenarioCards();
 }
 </script>
 

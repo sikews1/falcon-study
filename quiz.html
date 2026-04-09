@@ -646,8 +646,14 @@ document.querySelectorAll('.module-selector button').forEach(btn => {
     });
 });
 
-// Init
-filterQuestions('all');
+// Init - check URL params
+const urlModule = new URLSearchParams(window.location.search).get('module');
+if (urlModule) {
+    const btn = document.querySelector(`.module-selector button[data-module="${urlModule}"]`);
+    if (btn) { btn.click(); } else { filterQuestions('all'); }
+} else {
+    filterQuestions('all');
+}
 </script>
 
 <script src="auth.js"></script>

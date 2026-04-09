@@ -484,7 +484,14 @@ document.addEventListener('keydown', (e) => {
     if (e.key === '2') markCard(false);
 });
 
-filterCards('all');
+// Init - check URL params
+const urlCat = new URLSearchParams(window.location.search).get('cat');
+if (urlCat) {
+    const btn = document.querySelector(`.category-selector button[data-cat="${urlCat}"]`);
+    if (btn) { btn.click(); } else { filterCards('all'); }
+} else {
+    filterCards('all');
+}
 </script>
 
 <script src="auth.js"></script>

@@ -267,6 +267,7 @@ const allQuestions = [
     {
         module: "100", moduleLabel: "FALCON 100",
         question: "CrowdStrike Falcon es una plataforma de seguridad que funciona de forma...",
+        question_en: "CrowdStrike Falcon is a security platform that operates in a ___ manner.",
         options: ["On-premises (en servidores locales)", "Cloud-native (nativa en la nube)", "Hibrida (mitad local, mitad nube)", "Solo funciona en redes locales sin internet"],
         correct: 1,
         explanation: "Falcon es <strong>cloud-native</strong>: toda la inteligencia y procesamiento esta en la nube de CrowdStrike. El sensor solo recopila datos y los envia. No necesitas servidores propios."
@@ -274,6 +275,7 @@ const allQuestions = [
     {
         module: "100", moduleLabel: "FALCON 100",
         question: "¿Que es el Threat Graph de CrowdStrike?",
+        question_en: "What is the CrowdStrike Threat Graph?",
         options: ["Un grafico que muestra amenazas en tu red", "Una base de datos masiva que correlaciona eventos de todos los clientes en tiempo real", "Un informe semanal de amenazas", "El nombre del dashboard principal"],
         correct: 1,
         explanation: "El <strong>Threat Graph</strong> procesa billones de eventos por semana de todos los clientes de CrowdStrike. Si un ataque se detecta en un cliente, todos los demas se protegen automaticamente. Es la ventaja competitiva clave."
@@ -281,6 +283,7 @@ const allQuestions = [
     {
         module: "100", moduleLabel: "FALCON 100",
         question: "¿Cuantos agentes/sensores necesitas instalar para usar todos los modulos de Falcon (Prevent, Insight, Discover, etc.)?",
+        question_en: "How many agents/sensors do you need to install to use all Falcon modules (Prevent, Insight, Discover, etc.)?",
         options: ["Uno por cada modulo", "Dos: uno para prevencion y otro para deteccion", "Solo uno: el Falcon Sensor", "Depende del sistema operativo"],
         correct: 2,
         explanation: "CrowdStrike usa una <strong>arquitectura de un solo agente</strong>. Un unico sensor ligero da acceso a todos los modulos. Esto simplifica el despliegue y reduce el impacto en el rendimiento."
@@ -288,6 +291,7 @@ const allQuestions = [
     {
         module: "100", moduleLabel: "FALCON 100",
         question: "¿Cual es la principal diferencia entre el enfoque de CrowdStrike y un antivirus clasico?",
+        question_en: "What is the main difference between CrowdStrike's approach and a traditional antivirus?",
         options: ["CrowdStrike usa mas firmas de virus", "CrowdStrike se enfoca en IOAs (comportamiento) en vez de solo IOCs (firmas)", "CrowdStrike es gratuito", "CrowdStrike solo funciona en Windows"],
         correct: 1,
         explanation: "CrowdStrike se diferencia por su enfoque en <strong>IOAs (Indicators of Attack)</strong>: analiza el comportamiento en tiempo real. Un antivirus clasico se basa en <strong>IOCs</strong> (firmas conocidas) y solo detecta lo que ya conoce."
@@ -295,6 +299,7 @@ const allQuestions = [
     {
         module: "100", moduleLabel: "FALCON 100",
         question: "¿Que es el Falcon Sensor?",
+        question_en: "What is the Falcon Sensor?",
         options: ["Un hardware que se conecta a la red", "Un servidor que se instala en el data center", "Un agente ligero que se instala en cada endpoint", "Una aplicacion movil para administradores"],
         correct: 2,
         explanation: "El <strong>Falcon Sensor</strong> es un agente ligero que se instala en cada endpoint (PC, servidor). Recopila datos y los envia a la nube. Consume pocos recursos y no necesita actualizaciones de firmas."
@@ -302,6 +307,7 @@ const allQuestions = [
     {
         module: "100", moduleLabel: "FALCON 100",
         question: "¿Donde se gestiona la plataforma CrowdStrike Falcon?",
+        question_en: "Where is the CrowdStrike Falcon platform managed?",
         options: ["Desde una aplicacion de escritorio instalada en el PC del admin", "Desde la linea de comandos del servidor", "Desde la Falcon Console, una interfaz web", "Desde una app movil exclusiva"],
         correct: 2,
         explanation: "La <strong>Falcon Console</strong> es la interfaz web donde se gestiona todo: alertas, politicas, equipos, investigaciones. Se accede desde cualquier navegador."
@@ -311,6 +317,7 @@ const allQuestions = [
     {
         module: "101", moduleLabel: "FALCON 101",
         question: "¿Que modulo de Falcon actua como antivirus de nueva generacion (NGAV)?",
+        question_en: "Which Falcon module acts as a Next-Generation Antivirus (NGAV)?",
         options: ["Falcon Insight", "Falcon Prevent", "Falcon OverWatch", "Falcon Discover"],
         correct: 1,
         explanation: "<strong>Falcon Prevent</strong> es el modulo NGAV. Bloquea malware conocido y desconocido usando machine learning e IOAs. Reemplaza al antivirus clasico."
@@ -318,6 +325,7 @@ const allQuestions = [
     {
         module: "101", moduleLabel: "FALCON 101",
         question: "¿Que modulo de Falcon proporciona la capacidad de EDR (investigar incidentes en endpoints)?",
+        question_en: "Which Falcon module provides EDR (Endpoint Detection and Response) capabilities?",
         options: ["Falcon Prevent", "Falcon Spotlight", "Falcon Insight", "Falcon Fusion"],
         correct: 2,
         explanation: "<strong>Falcon Insight</strong> es el modulo de EDR. Proporciona visibilidad completa de lo que pasa en cada endpoint y permite investigar incidentes con detalle (process tree, conexiones, archivos)."
@@ -325,6 +333,7 @@ const allQuestions = [
     {
         module: "101", moduleLabel: "FALCON 101",
         question: "Falcon OverWatch es un servicio de...",
+        question_en: "Falcon OverWatch is a service that provides...",
         options: ["Inteligencia artificial automatizada", "Threat hunting realizado por un equipo humano 24/7", "Gestion de vulnerabilidades", "Backup de datos en la nube"],
         correct: 1,
         explanation: "<strong>Falcon OverWatch</strong> es un equipo de expertos humanos que busca amenazas activamente 24/7. Complementan la IA detectando lo que las maquinas podrian no ver."
@@ -332,6 +341,7 @@ const allQuestions = [
     {
         module: "101", moduleLabel: "FALCON 101",
         question: "¿Que modulo de Falcon gestiona vulnerabilidades SIN necesidad de hacer escaneos?",
+        question_en: "Which Falcon module manages vulnerabilities WITHOUT the need for scans?",
         options: ["Falcon Discover", "Falcon Prevent", "Falcon Spotlight", "Falcon Fusion"],
         correct: 2,
         explanation: "<strong>Falcon Spotlight</strong> identifica vulnerabilidades usando los datos que el sensor ya recopila. No necesita escaneos programados, lo que significa cero impacto en el rendimiento."
@@ -339,6 +349,7 @@ const allQuestions = [
     {
         module: "101", moduleLabel: "FALCON 101",
         question: "¿Para que sirve Falcon Fusion?",
+        question_en: "What is Falcon Fusion used for?",
         options: ["Para fusionar varios sensores en uno", "Para automatizar respuestas ante incidentes (SOAR)", "Para gestionar el firewall", "Para proteger dispositivos moviles"],
         correct: 1,
         explanation: "<strong>Falcon Fusion</strong> es el motor SOAR de CrowdStrike. Permite crear flujos automaticos: 'si pasa X, haz Y'. Ej: si se detecta ransomware, aislar el equipo automaticamente."
@@ -346,6 +357,7 @@ const allQuestions = [
     {
         module: "101", moduleLabel: "FALCON 101",
         question: "Falcon Discover te ayuda a...",
+        question_en: "Falcon Discover helps you to...",
         options: ["Descubrir nuevas amenazas zero-day", "Tener un inventario de aplicaciones, cuentas y activos en tu red", "Descubrir contrasenas debiles", "Descubrir vulnerabilidades en el codigo fuente"],
         correct: 1,
         explanation: "<strong>Falcon Discover</strong> es el modulo de higiene de TI. Te muestra que aplicaciones, cuentas de usuario y activos hay en tu red. Util para detectar shadow IT."
@@ -355,6 +367,7 @@ const allQuestions = [
     {
         module: "102", moduleLabel: "FALCON 102",
         question: "¿Que necesitas para instalar el Falcon Sensor en un equipo?",
+        question_en: "What do you need to install the Falcon Sensor on a host?",
         options: ["Solo la IP del equipo", "El CID (Customer ID) y el instalador", "Una licencia individual por equipo", "Acceso root al Threat Graph"],
         correct: 1,
         explanation: "Para instalar el sensor necesitas el <strong>CID (Customer ID)</strong>, que es tu identificador unico como cliente, y el instalador correcto para el sistema operativo. El CID conecta el equipo con tu cuenta de CrowdStrike."
@@ -362,6 +375,7 @@ const allQuestions = [
     {
         module: "102", moduleLabel: "FALCON 102",
         question: "¿Cual es la diferencia entre un Host Group estatico y uno dinamico?",
+        question_en: "What is the difference between a static and a dynamic Host Group?",
         options: ["El estatico es mas rapido", "El estatico se llena manualmente, el dinamico se llena automaticamente por reglas", "El dinamico solo funciona en Windows", "No hay diferencia, son lo mismo"],
         correct: 1,
         explanation: "Los <strong>Host Groups estaticos</strong> requieren anadir equipos manualmente. Los <strong>dinamicos</strong> se llenan automaticamente segun reglas (SO, dominio, OU, tags...). Los dinamicos son mas utiles en entornos grandes."
@@ -369,6 +383,7 @@ const allQuestions = [
     {
         module: "102", moduleLabel: "FALCON 102",
         question: "Las Prevention Policies se asignan a...",
+        question_en: "Prevention Policies are assigned to...",
         options: ["Usuarios individuales", "Direcciones IP", "Host Groups", "Modulos de Falcon"],
         correct: 2,
         explanation: "Las <strong>Prevention Policies</strong> se asignan a <strong>Host Groups</strong>. Asi puedes tener politicas diferentes para diferentes grupos de equipos (ej: servidores vs portatiles)."
@@ -376,6 +391,7 @@ const allQuestions = [
     {
         module: "102", moduleLabel: "FALCON 102",
         question: "¿Que es una exclusion en CrowdStrike Falcon?",
+        question_en: "What is an exclusion in CrowdStrike Falcon?",
         options: ["Excluir un usuario del sistema", "Una regla para que Falcon ignore ciertos archivos o procesos legitimos", "Eliminar un sensor de un equipo", "Bloquear un equipo de la red"],
         correct: 1,
         explanation: "Una <strong>exclusion</strong> indica a Falcon que ignore ciertos archivos, carpetas o procesos legitimos que causan falsos positivos. Cuidado: cada exclusion crea un punto ciego potencial."
@@ -383,6 +399,7 @@ const allQuestions = [
     {
         module: "102", moduleLabel: "FALCON 102",
         question: "¿Que principio de seguridad se aplica al configurar roles y permisos (RBAC)?",
+        question_en: "Which security principle is applied when configuring roles and permissions (RBAC)?",
         options: ["Maximo privilegio", "Confianza total", "Minimo privilegio", "Acceso universal"],
         correct: 2,
         explanation: "El principio de <strong>minimo privilegio</strong>: cada usuario solo debe tener los permisos necesarios para su trabajo. Un analista junior no necesita cambiar politicas, un viewer no necesita modificar configuraciones."
@@ -390,6 +407,7 @@ const allQuestions = [
     {
         module: "102", moduleLabel: "FALCON 102",
         question: "¿Cual es el orden correcto del flujo de onboarding?",
+        question_en: "What is the correct order for the onboarding workflow?",
         options: ["Instalar sensor → Crear politicas → Crear usuarios", "Crear usuarios/roles → Instalar sensor → Crear Host Groups → Asignar politicas", "Crear Host Groups → Instalar sensor → Crear usuarios", "Asignar politicas → Crear Host Groups → Instalar sensor"],
         correct: 1,
         explanation: "El flujo correcto es: <strong>1) Crear usuarios/roles → 2) Instalar sensor (con CID) → 3) Crear Host Groups → 4) Crear/asignar Policies → 5) Verificar despliegue</strong>."
@@ -399,6 +417,7 @@ const allQuestions = [
     {
         module: "104", moduleLabel: "FALCON 104",
         question: "¿Cual es el orden correcto de severidad de las detecciones (de menor a mayor)?",
+        question_en: "What is the correct order of detection severity (from lowest to highest)?",
         options: ["Low → Medium → High → Critical", "Informational → Low → Medium → High → Critical", "Critical → High → Medium → Low", "Warning → Error → Critical → Fatal"],
         correct: 1,
         explanation: "El orden es: <strong>Informational → Low → Medium → High → Critical</strong>. Siempre prioriza Critical y High primero."
@@ -406,6 +425,7 @@ const allQuestions = [
     {
         module: "104", moduleLabel: "FALCON 104",
         question: "¿Que muestra el Process Tree en una deteccion?",
+        question_en: "What does the Process Tree show in a detection?",
         options: ["Los archivos del equipo", "La cadena de procesos: que proceso lanzo que otro", "El arbol de directorios", "Los usuarios que se conectaron"],
         correct: 1,
         explanation: "El <strong>Process Tree</strong> muestra la cadena de procesos: que proceso padre lanzo que proceso hijo. Ej: Word → PowerShell → cmd.exe → malware.exe. Es clave para investigar incidentes."
@@ -413,6 +433,7 @@ const allQuestions = [
     {
         module: "104", moduleLabel: "FALCON 104",
         question: "¿Que hace el 'Network Containment' en Falcon?",
+        question_en: "What does 'Network Containment' do in Falcon?",
         options: ["Apaga el equipo remotamente", "Aisla el equipo de la red pero mantiene conexion con CrowdStrike", "Desinstala el sensor", "Bloquea todo el trafico de la empresa"],
         correct: 1,
         explanation: "<strong>Network Containment</strong> aisla un equipo comprometido de la red para que no pueda comunicarse con nada EXCEPTO con la nube de CrowdStrike. Asi puedes seguir investigando remotamente."
@@ -420,6 +441,7 @@ const allQuestions = [
     {
         module: "104", moduleLabel: "FALCON 104",
         question: "¿Que es RTR (Real Time Response)?",
+        question_en: "What is RTR (Real Time Response)?",
         options: ["Un informe en tiempo real", "Acceso remoto al equipo desde la consola para investigar y remediar", "Una politica de respuesta automatica", "Un tipo de deteccion"],
         correct: 1,
         explanation: "<strong>RTR (Real Time Response)</strong> permite conectarte remotamente a un equipo desde la consola. Puedes ejecutar comandos, recopilar archivos, matar procesos... Es como un SSH/RDP pero a traves de CrowdStrike."
@@ -429,6 +451,7 @@ const allQuestions = [
     {
         module: "105", moduleLabel: "FALCON 105",
         question: "¿Que son los Sensor Tags?",
+        question_en: "What are Sensor Tags?",
         options: ["Nombres de los sensores", "Etiquetas que se asignan durante la instalacion para organizar equipos", "Versiones del sensor", "Alertas del sensor"],
         correct: 1,
         explanation: "Los <strong>Sensor Tags</strong> son etiquetas que se ponen durante la instalacion. Son muy utiles para crear Host Groups dinamicos (ej: tag 'produccion', 'desarrollo', 'madrid')."
@@ -436,6 +459,7 @@ const allQuestions = [
     {
         module: "105", moduleLabel: "FALCON 105",
         question: "En las Sensor Update Policies, ¿que significa el canal N-1?",
+        question_en: "In Sensor Update Policies, what does the N-1 channel mean?",
         options: ["La version mas antigua disponible", "Una version del sensor detras de la ultima", "No actualizar nunca", "Solo actualizaciones de seguridad"],
         correct: 1,
         explanation: "Los canales son: <strong>N</strong> (ultima version), <strong>N-1</strong> (una version atras), <strong>N-2</strong> (dos atras). Buena practica: usar N en un grupo piloto y N-1 en produccion para evitar problemas con versiones nuevas."
@@ -445,6 +469,7 @@ const allQuestions = [
     {
         module: "soar", moduleLabel: "SOAR 100",
         question: "¿Cual es la estructura basica de un workflow en Falcon Fusion?",
+        question_en: "What is the basic structure of a workflow in Falcon Fusion?",
         options: ["Input → Process → Output", "Trigger → Condicion → Accion", "Inicio → Medio → Fin", "Detectar → Analizar → Reportar"],
         correct: 1,
         explanation: "Un workflow de Falcon Fusion tiene: <strong>Trigger</strong> (que lo dispara), <strong>Condicion</strong> (cuando se aplica), y <strong>Accion</strong> (que hace). Ej: trigger=deteccion critica, condicion=en servidores, accion=aislar equipo."
@@ -452,6 +477,7 @@ const allQuestions = [
     {
         module: "soar", moduleLabel: "SOAR 100",
         question: "¿Cual es el principal beneficio de automatizar con Falcon Fusion SOAR?",
+        question_en: "What is the main benefit of automating with Falcon Fusion SOAR?",
         options: ["Ahorra dinero en licencias", "Reduce el tiempo de respuesta de horas a segundos", "Elimina la necesidad de analistas", "Mejora la velocidad de internet"],
         correct: 1,
         explanation: "SOAR reduce el tiempo de respuesta drasticamente. Un ataque que un humano tardaria horas en contener, <strong>Fusion puede contenerlo en segundos automaticamente</strong>."
@@ -461,6 +487,7 @@ const allQuestions = [
     {
         module: "general", moduleLabel: "Ciber General",
         question: "¿Cual es la diferencia entre IOC e IOA?",
+        question_en: "What is the difference between an IOC and an IOA?",
         options: ["Son lo mismo, nombres diferentes", "IOC mira el pasado (evidencia), IOA mira el presente (comportamiento)", "IOA es mas antiguo que IOC", "IOC es para red, IOA es para endpoints"],
         correct: 1,
         explanation: "<strong>IOC</strong> = evidencia de que YA ocurrio un ataque (hash, IP maliciosa). Es reactivo. <strong>IOA</strong> = comportamiento que indica que un ataque esta ocurriendo AHORA. Es proactivo. CrowdStrike se enfoca en IOAs."
@@ -468,6 +495,7 @@ const allQuestions = [
     {
         module: "general", moduleLabel: "Ciber General",
         question: "¿Que significa EDR?",
+        question_en: "What does EDR stand for?",
         options: ["Electronic Data Recovery", "Endpoint Detection and Response", "Enterprise Defense Router", "Emergency Data Relay"],
         correct: 1,
         explanation: "<strong>EDR = Endpoint Detection and Response</strong>. Software que monitoriza endpoints, detecta amenazas y permite responder. CrowdStrike Falcon es un EDR (y mucho mas: XDR)."
@@ -475,6 +503,7 @@ const allQuestions = [
     {
         module: "general", moduleLabel: "Ciber General",
         question: "En la nomenclatura de CrowdStrike, ¿que pais representa un BEAR?",
+        question_en: "In CrowdStrike's naming convention, which country does BEAR represent?",
         options: ["China", "Iran", "Rusia", "Corea del Norte"],
         correct: 2,
         explanation: "CrowdStrike usa animales: <strong>BEAR = Rusia</strong>, PANDA = China, KITTEN = Iran, CHOLLIMA = Corea del Norte, SPIDER = Cibercrimen."
@@ -482,6 +511,7 @@ const allQuestions = [
     {
         module: "general", moduleLabel: "Ciber General",
         question: "¿Que es un ataque 'fileless' (sin archivos)?",
+        question_en: "What is a 'fileless' attack?",
         options: ["Un ataque que borra todos los archivos", "Un ataque que se ejecuta en memoria sin dejar archivos en disco", "Un ataque que solo roba archivos", "Un ataque contra el sistema de archivos"],
         correct: 1,
         explanation: "Un <strong>ataque fileless</strong> se ejecuta directamente en memoria sin escribir archivos en disco. Los antivirus clasicos no lo detectan porque buscan archivos. CrowdStrike si lo detecta gracias a su enfoque en IOAs (comportamiento)."
@@ -489,6 +519,7 @@ const allQuestions = [
     {
         module: "general", moduleLabel: "Ciber General",
         question: "¿Que es MITRE ATT&CK?",
+        question_en: "What is MITRE ATT&CK?",
         options: ["Un tipo de malware", "Un framework que clasifica todas las tecnicas conocidas de ciberataque", "Una herramienta de CrowdStrike", "Un tipo de ataque militar"],
         correct: 1,
         explanation: "<strong>MITRE ATT&CK</strong> es una base de datos publica que clasifica todas las tecnicas conocidas de ciberataque. CrowdStrike mapea sus detecciones a este framework para que entiendas que tipo de ataque se detecto."
@@ -496,6 +527,7 @@ const allQuestions = [
     {
         module: "general", moduleLabel: "Ciber General",
         question: "¿Que es un C2 (Command and Control)?",
+        question_en: "What is a C2 (Command and Control)?",
         options: ["Un tipo de certificacion", "El servidor del atacante que envia instrucciones al malware", "Un protocolo de red seguro", "Un modulo de CrowdStrike"],
         correct: 1,
         explanation: "<strong>C2 (Command and Control)</strong> es el servidor del atacante. El malware instalado en tus equipos 'llama a casa' (al C2) para recibir instrucciones. CrowdStrike detecta estas comunicaciones sospechosas."
@@ -503,6 +535,7 @@ const allQuestions = [
     {
         module: "general", moduleLabel: "Ciber General",
         question: "¿Que diferencia hay entre NGAV y un antivirus clasico?",
+        question_en: "What is the difference between NGAV and a traditional antivirus?",
         options: ["NGAV es mas barato", "NGAV usa machine learning y analisis de comportamiento, el clasico solo usa firmas", "No hay diferencia real", "El clasico es mejor porque tiene mas firmas"],
         correct: 1,
         explanation: "El antivirus clasico compara archivos con una <strong>base de datos de firmas conocidas</strong>. El <strong>NGAV usa machine learning y analisis de comportamiento</strong> para detectar amenazas nuevas y desconocidas. Falcon Prevent es un NGAV."
@@ -510,6 +543,7 @@ const allQuestions = [
     {
         module: "general", moduleLabel: "Ciber General",
         question: "Active Directory es un objetivo prioritario para los atacantes porque...",
+        question_en: "Active Directory is a priority target for attackers because...",
         options: ["Es facil de instalar", "Quien controla el AD controla todos los usuarios, equipos y permisos de la red", "Es un software gratuito", "Tiene muchas vulnerabilidades conocidas"],
         correct: 1,
         explanation: "<strong>Active Directory</strong> gestiona usuarios, equipos y permisos en redes empresariales. Si un atacante compromete el Domain Controller, tiene <strong>control total de toda la red</strong>. Por eso es el objetivo #1."
@@ -559,6 +593,7 @@ function renderQuestion() {
         <div class="question-card">
             <div class="question-counter">Pregunta ${currentIndex + 1} de ${currentQuestions.length}</div>
             <span class="question-module-tag">${q.moduleLabel}</span>
+            ${q.question_en ? '<div class="question-en">' + q.question_en + '</div>' : ''}
             <div class="question-text">${q.question}</div>
             <ul class="options">${optionsHtml}</ul>
             <div class="explanation ${answered ? 'show' : ''}">${q.explanation}</div>

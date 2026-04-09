@@ -551,6 +551,26 @@ input, textarea, select {
 }
 
 /* ============================================================
+   BILINGUAL QUESTION STYLES
+   ============================================================ */
+.question-en {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    padding: 10px 14px;
+    background: var(--bg-overlay);
+    border-left: 3px solid var(--purple);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-style: italic;
+    line-height: 1.5;
+    display: none;
+}
+
+[data-lang="en"] .question-en {
+    display: block;
+}
+
+/* ============================================================
    UTILITY: Smooth theme transition on ALL themed elements
    ============================================================ */
 .top-bar,

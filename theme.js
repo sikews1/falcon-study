@@ -19,24 +19,30 @@ function updateToggleIcon() {
     });
 }
 
-// Load saved theme
+// Load saved theme + lang
 (function() {
-    const saved = localStorage.getItem('falcon_theme');
-    if (saved === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-    }
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            updateToggleIcon();
-            initCardGlow();
-            injectToggle();
-        });
-    } else {
+    const savedTheme = localStorage.getItem('falcon_theme');
+    if (savedTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+
+    const savedLang = localStorage.getItem('falcon_lang');
+    if (savedLang === 'en') document.documentElement.setAttribute('data-lang', 'en');
+
+    function initAll() {
         updateToggleIcon();
+        updateLangIcon();
         initCardGlow();
         injectToggle();
+        injectLangToggle();
     }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAll);
+    else initAll();
 })();
+
+// Helper: check if bilingual mode is on
+function isBilingual() {
+    return document.documentElement.getAttribute('data-lang') === 'en';
+}
 
 // Inject toggle button into top-bar if not already there
 function injectToggle() {
@@ -48,6 +54,36 @@ function injectToggle() {
         btn.title = 'Cambiar tema';
         topBar.appendChild(btn);
         updateToggleIcon();
+    }
+}
+
+// Language toggle (ES only / EN+ES bilingual)
+function toggleLang() {
+    const current = document.documentElement.getAttribute('data-lang');
+    const next = current === 'en' ? '' : 'en';
+    if (next) document.documentElement.setAttribute('data-lang', 'en');
+    else document.documentElement.removeAttribute('data-lang');
+    localStorage.setItem('falcon_lang', next || 'es');
+    updateLangIcon();
+}
+
+function updateLangIcon() {
+    const isEn = document.documentElement.getAttribute('data-lang') === 'en';
+    document.querySelectorAll('.lang-toggle').forEach(btn => {
+        btn.textContent = isEn ? 'EN' : 'ES';
+        btn.title = isEn ? 'Modo bilingue activo (clic para solo espanol)' : 'Solo espanol (clic para bilingue EN+ES)';
+    });
+}
+
+function injectLangToggle() {
+    const topBar = document.querySelector('.top-bar');
+    if (topBar && !topBar.querySelector('.lang-toggle')) {
+        const btn = document.createElement('button');
+        btn.className = 'theme-toggle lang-toggle';
+        btn.onclick = toggleLang;
+        btn.style.cssText = 'font-size:0.75rem;font-weight:700;font-family:var(--font-sans);';
+        topBar.appendChild(btn);
+        updateLangIcon();
     }
 }
 

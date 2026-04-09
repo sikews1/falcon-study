@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glosario CrowdStrike & Ciberseguridad</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0f1923;
+            color: #e0e6ed;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 3px solid #e94560;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .header h1 span { color: #e94560; }
+
+        .header p {
+            color: #8892a4;
+            font-size: 0.95rem;
+        }
+
+        /* Search */
+        .search-container {
+            max-width: 500px;
+            margin: 20px auto 0;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border-radius: 25px;
+            border: 2px solid #2a3a4e;
+            background: #1a2738;
+            color: #e0e6ed;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-container input:focus { border-color: #e94560; }
+
+        .search-container svg {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            stroke: #8892a4;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Nav tabs */
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 20px;
+            flex-wrap: wrap;
+            background: #0f1923;
+            position: sticky;
+            top: 140px;
+            z-index: 99;
+        }
+
+        .nav button {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid #2a3a4e;
+            background: transparent;
+            color: #8892a4;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav button:hover { border-color: #e94560; color: #e94560; }
+        .nav button.active { background: #e94560; border-color: #e94560; color: #fff; }
+
+        /* Main content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 40px;
+            display: none;
+        }
+
+        .section.active { display: block; }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #e94560;
+            margin-bottom: 8px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1e2d3d;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #5dade2;
+            margin: 25px 0 15px;
+            padding-left: 10px;
+            border-left: 3px solid #5dade2;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: #1a2738;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #2a3a4e;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .card:hover {
+            border-color: #e94560;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.15);
+        }
+
+        .card .term {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .card .term-en {
+            font-size: 0.8rem;
+            color: #e94560;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: inline-block;
+            background: rgba(233, 69, 96, 0.15);
+            padding: 2px 10px;
+            border-radius: 12px;
+        }
+
+        .card .term-es {
+            font-size: 0.8rem;
+            color: #5dade2;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: inline-block;
+            background: rgba(93, 173, 226, 0.15);
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin-left: 5px;
+        }
+
+        .card .desc {
+            color: #b0bec5;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .card .desc strong { color: #f5c842; }
+
+        .card .tag {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .tag-crowdstrike { background: rgba(233, 69, 96, 0.2); color: #e94560; }
+        .tag-importante { background: rgba(245, 200, 66, 0.2); color: #f5c842; }
+        .tag-basico { background: rgba(93, 173, 226, 0.2); color: #5dade2; }
+
+        /* Threat actors table */
+        .actors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .actor-card {
+            background: #1a2738;
+            border-radius: 12px;
+            padding: 18px;
+            border: 1px solid #2a3a4e;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s;
+        }
+
+        .actor-card:hover {
+            border-color: #e94560;
+            transform: translateY(-2px);
+        }
+
+        .actor-emoji {
+            font-size: 2.2rem;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .actor-info .actor-name {
+            font-weight: 700;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .actor-info .actor-country {
+            color: #8892a4;
+            font-size: 0.85rem;
+        }
+
+        .actor-info .actor-example {
+            color: #e94560;
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        /* Progress tracker */
+        .progress-section {
+            background: #1a2738;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #2a3a4e;
+        }
+
+        .progress-title {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .module-list { list-style: none; }
+
+        .module-list li {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            background: #0f1923;
+            border: 1px solid #2a3a4e;
+        }
+
+        .module-list li .status {
+            min-width: 24px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .module-list li .module-name { flex: 1; }
+        .module-list li .module-time { color: #8892a4; font-size: 0.8rem; }
+
+        /* Key concept callout */
+        .callout {
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.1), rgba(93, 173, 226, 0.1));
+            border: 1px solid #e94560;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .callout h3 {
+            color: #e94560;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .callout p {
+            color: #b0bec5;
+            font-size: 0.92rem;
+        }
+
+        /* Module summaries */
+        .module-summary {
+            background: #1a2738;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid #2a3a4e;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-summary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .module-summary.completed::before { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+        .module-summary.in-progress::before { background: linear-gradient(90deg, #f39c12, #f1c40f); }
+        .module-summary.not-started::before { background: linear-gradient(90deg, #7f8c8d, #95a5a6); }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .module-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-completed { background: rgba(39, 174, 96, 0.2); color: #2ecc71; }
+        .badge-progress { background: rgba(243, 156, 18, 0.2); color: #f1c40f; }
+        .badge-not-started { background: rgba(127, 140, 141, 0.2); color: #95a5a6; }
+
+        .module-summary h3 {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .module-meta {
+            color: #8892a4;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .module-objective {
+            background: rgba(93, 173, 226, 0.1);
+            border-left: 3px solid #5dade2;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 18px;
+            color: #b0bec5;
+            font-size: 0.92rem;
+        }
+
+        .module-objective strong { color: #5dade2; }
+
+        .key-points {
+            list-style: none;
+            padding: 0;
+        }
+
+        .key-points li {
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            background: #0f1923;
+            border-radius: 8px;
+            border-left: 3px solid #e94560;
+            color: #b0bec5;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .key-points li strong { color: #fff; }
+        .key-points li em { color: #f5c842; font-style: normal; }
+
+        .exam-tip {
+            background: linear-gradient(135deg, rgba(245, 200, 66, 0.1), rgba(233, 69, 96, 0.1));
+            border: 1px solid rgba(245, 200, 66, 0.3);
+            border-radius: 10px;
+            padding: 15px 18px;
+            margin-top: 18px;
+            font-size: 0.88rem;
+            color: #b0bec5;
+        }
+
+        .exam-tip::before {
+            content: 'DATO CLAVE PARA EL EXAMEN';
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #f5c842;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #8892a4;
+            display: none;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #4a5568;
+            font-size: 0.8rem;
+            border-top: 1px solid #1e2d3d;
+            margin-top: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.4rem; }
+            .cards { grid-template-columns: 1fr; }
+            .actors-grid { grid-template-columns: 1fr; }
+            .nav button { padding: 8px 14px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1><span>CrowdStrike</span> Falcon Administrator</h1>
+    <p>Glosario de Ciberseguridad - Curso de Certificacion</p>
+    <div class="search-container">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="Buscar termino..." autocomplete="off">
+    </div>
+</div>
+
+<div style="background:#0a1018;padding:10px 20px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid #1e2d3d;position:sticky;top:0;z-index:200;">
+    <a href="glosario.html" style="padding:8px 18px;border-radius:20px;border:1px solid #e94560;background:#e94560;color:#fff;text-decoration:none;font-size:0.85rem;font-weight:600;">Glosario</a>
+    <a href="quiz.html" style="padding:8px 18px;border-radius:20px;border:1px solid #2a3a4e;color:#8892a4;text-decoration:none;font-size:0.85rem;font-weight:600;">Quiz</a>
+    <a href="flashcards.html" style="padding:8px 18px;border-radius:20px;border:1px solid #2a3a4e;color:#8892a4;text-decoration:none;font-size:0.85rem;font-weight:600;">Flashcards</a>
+    <a href="examen.html" style="padding:8px 18px;border-radius:20px;border:1px solid #2a3a4e;color:#8892a4;text-decoration:none;font-size:0.85rem;font-weight:600;">Simulador Examen</a>
+    <a href="escenarios.html" style="padding:8px 18px;border-radius:20px;border:1px solid #2a3a4e;color:#8892a4;text-decoration:none;font-size:0.85rem;font-weight:600;">Escenarios</a>
+</div>
+
+<div class="nav" id="nav">
+    <button class="active" data-tab="inicio">Inicio</button>
+    <button data-tab="amenazas">Amenazas</button>
+    <button data-tab="deteccion">Deteccion</button>
+    <button data-tab="herramientas">Herramientas</button>
+    <button data-tab="conceptos">Conceptos Generales</button>
+    <button data-tab="falcon">Falcon Platform</button>
+    <button data-tab="modulos">Modulos Falcon</button>
+    <button data-tab="gestion">Gestion Falcon</button>
+    <button data-tab="alertas">Alertas</button>
+    <button data-tab="red">Red & Sistemas</button>
+    <button data-tab="actors">Threat Actors</button>
+    <button data-tab="resumenes" style="background: linear-gradient(135deg, #e94560, #c23152); border-color: #e94560; color: #fff;">Resumenes Modulos</button>
+</div>
+
+<div class="container">
+
+    <!-- NO RESULTS -->
+    <div class="no-results" id="noResults">
+        <p style="font-size: 1.5rem; margin-bottom: 10px;">No se encontraron resultados</p>
+        <p>Intenta con otro termino de busqueda</p>
+    </div>
+
+    <!-- INICIO -->
+    <div class="section active" id="inicio">
+        <div class="progress-section">
+            <div class="progress-title">Tu progreso en el curso</div>
+            <ul class="module-list">
+                <li><span class="status">&#9989;</span><span class="module-name">FALCON 100: Falcon Platform Architecture Overview</span><span class="module-time">30 min</span></li>
+                <li><span class="status">&#9989;</span><span class="module-name">FALCON 101: Falcon Platform Essentials</span><span class="module-time">50 min</span></li>
+                <li><span class="status">&#128260;</span><span class="module-name">FALCON 102: Falcon Platform Onboarding Configuration</span><span class="module-time">1h (4/6)</span></li>
+                <li><span class="status">&#128260;</span><span class="module-name">FALCON 104: Getting Started with Endpoint Security</span><span class="module-time">25 min (0/3)</span></li>
+                <li><span class="status">&#11036;</span><span class="module-name">FALCON 105: Sensor Installation & Troubleshooting</span><span class="module-time">45 min</span></li>
+                <li><span class="status">&#11036;</span><span class="module-name">FALCON 106: Customizing Dashboards</span><span class="module-time">20 min</span></li>
+                <li><span class="status">&#11036;</span><span class="module-name">FALCON 107: Firewall Management Fundamentals</span><span class="module-time">15 min</span></li>
+                <li><span class="status">&#11036;</span><span class="module-name">SOAR 100: Falcon Fusion SOAR Fundamentals</span><span class="module-time">45 min</span></li>
+                <li><span class="status">&#11036;</span><span class="module-name">FALCON 160: Falcon for Mobile</span><span class="module-time">15 min</span></li>
+                <li><span class="status">&#11036;</span><span class="module-name">ITSEC 121: Vulnerability Management</span><span class="module-time">40 min</span></li>
+                <li><span class="status">&#11036;</span><span class="module-name">ITSEC 122: Asset Management</span><span class="module-time">40 min</span></li>
+                <li><span class="status">&#11036;</span><span class="module-name">Falcon Administrator ILT Courses</span><span class="module-time">-</span></li>
+            </ul>
+        </div>
+
+        <div class="callout">
+            <h3>Concepto clave del curso</h3>
+            <p><strong>CrowdStrike se diferencia por enfocarse en IOAs (Indicators of Attack)</strong> en lugar de solo IOCs (Indicators of Compromise). Esto significa que detecta ataques por su <strong>comportamiento en tiempo real</strong>, no solo comparando con firmas conocidas. Este concepto aparece constantemente en todos los modulos.</p>
+        </div>
+
+        <p style="color: #8892a4; text-align: center; margin-top: 20px;">Usa las pestanas de arriba o el buscador para explorar los terminos</p>
+    </div>
+
+    <!-- AMENAZAS -->
+    <div class="section" id="amenazas">
+        <h2 class="section-title">Amenazas y Ataques</h2>
+        <div class="cards">
+            <div class="card" data-search="malware software malicioso virus troyano">
+                <div class="term">Malware</div>
+                <span class="term-es">Software malicioso</span>
+                <div class="desc">Cualquier programa disenado para hacer dano: virus, troyanos, ransomware, spyware, etc. Es el termino paraguas para todo lo "malo".</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="ransomware secuestro datos cifrado rescate">
+                <div class="term">Ransomware</div>
+                <span class="term-es">Secuestro de datos</span>
+                <div class="desc"><strong>Cifra tus archivos y pide un rescate</strong> (generalmente en criptomonedas) para devolvertelos. Es una de las amenazas mas comunes y daninas actualmente. Grupos como WIZARD SPIDER son conocidos por esto.</div>
+                <span class="tag tag-importante">Muy importante</span>
+            </div>
+            <div class="card" data-search="phishing suplantacion pesca correo falso">
+                <div class="term">Phishing</div>
+                <span class="term-es">Suplantacion / Pesca</span>
+                <div class="desc">Correos o webs falsas que imitan ser legitimas para <strong>robarte credenciales o datos</strong>. Es el vector de ataque mas comun. El "spear phishing" es phishing dirigido a una persona concreta.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="exploit explotacion vulnerabilidad aprovecha">
+                <div class="term">Exploit</div>
+                <span class="term-es">Explotacion</span>
+                <div class="desc">Codigo o tecnica que <strong>aprovecha una vulnerabilidad conocida</strong> en un software para ejecutar acciones no autorizadas.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="zero day dia cero vulnerabilidad desconocida sin parche">
+                <div class="term">Zero-day</div>
+                <span class="term-es">Dia cero</span>
+                <div class="desc">Vulnerabilidad que <strong>nadie conocia hasta ahora</strong>. No tiene parche todavia. Es la mas peligrosa porque no hay defensa preparada. Se llama "dia cero" porque los defensores han tenido cero dias para prepararse.</div>
+                <span class="tag tag-importante">Muy importante</span>
+            </div>
+            <div class="card" data-search="lateral movement movimiento lateral red propagacion">
+                <div class="term">Lateral Movement</div>
+                <span class="term-es">Movimiento lateral</span>
+                <div class="desc">Cuando un atacante <strong>ya entro a un equipo y se mueve a otros</strong> dentro de la red. Usa credenciales robadas, vulnerabilidades de red, etc. CrowdStrike es muy bueno detectando esto.</div>
+                <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
+            </div>
+            <div class="card" data-search="privilege escalation escalada privilegios administrador">
+                <div class="term">Privilege Escalation</div>
+                <span class="term-es">Escalada de privilegios</span>
+                <div class="desc">El atacante <strong>consigue permisos de administrador</strong> partiendo de un usuario normal. Es un paso critico en casi todos los ataques avanzados.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="brute force fuerza bruta contrasena password">
+                <div class="term">Brute Force</div>
+                <span class="term-es">Fuerza bruta</span>
+                <div class="desc">Probar <strong>miles de combinaciones de contrasenas</strong> hasta dar con la correcta. Herramientas como Hydra automatizan esto.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="social engineering ingenieria social manipulacion personas">
+                <div class="term">Social Engineering</div>
+                <span class="term-es">Ingenieria social</span>
+                <div class="desc"><strong>Manipular a personas</strong> (no maquinas) para que revelen informacion o hagan algo peligroso. El phishing es un tipo de ingenieria social.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="supply chain attack cadena suministro proveedor">
+                <div class="term">Supply Chain Attack</div>
+                <span class="term-es">Ataque a la cadena de suministro</span>
+                <div class="desc">Atacar un <strong>proveedor de software para infectar a todos sus clientes</strong> de golpe. Ejemplo famoso: el ataque a SolarWinds en 2020.</div>
+                <span class="tag tag-importante">Muy importante</span>
+            </div>
+            <div class="card" data-search="fileless attack ataque sin archivos memoria">
+                <div class="term">Fileless Attack</div>
+                <span class="term-es">Ataque sin archivos</span>
+                <div class="desc">Ataque que <strong>no deja archivos en disco</strong>, se ejecuta directamente en memoria. Los antivirus clasicos no lo detectan. <strong>CrowdStrike si, gracias a su enfoque en IOAs (comportamiento).</strong></div>
+                <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETECCION -->
+    <div class="section" id="deteccion">
+        <h2 class="section-title">Indicadores y Deteccion</h2>
+
+        <div class="callout">
+            <h3>IOC vs IOA - La diferencia clave</h3>
+            <p><strong>IOC = "Ya me robaron"</strong> (miras las huellas que dejo el ladron). <strong>IOA = "Me estan robando ahora"</strong> (ves al ladron en accion). CrowdStrike apuesta por IOA porque detecta ataques nuevos que no tienen IOCs conocidos.</p>
+        </div>
+
+        <div class="cards">
+            <div class="card" data-search="ioc indicator compromise indicador compromiso hash ip dominio">
+                <div class="term">IOC - Indicator of Compromise</div>
+                <span class="term-es">Indicador de compromiso</span>
+                <div class="desc"><strong>Evidencia de que ya ocurrio un ataque</strong>: un hash de archivo malicioso, una IP sospechosa, un dominio conocido como malicioso. Es <strong>reactivo</strong> (mira el pasado). Como las huellas que deja un ladron despues de robar.</div>
+                <span class="tag tag-importante">Muy importante</span>
+            </div>
+            <div class="card" data-search="ioa indicator attack indicador ataque comportamiento">
+                <div class="term">IOA - Indicator of Attack</div>
+                <span class="term-es">Indicador de ataque</span>
+                <div class="desc">Patron de comportamiento que indica que <strong>un ataque esta ocurriendo AHORA</strong>, sin importar que herramienta use el atacante. Es <strong>proactivo</strong> (mira el presente). <strong>CrowdStrike se enfoca mucho en IOAs.</strong></div>
+                <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
+            </div>
+            <div class="card" data-search="ttp tactics techniques procedures tacticas tecnicas procedimientos mitre">
+                <div class="term">TTP - Tactics, Techniques, Procedures</div>
+                <span class="term-es">Tacticas, Tecnicas y Procedimientos</span>
+                <div class="desc">La forma en que un atacante opera. <strong>Tactica</strong> = el "que" quiere lograr. <strong>Tecnica</strong> = el "como" lo hace. <strong>Procedimiento</strong> = los pasos concretos. MITRE ATT&CK los cataloga todos.</div>
+                <span class="tag tag-importante">Muy importante</span>
+            </div>
+            <div class="card" data-search="mitre att&ck attack framework base datos tecnicas">
+                <div class="term">MITRE ATT&CK</div>
+                <span class="term-es">Framework MITRE ATT&CK</span>
+                <div class="desc"><strong>Base de datos publica que clasifica TODAS las tecnicas conocidas de ataque.</strong> CrowdStrike mapea sus detecciones a este framework. Es el "diccionario universal" de ciberataques.</div>
+                <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
+            </div>
+            <div class="card" data-search="threat intelligence inteligencia amenazas informacion atacantes">
+                <div class="term">Threat Intelligence</div>
+                <span class="term-es">Inteligencia de amenazas</span>
+                <div class="desc"><strong>Informacion recopilada sobre atacantes</strong>: quienes son, que buscan, como operan. CrowdStrike tiene un equipo dedicado y es lider en esto.</div>
+                <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
+            </div>
+            <div class="card" data-search="threat actor actor amenaza grupo atacante adversario">
+                <div class="term">Threat Actor</div>
+                <span class="term-es">Actor de amenaza</span>
+                <div class="desc">Grupo o individuo que realiza ciberataques. <strong>CrowdStrike les pone nombres de animales</strong> segun su pais de origen (BEAR = Rusia, PANDA = China, etc.).</div>
+                <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
+            </div>
+            <div class="card" data-search="false positive falso positivo alerta incorrecta">
+                <div class="term">False Positive</div>
+                <span class="term-es">Falso positivo</span>
+                <div class="desc">Alerta que dice que algo es malicioso <strong>cuando en realidad es legitimo</strong>. Hay que minimizarlos para no perder tiempo investigando cosas que no son amenazas reales.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="true positive verdadero positivo alerta correcta">
+                <div class="term">True Positive</div>
+                <span class="term-es">Verdadero positivo</span>
+                <div class="desc">Alerta correcta: <strong>realmente habia algo malicioso</strong>. Es lo que quieres que tus herramientas detecten.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERRAMIENTAS -->
+    <div class="section" id="herramientas">
+        <h2 class="section-title">Herramientas y Tecnologias de Seguridad</h2>
+        <div class="cards">
+            <div class="card" data-search="edr endpoint detection response deteccion respuesta">
+                <div class="term">EDR</div>
+                <span class="term-en">Endpoint Detection & Response</span>
+                <span class="term-es">Deteccion y respuesta en endpoints</span>
+                <div class="desc">Software que <strong>monitoriza lo que pasa en cada equipo</strong>, detecta amenazas y permite responder. <strong>CrowdStrike Falcon ES un EDR (y mucho mas).</strong></div>
+                <span class="tag tag-crowdstrike">CrowdStrike es esto</span>
+            </div>
+            <div class="card" data-search="xdr extended detection response extendida">
+                <div class="term">XDR</div>
+                <span class="term-en">Extended Detection & Response</span>
+                <span class="term-es">Deteccion y respuesta extendida</span>
+                <div class="desc">Como EDR pero <strong>ampliado</strong>: no solo mira endpoints sino tambien red, cloud, email, identidad... todo junto y correlacionado.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="siem security information event management gestion eventos logs">
+                <div class="term">SIEM</div>
+                <span class="term-en">Security Information & Event Management</span>
+                <span class="term-es">Gestion de eventos de seguridad</span>
+                <div class="desc">Herramienta que <strong>recopila logs de muchas fuentes y los correlaciona</strong> para detectar amenazas. Ejemplos: Splunk, QRadar, Microsoft Sentinel.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="soar security orchestration automation response automatizacion">
+                <div class="term">SOAR</div>
+                <span class="term-en">Security Orchestration, Automation & Response</span>
+                <span class="term-es">Orquestacion y automatizacion</span>
+                <div class="desc">Herramienta que <strong>automatiza respuestas ante incidentes</strong>. Ej: si detecta malware, automaticamente aisla el equipo. <strong>CrowdStrike tiene Falcon Fusion SOAR.</strong></div>
+                <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
+            </div>
+            <div class="card" data-search="firewall cortafuegos trafico red filtrar bloquear">
+                <div class="term">Firewall</div>
+                <span class="term-es">Cortafuegos</span>
+                <div class="desc"><strong>Filtra el trafico de red</strong>, permite o bloquea conexiones segun reglas definidas. Puede ser de red (hardware) o de host (software en el equipo).</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="antivirus av firmas signatures clasico">
+                <div class="term">Antivirus (AV)</div>
+                <span class="term-es">Antivirus clasico</span>
+                <div class="desc">Software clasico que detecta malware <strong>comparando con una base de datos de firmas conocidas</strong>. Es mas limitado que un EDR porque solo detecta lo que ya conoce.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="ngav next gen antivirus nueva generacion machine learning">
+                <div class="term">NGAV</div>
+                <span class="term-en">Next-Gen Antivirus</span>
+                <span class="term-es">Antivirus de nueva generacion</span>
+                <div class="desc">Antivirus moderno que usa <strong>machine learning y analisis de comportamiento</strong>, no solo firmas. Detecta amenazas desconocidas. <strong>CrowdStrike Falcon Prevent es un NGAV.</strong></div>
+                <span class="tag tag-crowdstrike">CrowdStrike incluye esto</span>
+            </div>
+            <div class="card" data-search="sandbox caja arena entorno aislado ejecutar sospechoso">
+                <div class="term">Sandbox</div>
+                <span class="term-es">Caja de arena</span>
+                <div class="desc">Entorno aislado donde se <strong>ejecuta un archivo sospechoso para ver que hace</strong> sin riesgo para el sistema real. CrowdStrike tiene Falcon Sandbox.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="dlp data loss prevention prevencion perdida datos">
+                <div class="term">DLP</div>
+                <span class="term-en">Data Loss Prevention</span>
+                <span class="term-es">Prevencion de perdida de datos</span>
+                <div class="desc">Herramientas que <strong>evitan que datos sensibles salgan de la organizacion</strong> por email, USB, cloud, etc.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCEPTOS GENERALES -->
+    <div class="section" id="conceptos">
+        <h2 class="section-title">Conceptos Generales</h2>
+        <div class="cards">
+            <div class="card" data-search="endpoint punto final equipo dispositivo pc servidor">
+                <div class="term">Endpoint</div>
+                <span class="term-es">Punto final / Equipo</span>
+                <div class="desc">Cualquier dispositivo que se conecta a la red: <strong>PC, portatil, servidor, movil</strong>. Es lo que CrowdStrike protege. Cada endpoint tiene un sensor instalado.</div>
+                <span class="tag tag-crowdstrike">Concepto fundamental</span>
+            </div>
+            <div class="card" data-search="cloud native nativo nube disenado">
+                <div class="term">Cloud-native</div>
+                <span class="term-es">Nativo en la nube</span>
+                <div class="desc">Disenado para funcionar en la nube <strong>desde el principio</strong> (no adaptado despues). <strong>CrowdStrike Falcon es cloud-native</strong>, no necesitas servidores propios.</div>
+                <span class="tag tag-crowdstrike">Clave en CrowdStrike</span>
+            </div>
+            <div class="card" data-search="on premises on-prem local instalaciones servidor propio">
+                <div class="term">On-premises</div>
+                <span class="term-es">En local / En las instalaciones</span>
+                <div class="desc">Software que se instala en <strong>tus propios servidores</strong>, no en la nube. CrowdStrike NO es on-premises (es cloud).</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="vulnerability vulnerabilidad debilidad sistema fallo">
+                <div class="term">Vulnerability</div>
+                <span class="term-es">Vulnerabilidad</span>
+                <div class="desc"><strong>Debilidad en un sistema</strong> que un atacante podria aprovechar. Se clasifican con puntuacion CVSS (0-10, siendo 10 la mas critica).</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="patch parche actualizacion correccion">
+                <div class="term">Patch</div>
+                <span class="term-es">Parche</span>
+                <div class="desc"><strong>Actualizacion que corrige una vulnerabilidad</strong> o bug. Aplicar parches a tiempo es una de las defensas mas basicas e importantes.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="compliance cumplimiento normativo regulacion gdpr pci">
+                <div class="term">Compliance</div>
+                <span class="term-es">Cumplimiento normativo</span>
+                <div class="desc">Cumplir con <strong>regulaciones de seguridad</strong> como GDPR (datos personales en Europa), PCI-DSS (datos de tarjetas), HIPAA (datos medicos), etc.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="remediation remediacion solucion corregir arreglar">
+                <div class="term">Remediation</div>
+                <span class="term-es">Remediacion</span>
+                <div class="desc">Las <strong>acciones que tomas para solucionar</strong> un problema de seguridad: parchear, aislar, eliminar malware, cambiar credenciales, etc.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="quarantine cuarentena aislar archivo sospechoso">
+                <div class="term">Quarantine</div>
+                <span class="term-es">Cuarentena</span>
+                <div class="desc"><strong>Aislar un archivo sospechoso</strong> para que no pueda ejecutarse ni hacer dano. CrowdStrike puede poner archivos en cuarentena automaticamente.</div>
+                <span class="tag tag-crowdstrike">Funcion de CrowdStrike</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- FALCON PLATFORM -->
+    <div class="section" id="falcon">
+        <h2 class="section-title">CrowdStrike Falcon - La Plataforma</h2>
+        <div class="cards">
+            <div class="card" data-search="crowdstrike falcon plataforma seguridad cloud">
+                <div class="term">CrowdStrike Falcon</div>
+                <div class="desc">La <strong>plataforma completa de ciberseguridad</strong> de CrowdStrike. Es cloud-native: todo se gestiona desde la nube, el sensor es ligero y no necesita servidores locales.</div>
+                <span class="tag tag-crowdstrike">La plataforma</span>
+            </div>
+            <div class="card" data-search="falcon console consola interfaz web panel control gestion">
+                <div class="term">Falcon Console</div>
+                <div class="desc">La <strong>interfaz web donde gestionas todo</strong>: ves alertas, configuras politicas, gestionas equipos, investigas incidentes. Es tu panel de control diario como administrador.</div>
+                <span class="tag tag-crowdstrike">Tu herramienta diaria</span>
+            </div>
+            <div class="card" data-search="falcon sensor agente ligero instala endpoint recopila datos">
+                <div class="term">Falcon Sensor</div>
+                <div class="desc">El <strong>agente ligero que se instala en cada endpoint</strong> (PC, servidor). Recopila datos de todo lo que pasa en el equipo y los envia a la nube de CrowdStrike. No necesita actualizaciones de firmas porque la inteligencia esta en la nube.</div>
+                <span class="tag tag-crowdstrike">Componente fundamental</span>
+            </div>
+            <div class="card" data-search="cid customer id identificador cliente instalacion">
+                <div class="term">CID - Customer ID</div>
+                <div class="desc">Tu <strong>identificador unico como cliente</strong> de CrowdStrike. Lo necesitas para instalar sensores - es como la "llave" que conecta tus equipos con tu cuenta de CrowdStrike.</div>
+                <span class="tag tag-crowdstrike">Necesario para instalar</span>
+            </div>
+            <div class="card" data-search="falcon cloud nube infraestructura procesamiento ia">
+                <div class="term">Falcon Cloud</div>
+                <div class="desc">La <strong>infraestructura en la nube</strong> de CrowdStrike donde se procesan todos los datos y se ejecuta la IA de deteccion. Tu sensor envia datos aqui.</div>
+                <span class="tag tag-crowdstrike">Infraestructura</span>
+            </div>
+            <div class="card" data-search="threat graph base datos masiva correlacion eventos tiempo real">
+                <div class="term">Threat Graph</div>
+                <div class="desc">La <strong>base de datos masiva de CrowdStrike</strong> que correlaciona eventos de TODOS sus clientes en tiempo real. Procesa billones de eventos por semana. Si un ataque se ve en un cliente, todos los demas se protegen automaticamente.</div>
+                <span class="tag tag-crowdstrike">Ventaja competitiva</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODULOS FALCON -->
+    <div class="section" id="modulos">
+        <h2 class="section-title">Modulos de Falcon</h2>
+        <div class="cards">
+            <div class="card" data-search="falcon prevent ngav antivirus bloqueo malware prevencion">
+                <div class="term">Falcon Prevent</div>
+                <div class="desc">Modulo de <strong>NGAV (antivirus de nueva generacion)</strong>. Bloquea malware y ataques conocidos y desconocidos usando machine learning e IOAs. Es la primera linea de defensa.</div>
+                <span class="tag tag-crowdstrike">NGAV</span>
+            </div>
+            <div class="card" data-search="falcon insight edr visibilidad endpoint investigar incidentes">
+                <div class="term">Falcon Insight</div>
+                <div class="desc">Modulo de <strong>EDR</strong>. Proporciona visibilidad completa de lo que pasa en cada endpoint. Permite <strong>investigar y responder a incidentes</strong> con detalle: ver procesos, conexiones, archivos modificados, etc.</div>
+                <span class="tag tag-crowdstrike">EDR</span>
+            </div>
+            <div class="card" data-search="falcon overwatch threat hunting equipo humano 24/7 busqueda">
+                <div class="term">Falcon OverWatch</div>
+                <div class="desc"><strong>Equipo humano de CrowdStrike</strong> que hace threat hunting 24/7. Son analistas expertos que buscan amenazas activamente que las maquinas podrian no detectar. Es un servicio premium.</div>
+                <span class="tag tag-crowdstrike">Servicio humano</span>
+            </div>
+            <div class="card" data-search="falcon discover higiene ti aplicaciones cuentas activos inventario">
+                <div class="term">Falcon Discover</div>
+                <div class="desc">Modulo de <strong>higiene de TI</strong>. Te muestra que aplicaciones, cuentas de usuario y activos tienes en tu red. Ayuda a mantener un inventario actualizado y detectar shadow IT.</div>
+                <span class="tag tag-crowdstrike">Visibilidad</span>
+            </div>
+            <div class="card" data-search="falcon spotlight vulnerabilidades gestion escaneo sin escaneo">
+                <div class="term">Falcon Spotlight</div>
+                <div class="desc"><strong>Gestion de vulnerabilidades sin necesidad de escaneos.</strong> Usa los datos que el sensor ya recopila para identificar vulnerabilidades en el software instalado. Sin escaneos extra = sin impacto en rendimiento.</div>
+                <span class="tag tag-crowdstrike">Vulnerabilidades</span>
+            </div>
+            <div class="card" data-search="falcon fusion soar automatizacion flujos trabajo respuesta automatica">
+                <div class="term">Falcon Fusion (SOAR)</div>
+                <div class="desc"><strong>Motor de automatizacion</strong>. Permite crear flujos de trabajo automaticos: "si pasa X, haz Y". Ejemplo: si se detecta ransomware, aislar el equipo y notificar al equipo de seguridad automaticamente.</div>
+                <span class="tag tag-crowdstrike">Automatizacion</span>
+            </div>
+            <div class="card" data-search="falcon identity protection identidad credenciales active directory">
+                <div class="term">Falcon Identity Protection</div>
+                <div class="desc"><strong>Proteccion de identidades y credenciales.</strong> Detecta ataques a Active Directory, uso de credenciales robadas, movimiento lateral basado en identidad, etc.</div>
+                <span class="tag tag-crowdstrike">Identidad</span>
+            </div>
+            <div class="card" data-search="falcon mobile movil ios android proteccion dispositivos">
+                <div class="term">Falcon for Mobile</div>
+                <div class="desc"><strong>Proteccion para dispositivos moviles</strong> (iOS y Android). Extiende la visibilidad y proteccion de Falcon a smartphones y tablets corporativos.</div>
+                <span class="tag tag-crowdstrike">Movil</span>
+            </div>
+            <div class="card" data-search="falcon firewall management cortafuegos gestion host windows">
+                <div class="term">Falcon Firewall Management</div>
+                <div class="desc">Gestion del <strong>firewall del host</strong> (Windows Firewall) desde la consola de Falcon. Permite crear y gestionar reglas de firewall de forma centralizada.</div>
+                <span class="tag tag-crowdstrike">Firewall</span>
+            </div>
+            <div class="card" data-search="falcon device control usb perifericos control dispositivos">
+                <div class="term">Falcon Device Control</div>
+                <div class="desc"><strong>Control de dispositivos USB y perifericos.</strong> Puedes definir politicas para permitir, bloquear o limitar el uso de USBs, discos externos, etc.</div>
+                <span class="tag tag-crowdstrike">USB</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GESTION FALCON -->
+    <div class="section" id="gestion">
+        <h2 class="section-title">Gestion y Configuracion de Falcon</h2>
+        <div class="cards">
+            <div class="card" data-search="host endpoint equipo sensor instalado consola">
+                <div class="term">Host / Endpoint</div>
+                <div class="desc">Un <strong>equipo donde esta instalado el sensor</strong> de CrowdStrike. Cada host aparece en la consola con su nombre, IP, sistema operativo, ultimo check-in, etc.</div>
+                <span class="tag tag-crowdstrike">Gestion</span>
+            </div>
+            <div class="card" data-search="host group grupo equipos agrupacion politicas estatico dinamico">
+                <div class="term">Host Group</div>
+                <div class="desc"><strong>Agrupacion de equipos.</strong> Sirve para aplicar diferentes politicas a diferentes grupos. Pueden ser <strong>estaticos</strong> (anadir equipos manualmente) o <strong>dinamicos</strong> (se llenan automaticamente segun reglas como SO, dominio, etc.).</div>
+                <span class="tag tag-crowdstrike">Gestion</span>
+            </div>
+            <div class="card" data-search="prevention policy politica prevencion bloqueo amenazas configuracion">
+                <div class="term">Prevention Policy</div>
+                <div class="desc">Politica que define <strong>que amenazas bloquea automaticamente</strong> Falcon y como responde. Puedes tener politicas agresivas para servidores criticos y mas permisivas para equipos de desarrollo.</div>
+                <span class="tag tag-crowdstrike">Configuracion clave</span>
+            </div>
+            <div class="card" data-search="detection policy politica deteccion alertar comportamiento">
+                <div class="term">Detection Policy</div>
+                <div class="desc">Politica que define <strong>que comportamientos debe detectar y alertar</strong> (sin necesariamente bloquear). Controla la sensibilidad de las detecciones.</div>
+                <span class="tag tag-crowdstrike">Configuracion</span>
+            </div>
+            <div class="card" data-search="response policy politica respuesta acciones aislar remoto">
+                <div class="term">Response Policy</div>
+                <div class="desc">Politica que define <strong>que acciones de respuesta estan disponibles</strong>: si se puede aislar un equipo remotamente, si se pueden ejecutar scripts, etc.</div>
+                <span class="tag tag-crowdstrike">Configuracion</span>
+            </div>
+            <div class="card" data-search="sensor update policy politica actualizacion sensor version">
+                <div class="term">Sensor Update Policy</div>
+                <div class="desc">Politica que controla <strong>como y cuando se actualizan los sensores</strong> en los endpoints. Puedes definir ventanas de mantenimiento, versiones especificas, etc.</div>
+                <span class="tag tag-crowdstrike">Configuracion</span>
+            </div>
+            <div class="card" data-search="exclusion excluir ignorar falso positivo software legitimo">
+                <div class="term">Exclusion</div>
+                <div class="desc">Regla para que Falcon <strong>ignore ciertos archivos, carpetas o procesos</strong>. Se usa cuando hay falsos positivos con software legitimo. Cuidado: no abuses o crearas puntos ciegos.</div>
+                <span class="tag tag-crowdstrike">Configuracion</span>
+            </div>
+            <div class="card" data-search="containment network containment aislar equipo red comprometido">
+                <div class="term">Network Containment</div>
+                <div class="desc"><strong>Aislar un equipo de la red</strong> para que no pueda comunicarse con nada excepto con la nube de CrowdStrike. Se usa cuando un equipo esta comprometido. Es como ponerle una burbuja al equipo infectado.</div>
+                <span class="tag tag-crowdstrike">Respuesta a incidentes</span>
+            </div>
+            <div class="card" data-search="rtr real time response acceso remoto comandos scripts investigar">
+                <div class="term">Real Time Response (RTR)</div>
+                <div class="desc"><strong>Acceso remoto al equipo desde la consola.</strong> Permite ejecutar comandos, recopilar archivos, matar procesos, ver registros... Como un SSH/RDP pero a traves de CrowdStrike. Muy potente para investigar incidentes.</div>
+                <span class="tag tag-crowdstrike">Herramienta potente</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALERTAS -->
+    <div class="section" id="alertas">
+        <h2 class="section-title">Alertas y Detecciones en Falcon</h2>
+        <div class="cards">
+            <div class="card" data-search="detection alerta deteccion actividad sospechosa maliciosa">
+                <div class="term">Detection</div>
+                <div class="desc"><strong>Alerta que Falcon genera</strong> cuando detecta actividad sospechosa o maliciosa en un endpoint. Cada deteccion tiene severidad, detalle del proceso, y mapeo a MITRE ATT&CK.</div>
+                <span class="tag tag-crowdstrike">Trabajo diario</span>
+            </div>
+            <div class="card" data-search="severity severidad gravedad critical high medium low informational">
+                <div class="term">Severity</div>
+                <div class="desc">Nivel de gravedad: <strong>Informational</strong> (info) → <strong>Low</strong> (baja) → <strong>Medium</strong> (media) → <strong>High</strong> (alta) → <strong>Critical</strong> (critica). Prioriza siempre Critical y High.</div>
+                <span class="tag tag-crowdstrike">Priorizacion</span>
+            </div>
+            <div class="card" data-search="tactic technique tactica tecnica mitre ataque tipo">
+                <div class="term">Tactic / Technique</div>
+                <div class="desc">Referencia al framework MITRE ATT&CK dentro de la deteccion. Te dice <strong>QUE tipo de ataque se detecto</strong> (ej: "Execution" = se ejecuto algo, "Persistence" = intento de persistir).</div>
+                <span class="tag tag-crowdstrike">Investigacion</span>
+            </div>
+            <div class="card" data-search="process tree arbol procesos cadena padre hijo investigar">
+                <div class="term">Process Tree</div>
+                <div class="desc">Vista que muestra la <strong>cadena de procesos: que proceso lanzo que otro</strong>. Ej: el usuario abrio Word → Word lanzo PowerShell → PowerShell descargo malware. Muy util para investigar.</div>
+                <span class="tag tag-crowdstrike">Investigacion</span>
+            </div>
+            <div class="card" data-search="status estado deteccion new in progress true false positive closed">
+                <div class="term">Detection Status</div>
+                <div class="desc">Estado de la deteccion: <strong>New</strong> (nueva, sin revisar) → <strong>In Progress</strong> (investigando) → <strong>True/False Positive</strong> (confirmada o descartada) → <strong>Closed</strong> (cerrada).</div>
+                <span class="tag tag-crowdstrike">Flujo de trabajo</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- RED Y SISTEMAS -->
+    <div class="section" id="red">
+        <h2 class="section-title">Red y Sistemas</h2>
+        <div class="cards">
+            <div class="card" data-search="ip address direccion ip identificador dispositivo red">
+                <div class="term">IP Address</div>
+                <span class="term-es">Direccion IP</span>
+                <div class="desc">Numero que <strong>identifica a un dispositivo en la red</strong> (ej: 192.168.1.100 para red local, 8.8.8.8 para internet). Cada equipo en Falcon muestra su IP.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="dns domain name system nombres dominio traduccion">
+                <div class="term">DNS</div>
+                <span class="term-en">Domain Name System</span>
+                <span class="term-es">Sistema de nombres de dominio</span>
+                <div class="desc"><strong>Traduce nombres (google.com) a direcciones IP.</strong> Los atacantes a menudo usan DNS para comunicarse con sus servidores de comando y control (C2).</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="port puerto servicio 80 443 22 3389 rdp ssh">
+                <div class="term">Port</div>
+                <span class="term-es">Puerto</span>
+                <div class="desc">Numero que identifica un servicio: <strong>80</strong> = web, <strong>443</strong> = web segura (HTTPS), <strong>22</strong> = SSH, <strong>3389</strong> = RDP (escritorio remoto), <strong>445</strong> = SMB (compartir archivos Windows).</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="active directory ad directorio activo usuarios equipos permisos">
+                <div class="term">Active Directory (AD)</div>
+                <span class="term-es">Directorio Activo</span>
+                <div class="desc">Sistema de Microsoft que <strong>gestiona usuarios, equipos y permisos</strong> en una red empresarial. Es el <strong>objetivo #1 de los atacantes</strong> porque quien controla el AD controla todo.</div>
+                <span class="tag tag-importante">Muy importante</span>
+            </div>
+            <div class="card" data-search="domain controller dc controlador dominio servidor ad">
+                <div class="term">Domain Controller (DC)</div>
+                <span class="term-es">Controlador de dominio</span>
+                <div class="desc">Servidor que <strong>gestiona el Active Directory</strong>. Si un atacante lo compromete, tiene control total de la red. Protegerlo es prioridad maxima.</div>
+                <span class="tag tag-importante">Muy importante</span>
+            </div>
+            <div class="card" data-search="hash huella digital archivo md5 sha256 identificar malware">
+                <div class="term">Hash</div>
+                <span class="term-es">Huella digital</span>
+                <div class="desc"><strong>Huella digital unica de un archivo.</strong> Si cambias un solo byte, el hash cambia completamente. Se usa para identificar malware. Tipos: MD5, SHA-1, SHA-256. CrowdStrike los usa como IOCs.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="c2 c&c command control comando servidor atacante instrucciones">
+                <div class="term">C2 / C&C</div>
+                <span class="term-en">Command and Control</span>
+                <span class="term-es">Comando y control</span>
+                <div class="desc"><strong>Servidor del atacante</strong> que envia instrucciones al malware instalado en tus equipos. El malware "llama a casa" para recibir ordenes. CrowdStrike detecta estas comunicaciones.</div>
+                <span class="tag tag-importante">Muy importante</span>
+            </div>
+            <div class="card" data-search="powershell scripting windows administracion atacantes">
+                <div class="term">PowerShell</div>
+                <div class="desc">Lenguaje de scripting de Windows. Muy potente y por eso <strong>muy usado tanto por administradores como por atacantes</strong>. CrowdStrike monitoriza la actividad de PowerShell de cerca.</div>
+                <span class="tag tag-crowdstrike">Monitorizado por CrowdStrike</span>
+            </div>
+            <div class="card" data-search="api application programming interface integracion automatizacion">
+                <div class="term">API</div>
+                <span class="term-en">Application Programming Interface</span>
+                <div class="desc">Forma de que <strong>dos programas se comuniquen entre si</strong>. CrowdStrike tiene APIs para integrarse con SIEM, SOAR, y otras herramientas de seguridad.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+            <div class="card" data-search="registry registro windows configuracion persistencia malware">
+                <div class="term">Registry</div>
+                <span class="term-es">Registro de Windows</span>
+                <div class="desc"><strong>Base de datos de configuracion de Windows.</strong> El malware a menudo modifica el registro para persistir (sobrevivir a reinicios). CrowdStrike vigila cambios sospechosos en el registro.</div>
+                <span class="tag tag-basico">Basico</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- THREAT ACTORS -->
+    <div class="section" id="actors">
+        <h2 class="section-title">Threat Actors - Nombres de CrowdStrike</h2>
+        <p style="color: #8892a4; margin-bottom: 20px;">CrowdStrike nombra a los grupos de atacantes con animales segun su pais de origen:</p>
+        <div class="actors-grid">
+            <div class="actor-card" data-search="bear oso rusia fancy cozy">
+                <div class="actor-emoji">&#x1F43B;</div>
+                <div class="actor-info">
+                    <div class="actor-name">BEAR</div>
+                    <div class="actor-country">Rusia</div>
+                    <div class="actor-example">Ej: FANCY BEAR, COZY BEAR</div>
+                </div>
+            </div>
+            <div class="actor-card" data-search="panda china apt gobierno">
+                <div class="actor-emoji">&#x1F43C;</div>
+                <div class="actor-info">
+                    <div class="actor-name">PANDA</div>
+                    <div class="actor-country">China</div>
+                    <div class="actor-example">Ej: WICKED PANDA, GOBLIN PANDA</div>
+                </div>
+            </div>
+            <div class="actor-card" data-search="kitten gatito iran irani">
+                <div class="actor-emoji">&#x1F431;</div>
+                <div class="actor-info">
+                    <div class="actor-name">KITTEN</div>
+                    <div class="actor-country">Iran</div>
+                    <div class="actor-example">Ej: CHARMING KITTEN</div>
+                </div>
+            </div>
+            <div class="actor-card" data-search="chollima corea norte norcoreano">
+                <div class="actor-emoji">&#x1F40E;</div>
+                <div class="actor-info">
+                    <div class="actor-name">CHOLLIMA</div>
+                    <div class="actor-country">Corea del Norte</div>
+                    <div class="actor-example">Ej: LABYRINTH CHOLLIMA</div>
+                </div>
+            </div>
+            <div class="actor-card" data-search="spider arana cibercrimen economico ransomware">
+                <div class="actor-emoji">&#x1F577;&#xFE0F;</div>
+                <div class="actor-info">
+                    <div class="actor-name">SPIDER</div>
+                    <div class="actor-country">Cibercrimen (motivacion economica)</div>
+                    <div class="actor-example">Ej: WIZARD SPIDER (Ryuk/Conti)</div>
+                </div>
+            </div>
+            <div class="actor-card" data-search="jackal chacal hacktivismo activismo">
+                <div class="actor-emoji">&#x1F43A;</div>
+                <div class="actor-info">
+                    <div class="actor-name">JACKAL</div>
+                    <div class="actor-country">Hacktivismo</div>
+                    <div class="actor-example">Motivacion ideologica/politica</div>
+                </div>
+            </div>
+            <div class="actor-card" data-search="hawk halcon otros paises">
+                <div class="actor-emoji">&#x1F985;</div>
+                <div class="actor-info">
+                    <div class="actor-name">HAWK</div>
+                    <div class="actor-country">Otros paises</div>
+                    <div class="actor-example">Actores de otros origenes</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <!-- RESUMENES DE MODULOS -->
+    <div class="section" id="resumenes">
+        <h2 class="section-title">Resumenes de Modulos del Curso</h2>
+        <p style="color: #8892a4; margin-bottom: 25px;">Resumen en espanol de cada modulo. Usa esto para repasar antes del examen o para prepararte antes de hacer un modulo nuevo.</p>
+
+        <!-- FALCON 100 -->
+        <div class="module-summary completed">
+            <div class="module-header">
+                <span class="module-badge badge-completed">Completado</span>
+                <span class="module-meta">30 min | E-learning</span>
+            </div>
+            <h3>FALCON 100: Falcon Platform Architecture Overview</h3>
+            <div class="module-objective">
+                <strong>Objetivo:</strong> Entender como esta construida la plataforma CrowdStrike Falcon, por que es diferente a un antivirus clasico, y como encajan todas las piezas.
+            </div>
+            <ul class="key-points">
+                <li><strong>CrowdStrike Falcon es cloud-native:</strong> Toda la inteligencia y procesamiento esta en la nube. No necesitas servidores propios, no necesitas actualizar firmas. El sensor envia datos a la nube y ahi se analiza todo.</li>
+                <li><strong>El sensor es ligero:</strong> Se instala en cada endpoint (PC, servidor) y consume pocos recursos. Solo recopila datos y los envia. <em>No es como un antivirus pesado que ralentiza el equipo.</em></li>
+                <li><strong>Threat Graph:</strong> Es el cerebro de CrowdStrike. Una base de datos masiva que procesa <em>billones de eventos por semana</em> de todos los clientes. Si un ataque se detecta en un cliente, todos los demas se protegen automaticamente.</li>
+                <li><strong>Arquitectura de un solo agente:</strong> Un unico sensor da acceso a todos los modulos (Prevent, Insight, Discover, Spotlight...). No necesitas instalar un agente diferente para cada funcion. <em>Esto es una ventaja enorme frente a la competencia.</em></li>
+                <li><strong>Enfoque en IOAs (Indicators of Attack):</strong> CrowdStrike no se basa solo en firmas (IOCs). Analiza el <em>comportamiento</em> en tiempo real. Si un proceso hace algo sospechoso (ej: Word lanzando PowerShell), lo detecta aunque sea un malware completamente nuevo.</li>
+                <li><strong>Falcon Console:</strong> Tu panel de control web donde gestionas todo: alertas, politicas, equipos, investigaciones. Es la interfaz que usaras a diario como administrador.</li>
+            </ul>
+            <div class="exam-tip">
+                Recuerda: CrowdStrike usa <strong>un solo sensor ligero</strong> para todo, es <strong>cloud-native</strong> (no on-premises), y su ventaja principal es el enfoque en <strong>IOAs + Threat Graph</strong>. Estas tres ideas aparecen constantemente en el examen.
+            </div>
+        </div>
+
+        <!-- FALCON 101 -->
+        <div class="module-summary completed">
+            <div class="module-header">
+                <span class="module-badge badge-completed">Completado</span>
+                <span class="module-meta">50 min | E-learning</span>
+            </div>
+            <h3>FALCON 101: Falcon Platform Essentials</h3>
+            <div class="module-objective">
+                <strong>Objetivo:</strong> Conocer los modulos principales de la plataforma Falcon y entender que hace cada uno. Es como el "catalogo de productos" de CrowdStrike.
+            </div>
+            <ul class="key-points">
+                <li><strong>Falcon Prevent (NGAV):</strong> Antivirus de nueva generacion. Bloquea malware conocido y desconocido usando machine learning. Es la <em>primera linea de defensa</em>. Reemplaza al antivirus clasico.</li>
+                <li><strong>Falcon Insight (EDR):</strong> Deteccion y respuesta en endpoints. Te da <em>visibilidad total</em> de lo que pasa en cada equipo: procesos, conexiones de red, archivos modificados. Permite investigar incidentes con el "process tree" (arbol de procesos).</li>
+                <li><strong>Falcon OverWatch:</strong> Equipo <em>humano</em> de threat hunters que busca amenazas 24/7. Son los expertos de CrowdStrike que complementan la IA. Buscan activamente lo que las maquinas podrian no detectar.</li>
+                <li><strong>Falcon Discover:</strong> Higiene de TI. Te muestra <em>que tienes en tu red</em>: aplicaciones instaladas, cuentas de usuario, dispositivos. Ayuda a encontrar "shadow IT" (cosas que no sabias que estaban ahi).</li>
+                <li><strong>Falcon Spotlight:</strong> Gestion de vulnerabilidades <em>sin escaneos</em>. Usa los datos del sensor para decirte que software tiene vulnerabilidades. No necesita escaneos programados que ralenticen la red.</li>
+                <li><strong>Falcon Identity Protection:</strong> Protege las identidades y credenciales. Detecta ataques a <em>Active Directory</em>, credenciales robadas, y movimiento lateral basado en identidad.</li>
+                <li><strong>Falcon Fusion (SOAR):</strong> Automatizacion. Crea flujos tipo "si pasa esto, haz aquello". Ej: <em>si se detecta ransomware → aislar equipo + notificar al SOC automaticamente</em>.</li>
+                <li><strong>Falcon Device Control:</strong> Controla dispositivos USB. Puedes <em>bloquear, permitir o limitar</em> el uso de USBs y perifericos segun politicas.</li>
+                <li><strong>Falcon Firewall Management:</strong> Gestiona el firewall de Windows desde la consola de Falcon. <em>Reglas centralizadas</em> sin tener que ir equipo por equipo.</li>
+            </ul>
+            <div class="exam-tip">
+                Para el examen necesitas saber <strong>que hace cada modulo y en que se diferencia de los demas</strong>. Truco: Prevent = bloquear, Insight = investigar, OverWatch = humanos, Discover = inventario, Spotlight = vulnerabilidades, Fusion = automatizar.
+            </div>
+        </div>
+
+        <!-- FALCON 102 -->
+        <div class="module-summary in-progress">
+            <div class="module-header">
+                <span class="module-badge badge-progress">En progreso (4/6)</span>
+                <span class="module-meta">1 hora | E-learning</span>
+            </div>
+            <h3>FALCON 102: Falcon Platform Onboarding Configuration</h3>
+            <div class="module-objective">
+                <strong>Objetivo:</strong> Aprender a configurar la plataforma Falcon desde cero cuando llegas a una empresa: como crear usuarios, instalar sensores, configurar politicas y organizar los equipos. Es el modulo mas practico hasta ahora.
+            </div>
+            <ul class="key-points">
+                <li><strong>Configuracion inicial de la consola:</strong> Lo primero que haces al entrar a Falcon: crear usuarios, asignar roles (Falcon Administrator, Analyst, Viewer...), configurar autenticacion (MFA/2FA). <em>El rol de Falcon Administrator tiene acceso total.</em></li>
+                <li><strong>Instalacion del sensor:</strong> Para proteger un equipo necesitas instalar el sensor. Necesitas el <em>CID (Customer ID)</em> que es tu identificador unico. El sensor se puede desplegar via GPO, SCCM, scripts, o manualmente.</li>
+                <li><strong>Host Groups (Grupos de equipos):</strong> Organizas tus equipos en grupos para aplicar politicas diferentes. Dos tipos: <em>Estaticos</em> (los anaides manualmente) y <em>Dinamicos</em> (se llenan automaticamente por reglas: sistema operativo, dominio, OU, etc.).</li>
+                <li><strong>Prevention Policies (Politicas de prevencion):</strong> Defines QUE bloquea Falcon automaticamente. Puedes tener politicas mas agresivas para servidores criticos y mas permisivas para equipos de desarrollo. <em>Se asignan a Host Groups.</em></li>
+                <li><strong>Sensor Update Policies:</strong> Controlas <em>cuando y como se actualizan</em> los sensores. Puedes definir canales (N, N-1, N-2) para actualizar gradualmente: primero un grupo de prueba, luego el resto.</li>
+                <li><strong>Exclusiones:</strong> Si Falcon bloquea un software legitimo (falso positivo), creas una exclusion. Puedes excluir por <em>ruta de archivo, hash, o proceso</em>. Cuidado: cada exclusion es un punto ciego potencial.</li>
+                <li><strong>Roles y permisos (RBAC):</strong> Control de acceso basado en roles. Defines <em>quien puede ver que</em> en la consola. Ej: un analista junior solo ve alertas, un admin puede cambiar politicas. Principio de <em>minimo privilegio</em>.</li>
+                <li><strong>Verificacion del despliegue:</strong> Despues de instalar sensores, verificas en la consola que los equipos aparecen, estan en el grupo correcto y tienen la politica correcta aplicada. <em>Host Management</em> es la seccion donde ves todo esto.</li>
+            </ul>
+            <div class="exam-tip">
+                Este modulo es MUY importante para el examen. Recuerda el flujo: <strong>1) Crear usuarios/roles → 2) Instalar sensor (con CID) → 3) Crear Host Groups → 4) Crear/asignar Policies → 5) Verificar despliegue</strong>. Tambien: los Host Groups dinamicos son mas utiles que los estaticos en entornos grandes porque se gestionan solos.
+            </div>
+        </div>
+
+        <!-- FALCON 104 -->
+        <div class="module-summary in-progress">
+            <div class="module-header">
+                <span class="module-badge badge-progress">En progreso (0/3)</span>
+                <span class="module-meta">25 min | E-learning</span>
+            </div>
+            <h3>FALCON 104: Getting Started with Endpoint Security</h3>
+            <div class="module-objective">
+                <strong>Objetivo:</strong> Aprender a trabajar con las detecciones y alertas del dia a dia. Como ver, investigar y gestionar los incidentes que Falcon detecta en los endpoints. Este es tu trabajo diario como administrador.
+            </div>
+            <ul class="key-points">
+                <li><strong>Dashboard principal:</strong> La pantalla de inicio de Falcon te muestra un resumen: <em>detecciones recientes, equipos con problemas, tendencias</em>. Es lo primero que miras cada manana.</li>
+                <li><strong>Detecciones y severidad:</strong> Cada alerta tiene un nivel: Informational → Low → Medium → High → Critical. <em>Prioriza siempre Critical y High</em>. El color rojo = urgente.</li>
+                <li><strong>Investigacion con Process Tree:</strong> Cuando haces clic en una deteccion, ves el arbol de procesos: <em>que proceso inicio todo, que procesos lanzo, que conexiones hizo, que archivos toco</em>. Es como reconstruir la escena del crimen.</li>
+                <li><strong>Flujo de trabajo de una alerta:</strong> New (nueva) → In Progress (la estas investigando) → True Positive (confirmada como amenaza real) o False Positive (era legitimo) → Closed. <em>Siempre documenta por que la cierras.</em></li>
+                <li><strong>Acciones de respuesta:</strong> Cuando confirmas una amenaza puedes: <em>Network Contain</em> (aislar el equipo de la red), <em>quarantine</em> (cuarentena del archivo), o usar <em>RTR (Real Time Response)</em> para conectarte al equipo y limpiar manualmente.</li>
+                <li><strong>Mapeo MITRE ATT&CK:</strong> Cada deteccion te dice a que tactica y tecnica del framework MITRE corresponde. Esto te ayuda a entender <em>que estaba intentando hacer el atacante</em> (ejecutar codigo, persistir, moverse lateralmente, etc.).</li>
+            </ul>
+            <div class="exam-tip">
+                Para el examen: conoce el <strong>flujo de gestion de alertas</strong> (New → In Progress → TP/FP → Closed) y las <strong>acciones de respuesta disponibles</strong> (contain, quarantine, RTR). Tambien recuerda que cada deteccion se mapea a MITRE ATT&CK.
+            </div>
+        </div>
+
+        <!-- FALCON 105 -->
+        <div class="module-summary not-started">
+            <div class="module-header">
+                <span class="module-badge badge-not-started">No empezado</span>
+                <span class="module-meta">45 min | E-learning</span>
+            </div>
+            <h3>FALCON 105: Sensor Installation, Configuration and Troubleshooting</h3>
+            <div class="module-objective">
+                <strong>Objetivo:</strong> Profundizar en la instalacion del sensor: metodos de despliegue, configuracion avanzada, y como solucionar problemas cuando un sensor no funciona correctamente.
+            </div>
+            <ul class="key-points">
+                <li><strong>Metodos de instalacion:</strong> Manual (ejecutar el instalador), GPO (Group Policy), SCCM/MECM, scripts de PowerShell, herramientas de terceros (Intune, Jamf para Mac). <em>Cada metodo tiene sus ventajas segun el entorno.</em></li>
+                <li><strong>Requisitos del sensor:</strong> Necesitas el <em>CID</em>, el instalador correcto para el SO, y permisos de administrador local. El sensor necesita conectarse a la nube de CrowdStrike (verificar que el firewall no lo bloquee).</li>
+                <li><strong>Sensor tags:</strong> Etiquetas que puedes poner a los sensores durante la instalacion para organizarlos. <em>Muy utiles para Host Groups dinamicos</em> (ej: tag "produccion" o "desarrollo").</li>
+                <li><strong>Troubleshooting basico:</strong> Si un sensor no reporta: verificar conectividad a la nube de CrowdStrike, comprobar que el servicio esta corriendo, revisar logs del sensor. <em>El sensor tiene un modo de diagnostico.</em></li>
+                <li><strong>Proxy y conectividad:</strong> En entornos con proxy, el sensor necesita configuracion para conectarse a la nube. Se puede configurar durante la instalacion o despues via politica.</li>
+                <li><strong>Actualizaciones del sensor:</strong> Las Sensor Update Policies controlan las versiones. Canales: <em>N (ultima), N-1 (una version atras), N-2 (dos atras)</em>. Buena practica: usar N-1 en produccion y N en un grupo piloto.</li>
+            </ul>
+            <div class="exam-tip">
+                Clave: <strong>el CID es obligatorio para instalar</strong>, los <strong>sensor tags</strong> ayudan a organizar automaticamente, y los canales de actualizacion <strong>N/N-1/N-2</strong> son una pregunta clasica del examen.
+            </div>
+        </div>
+
+        <!-- FALCON 106 -->
+        <div class="module-summary not-started">
+            <div class="module-header">
+                <span class="module-badge badge-not-started">No empezado</span>
+                <span class="module-meta">20 min | E-learning</span>
+            </div>
+            <h3>FALCON 106: Customizing Dashboards in Falcon</h3>
+            <div class="module-objective">
+                <strong>Objetivo:</strong> Aprender a personalizar los dashboards de la consola para ver la informacion que mas te importa de un vistazo.
+            </div>
+            <ul class="key-points">
+                <li><strong>Dashboards predefinidos:</strong> Falcon viene con dashboards por defecto para diferentes areas: <em>detecciones, estado de sensores, vulnerabilidades, actividad de usuarios</em>, etc.</li>
+                <li><strong>Dashboards personalizados:</strong> Puedes crear tus propios dashboards con los widgets que necesites. <em>Ideal para tener una vista adaptada a tu rol o equipo.</em></li>
+                <li><strong>Widgets:</strong> Cada dashboard se compone de widgets: graficos, tablas, contadores. Puedes <em>anadir, quitar, mover y redimensionar</em> widgets segun lo que necesites ver.</li>
+                <li><strong>Filtros:</strong> Los dashboards permiten filtrar por <em>periodo de tiempo, Host Group, severidad, sistema operativo</em>, etc. Muy util para enfocarte en un area concreta.</li>
+                <li><strong>Compartir dashboards:</strong> Puedes compartir dashboards con otros usuarios del equipo para que todos vean la misma informacion.</li>
+            </ul>
+            <div class="exam-tip">
+                Modulo corto y sencillo. Lo importante: saber que puedes <strong>crear dashboards personalizados con widgets</strong> y que puedes <strong>filtrar y compartir</strong> con el equipo.
+            </div>
+        </div>
+
+        <!-- FALCON 107 -->
+        <div class="module-summary not-started">
+            <div class="module-header">
+                <span class="module-badge badge-not-started">No empezado</span>
+                <span class="module-meta">15 min | E-learning</span>
+            </div>
+            <h3>FALCON 107: Falcon Firewall Management Fundamentals</h3>
+            <div class="module-objective">
+                <strong>Objetivo:</strong> Aprender a gestionar el firewall de host (Windows Firewall) de forma centralizada desde la consola de Falcon.
+            </div>
+            <ul class="key-points">
+                <li><strong>Que es:</strong> Falcon Firewall Management te permite <em>crear y gestionar reglas de firewall de Windows</em> desde la consola de Falcon, sin tener que ir equipo por equipo o usar GPOs.</li>
+                <li><strong>Firewall Policies:</strong> Creas politicas de firewall y las asignas a Host Groups. Cada politica tiene <em>reglas que permiten o bloquean trafico</em> por puerto, protocolo, IP, aplicacion, etc.</li>
+                <li><strong>Reglas y grupos de reglas:</strong> Las reglas se organizan en grupos. Se procesan <em>de arriba a abajo</em> (la primera regla que coincide se aplica). El orden importa.</li>
+                <li><strong>Modo monitor vs enforce:</strong> Puedes poner las reglas en modo <em>monitor</em> primero (solo registra, no bloquea) para ver el impacto antes de activarlas en modo <em>enforce</em> (bloquea de verdad).</li>
+                <li><strong>Integracion con el sensor:</strong> No necesitas instalar nada extra. El sensor ya tiene la capacidad de gestionar el firewall. <em>Se habilita desde la consola.</em></li>
+            </ul>
+            <div class="exam-tip">
+                Recuerda: las reglas se procesan <strong>de arriba a abajo</strong> (orden importa), y el <strong>modo monitor</strong> es clave para probar reglas antes de aplicarlas en produccion.
+            </div>
+        </div>
+
+        <!-- SOAR 100 -->
+        <div class="module-summary not-started">
+            <div class="module-header">
+                <span class="module-badge badge-not-started">No empezado</span>
+                <span class="module-meta">45 min | E-learning</span>
+            </div>
+            <h3>SOAR 100: Falcon Fusion SOAR Fundamentals</h3>
+            <div class="module-objective">
+                <strong>Objetivo:</strong> Aprender a usar Falcon Fusion para automatizar respuestas ante incidentes. Crear flujos de trabajo tipo "si pasa X, haz Y automaticamente".
+            </div>
+            <ul class="key-points">
+                <li><strong>Que es SOAR:</strong> Security Orchestration, Automation and Response. En CrowdStrike se llama <em>Falcon Fusion</em>. Permite crear automatizaciones para responder mas rapido a incidentes.</li>
+                <li><strong>Workflows (flujos de trabajo):</strong> Un workflow tiene un <em>trigger</em> (disparador: que lo activa), <em>condiciones</em> (filtros: cuando se aplica), y <em>acciones</em> (que hace). Ej: trigger=deteccion critica, condicion=en servidores, accion=aislar equipo.</li>
+                <li><strong>Triggers disponibles:</strong> Deteccion nueva, cambio de severidad, nuevo host, vulnerabilidad encontrada, etc. <em>Cada trigger inicia un flujo diferente.</em></li>
+                <li><strong>Acciones disponibles:</strong> Contener equipo, enviar notificacion (email, Slack, webhook), ejecutar script RTR, cambiar estado de deteccion, anadir a Host Group, etc.</li>
+                <li><strong>Plantillas predefinidas:</strong> Falcon Fusion viene con <em>plantillas listas para usar</em> que puedes personalizar. No tienes que empezar de cero.</li>
+                <li><strong>Beneficio principal:</strong> Reduce el tiempo de respuesta de <em>horas a segundos</em>. Los ataques se contienen automaticamente mientras tu equipo investiga.</li>
+            </ul>
+            <div class="exam-tip">
+                Para el examen: recuerda la estructura <strong>Trigger → Condicion → Accion</strong>. Saber que Falcon Fusion puede <strong>contener equipos automaticamente</strong> ante detecciones criticas es un punto clasico.
+            </div>
+        </div>
+
+        <!-- FALCON 160 -->
+        <div class="module-summary not-started">
+            <div class="module-header">
+                <span class="module-badge badge-not-started">No empezado</span>
+                <span class="module-meta">15 min | E-learning</span>
+            </div>
+            <h3>FALCON 160: Falcon for Mobile</h3>
+            <div class="module-objective">
+                <strong>Objetivo:</strong> Entender como CrowdStrike protege dispositivos moviles (iOS y Android) y como se integra con la plataforma Falcon.
+            </div>
+            <ul class="key-points">
+                <li><strong>Proteccion movil:</strong> Extiende la visibilidad de Falcon a <em>smartphones y tablets</em>. Detecta apps maliciosas, phishing movil, configuraciones inseguras, etc.</li>
+                <li><strong>Integracion con la plataforma:</strong> Los dispositivos moviles aparecen en la misma consola que los endpoints de escritorio. <em>Vista unificada de toda tu flota.</em></li>
+                <li><strong>Deteccion de amenazas:</strong> Detecta malware movil, <em>jailbreak/root</em>, conexiones a redes WiFi inseguras, apps de fuentes no oficiales, phishing por SMS.</li>
+                <li><strong>Politicas para moviles:</strong> Se configuran politicas especificas para moviles, similares a las de endpoints pero adaptadas al contexto movil.</li>
+            </ul>
+            <div class="exam-tip">
+                Modulo corto. Lo importante: Falcon for Mobile da <strong>visibilidad unificada</strong> de moviles en la misma consola y detecta amenazas especificas de moviles como <strong>phishing por SMS y apps maliciosas</strong>.
+            </div>
+        </div>
+
+        <!-- ITSEC 121 -->
+        <div class="module-summary not-started">
+            <div class="module-header">
+                <span class="module-badge badge-not-started">No empezado</span>
+                <span class="module-meta">40 min | E-learning</span>
+            </div>
+            <h3>ITSEC 121: Vulnerability Management Fundamentals</h3>
+            <div class="module-objective">
+                <strong>Objetivo:</strong> Aprender a usar Falcon Spotlight para gestionar vulnerabilidades sin necesidad de escaneos tradicionales.
+            </div>
+            <ul class="key-points">
+                <li><strong>Falcon Spotlight:</strong> El modulo de gestion de vulnerabilidades de CrowdStrike. Usa los datos del sensor para identificar <em>vulnerabilidades en el software instalado sin hacer escaneos</em>.</li>
+                <li><strong>Sin escaneos = sin impacto:</strong> A diferencia de herramientas como Nessus o Qualys, Spotlight <em>no necesita escaneos programados</em>. Los datos ya los tiene el sensor. Esto significa cero impacto en el rendimiento de la red.</li>
+                <li><strong>CVSS y CVE:</strong> Cada vulnerabilidad tiene un <em>CVE</em> (identificador unico, ej: CVE-2024-1234) y una puntuacion <em>CVSS</em> (0-10, donde 10 es la mas critica). Prioriza las de puntuacion alta.</li>
+                <li><strong>Priorizacion inteligente:</strong> Spotlight no solo muestra vulnerabilidades, sino que las prioriza por <em>riesgo real</em>: tiene en cuenta si hay exploit publico, si el equipo esta expuesto, etc.</li>
+                <li><strong>Visibilidad en tiempo real:</strong> Como los datos vienen del sensor, la informacion de vulnerabilidades esta <em>siempre actualizada</em>. Si instalas o quitas software, se refleja inmediatamente.</li>
+                <li><strong>Remediacion:</strong> Spotlight te dice que vulnerabilidades tienes, pero <em>parchear es tu responsabilidad</em> (o de tu equipo de TI). Puedes usar los datos para priorizar que parchear primero.</li>
+            </ul>
+            <div class="exam-tip">
+                Clave: Spotlight funciona <strong>sin escaneos</strong> (usa datos del sensor), prioriza por <strong>riesgo real</strong> (no solo CVSS), y la informacion esta <strong>siempre actualizada en tiempo real</strong>.
+            </div>
+        </div>
+
+        <!-- ITSEC 122 -->
+        <div class="module-summary not-started">
+            <div class="module-header">
+                <span class="module-badge badge-not-started">No empezado</span>
+                <span class="module-meta">40 min | E-learning</span>
+            </div>
+            <h3>ITSEC 122: Asset Management Fundamentals</h3>
+            <div class="module-objective">
+                <strong>Objetivo:</strong> Aprender a usar Falcon Discover para tener un inventario completo de los activos de tu red: equipos, aplicaciones, cuentas de usuario.
+            </div>
+            <ul class="key-points">
+                <li><strong>Falcon Discover:</strong> El modulo de higiene de TI. Te da un <em>inventario completo y en tiempo real</em> de todo lo que hay en tu red: equipos, aplicaciones instaladas, cuentas de usuario.</li>
+                <li><strong>Descubrimiento de activos:</strong> Discover puede encontrar <em>equipos que no tienen el sensor instalado</em> (unmanaged hosts). Esto es critico para identificar puntos ciegos en tu proteccion.</li>
+                <li><strong>Inventario de aplicaciones:</strong> Ve <em>todas las aplicaciones instaladas</em> en tu red, sus versiones, y en que equipos estan. Util para detectar software no autorizado (shadow IT).</li>
+                <li><strong>Cuentas de usuario:</strong> Muestra las cuentas de usuario de tu entorno, incluyendo <em>cuentas de administrador, cuentas inactivas, y cuentas sospechosas</em>. Ayuda a reducir la superficie de ataque.</li>
+                <li><strong>Sin agentes extra:</strong> Todo funciona con el mismo sensor de Falcon. <em>No necesitas instalar nada mas</em> para obtener esta visibilidad.</li>
+            </ul>
+            <div class="exam-tip">
+                Lo clave: Discover encuentra <strong>equipos sin sensor</strong> (unmanaged hosts), muestra <strong>shadow IT</strong>, y todo funciona con <strong>el mismo sensor</strong> sin agentes adicionales.
+            </div>
+        </div>
+
+    </div>
+
+<div class="footer">
+    Glosario de estudio para CrowdStrike Falcon Administrator | Se actualiza conforme avanzas en el curso
+</div>
+
+<script>
+    // Tab navigation
+    const navButtons = document.querySelectorAll('.nav button');
+    const sections = document.querySelectorAll('.section');
+
+    navButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tab = btn.dataset.tab;
+
+            navButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            sections.forEach(s => {
+                s.classList.remove('active');
+                if (s.id === tab) s.classList.add('active');
+            });
+
+            // Clear search when switching tabs
+            document.getElementById('searchInput').value = '';
+            showAllCards();
+            document.getElementById('noResults').style.display = 'none';
+        });
+    });
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const noResults = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase().trim();
+
+        if (!query) {
+            // Show active tab content
+            showAllCards();
+            noResults.style.display = 'none';
+            return;
+        }
+
+        // Show all sections for search
+        sections.forEach(s => s.classList.add('active'));
+        navButtons.forEach(b => b.classList.remove('active'));
+
+        let found = false;
+        const allCards = document.querySelectorAll('.card, .actor-card');
+
+        allCards.forEach(card => {
+            const searchData = (card.dataset.search || '') + ' ' + card.textContent.toLowerCase();
+            if (searchData.includes(query)) {
+                card.style.display = '';
+                found = true;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Hide empty sections
+        sections.forEach(s => {
+            if (s.id === 'inicio') {
+                s.classList.remove('active');
+                return;
+            }
+            const visibleCards = s.querySelectorAll('.card:not([style*="display: none"]), .actor-card:not([style*="display: none"])');
+            if (visibleCards.length === 0) {
+                s.classList.remove('active');
+            }
+        });
+
+        noResults.style.display = found ? 'none' : 'block';
+    });
+
+    function showAllCards() {
+        document.querySelectorAll('.card, .actor-card').forEach(card => {
+            card.style.display = '';
+        });
+    }
+</script>
+
+</body>
+</html>

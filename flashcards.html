@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards - CrowdStrike Falcon Administrator</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .category-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .category-selector button {
+            padding: 8px 18px;
+            border-radius: 25px;
+            border: 2px solid #2a3a4e;
+            background: transparent;
+            color: #8892a4;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .category-selector button:hover { border-color: #e94560; color: #e94560; }
+        .category-selector button.active { background: #e94560; border-color: #e94560; color: #fff; }
+
+        /* Flashcard */
+        .flashcard-container {
+            perspective: 1000px;
+            max-width: 550px;
+            margin: 0 auto 30px;
+            height: 320px;
+            cursor: pointer;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 35px;
+            text-align: center;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, #1a2738, #16213e);
+            border: 2px solid #2a3a4e;
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, #16213e, #0f3460);
+            border: 2px solid #5dade2;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front .term {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .flashcard-front .hint {
+            color: #e94560;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .flashcard-front .flip-hint {
+            color: #4a5568;
+            font-size: 0.8rem;
+            position: absolute;
+            bottom: 20px;
+        }
+
+        .flashcard-back .answer {
+            font-size: 1.05rem;
+            color: #e0e6ed;
+            line-height: 1.7;
+        }
+
+        .flashcard-back .answer strong { color: #5dade2; }
+        .flashcard-back .answer em { color: #f5c842; font-style: normal; }
+
+        .flashcard-back .translation {
+            color: #e94560;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* Controls */
+        .fc-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .fc-counter {
+            color: #8892a4;
+            font-size: 0.9rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* Know / Don't know */
+        .fc-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .fc-actions button {
+            padding: 12px 30px;
+            border-radius: 25px;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-know { background: #27ae60; color: #fff; }
+        .btn-know:hover { background: #219a52; transform: translateY(-2px); }
+        .btn-dontknow { background: #e74c3c; color: #fff; }
+        .btn-dontknow:hover { background: #c0392b; transform: translateY(-2px); }
+
+        /* Stats */
+        .fc-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            padding: 15px;
+            background: #1a2738;
+            border-radius: 12px;
+        }
+
+        .fc-stat {
+            text-align: center;
+        }
+
+        .fc-stat .num {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .fc-stat .lbl {
+            font-size: 0.75rem;
+            color: #8892a4;
+        }
+
+        /* Keyboard shortcuts info */
+        .shortcuts-info {
+            text-align: center;
+            color: #4a5568;
+            font-size: 0.8rem;
+            margin-top: 15px;
+        }
+
+        .shortcuts-info kbd {
+            background: #2a3a4e;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #8892a4;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="glosario.html">Glosario</a>
+    <a href="quiz.html">Quiz</a>
+    <a href="flashcards.html" class="active">Flashcards</a>
+    <a href="examen.html">Simulador Examen</a>
+    <a href="escenarios.html">Escenarios</a>
+</div>
+
+<div class="header">
+    <h1><span>Flashcards</span> de Estudio</h1>
+    <p>Haz clic en la tarjeta para ver la respuesta - Usa las flechas o los botones</p>
+</div>
+
+<div class="container">
+    <div class="category-selector" id="categorySelector">
+        <button class="active" data-cat="all">Todas</button>
+        <button data-cat="amenazas">Amenazas</button>
+        <button data-cat="deteccion">Deteccion</button>
+        <button data-cat="herramientas">Herramientas</button>
+        <button data-cat="falcon">Falcon</button>
+        <button data-cat="modulos">Modulos</button>
+        <button data-cat="gestion">Gestion</button>
+        <button data-cat="red">Red</button>
+        <button data-cat="actors">Threat Actors</button>
+    </div>
+
+    <div class="flashcard-container" id="flashcardContainer" onclick="flipCard()">
+        <div class="flashcard" id="flashcard">
+            <div class="flashcard-face flashcard-front" id="fcFront"></div>
+            <div class="flashcard-face flashcard-back" id="fcBack"></div>
+        </div>
+    </div>
+
+    <div class="fc-actions">
+        <button class="btn-dontknow" onclick="markCard(false)">No lo se</button>
+        <button class="btn-know" onclick="markCard(true)">Lo se</button>
+    </div>
+
+    <div class="fc-controls">
+        <button class="btn btn-secondary" onclick="prevCard()" style="padding: 8px 20px;">&#9664; Anterior</button>
+        <span class="fc-counter" id="fcCounter">1 / 50</span>
+        <button class="btn btn-secondary" onclick="nextCard()" style="padding: 8px 20px;">Siguiente &#9654;</button>
+    </div>
+
+    <div class="fc-stats">
+        <div class="fc-stat"><div class="num" style="color: #27ae60" id="knownCount">0</div><div class="lbl">Lo se</div></div>
+        <div class="fc-stat"><div class="num" style="color: #e74c3c" id="unknownCount">0</div><div class="lbl">No lo se</div></div>
+        <div class="fc-stat"><div class="num" style="color: #5dade2" id="remainCount">0</div><div class="lbl">Pendientes</div></div>
+    </div>
+
+    <div class="shortcuts-info">
+        <kbd>Espacio</kbd> girar &nbsp; <kbd>&#8592;</kbd> anterior &nbsp; <kbd>&#8594;</kbd> siguiente &nbsp; <kbd>1</kbd> lo se &nbsp; <kbd>2</kbd> no lo se
+    </div>
+</div>
+
+<div class="footer">CrowdStrike Falcon Administrator - Material de estudio</div>
+
+<script>
+const allCards = [
+    // Amenazas
+    { cat: "amenazas", front: "Malware", hint: "Termino general", back: "<div class='translation'>Software malicioso</div>Cualquier programa disenado para hacer dano: <strong>virus, troyanos, ransomware, spyware</strong>. Es el termino paraguas para todo el software danino." },
+    { cat: "amenazas", front: "Ransomware", hint: "Tipo de malware", back: "<div class='translation'>Secuestro de datos</div><strong>Cifra tus archivos y pide un rescate</strong> (normalmente en criptomonedas). Grupos como <em>WIZARD SPIDER</em> son conocidos por ransomware (Ryuk/Conti)." },
+    { cat: "amenazas", front: "Phishing", hint: "Ingenieria social", back: "<div class='translation'>Suplantacion / Pesca</div>Correos o webs <strong>falsas que imitan ser legitimas</strong> para robarte credenciales. El <em>spear phishing</em> es dirigido a una persona concreta." },
+    { cat: "amenazas", front: "Zero-day", hint: "Vulnerabilidad", back: "<div class='translation'>Dia cero</div>Vulnerabilidad que <strong>nadie conocia hasta ahora</strong>. No tiene parche. Los defensores han tenido <em>cero dias</em> para prepararse." },
+    { cat: "amenazas", front: "Lateral Movement", hint: "Tecnica de ataque", back: "<div class='translation'>Movimiento lateral</div>El atacante <strong>ya entro a un equipo y se mueve a otros</strong> dentro de la red. Usa credenciales robadas o vulnerabilidades. <em>CrowdStrike es muy bueno detectando esto.</em>" },
+    { cat: "amenazas", front: "Fileless Attack", hint: "Ataque avanzado", back: "<div class='translation'>Ataque sin archivos</div>Se ejecuta <strong>directamente en memoria</strong> sin dejar archivos en disco. Antivirus clasicos no lo detectan. <em>CrowdStrike si, gracias a IOAs.</em>" },
+    { cat: "amenazas", front: "Privilege Escalation", hint: "Fase del ataque", back: "<div class='translation'>Escalada de privilegios</div>El atacante <strong>pasa de usuario normal a administrador</strong>. Es un paso critico en casi todos los ataques avanzados." },
+    { cat: "amenazas", front: "Supply Chain Attack", hint: "Vector de ataque", back: "<div class='translation'>Ataque a la cadena de suministro</div>Atacar un <strong>proveedor de software para infectar a todos sus clientes</strong>. Ejemplo: ataque a SolarWinds (2020)." },
+
+    // Deteccion
+    { cat: "deteccion", front: "IOC", hint: "Indicator of Compromise", back: "<div class='translation'>Indicador de compromiso</div>Evidencia de que <strong>ya ocurrio un ataque</strong>: hash malicioso, IP sospechosa, dominio danino. Es <em>reactivo</em> (mira el pasado)." },
+    { cat: "deteccion", front: "IOA", hint: "Indicator of Attack", back: "<div class='translation'>Indicador de ataque</div>Patron de <strong>comportamiento en tiempo real</strong> que indica un ataque en curso. Es <em>proactivo</em>. <em>CrowdStrike se enfoca en IOAs.</em>" },
+    { cat: "deteccion", front: "IOC vs IOA", hint: "Diferencia clave", back: "<strong>IOC = 'Ya me robaron'</strong> (miras huellas del ladron).<br><strong>IOA = 'Me estan robando ahora'</strong> (ves al ladron en accion).<br><em>CrowdStrike apuesta por IOA porque detecta ataques nuevos.</em>" },
+    { cat: "deteccion", front: "TTP", hint: "Tactics, Techniques, Procedures", back: "<div class='translation'>Tacticas, Tecnicas y Procedimientos</div><strong>Tactica</strong> = el 'que' quiere lograr. <strong>Tecnica</strong> = el 'como'. <strong>Procedimiento</strong> = pasos concretos. Catalogados en MITRE ATT&CK." },
+    { cat: "deteccion", front: "MITRE ATT&CK", hint: "Framework", back: "Base de datos publica que <strong>clasifica todas las tecnicas de ciberataque</strong>. CrowdStrike mapea sus detecciones a este framework. Es el 'diccionario universal' de ataques." },
+    { cat: "deteccion", front: "False Positive", hint: "Tipo de alerta", back: "<div class='translation'>Falso positivo</div>Alerta que dice que algo es malicioso <strong>cuando en realidad es legitimo</strong>. Hay que minimizarlos con exclusiones bien configuradas." },
+    { cat: "deteccion", front: "Threat Intelligence", hint: "Inteligencia", back: "<div class='translation'>Inteligencia de amenazas</div><strong>Informacion sobre atacantes</strong>: quienes son, que buscan, como operan. CrowdStrike tiene un equipo lider en esto." },
+
+    // Herramientas
+    { cat: "herramientas", front: "EDR", hint: "Endpoint Detection & Response", back: "Software que <strong>monitoriza endpoints, detecta amenazas y permite responder</strong>. CrowdStrike Falcon ES un EDR (y mas: XDR)." },
+    { cat: "herramientas", front: "XDR", hint: "Extended Detection & Response", back: "Como EDR pero <strong>ampliado</strong>: no solo mira endpoints sino tambien <em>red, cloud, email, identidad</em>. Todo correlacionado." },
+    { cat: "herramientas", front: "SIEM", hint: "Security Information & Event Mgmt", back: "<strong>Recopila logs de muchas fuentes y los correlaciona</strong> para detectar amenazas. Ejemplos: Splunk, QRadar, Microsoft Sentinel." },
+    { cat: "herramientas", front: "SOAR", hint: "Security Orchestration & Automation", back: "<strong>Automatiza respuestas ante incidentes.</strong> Si detecta malware → aisla equipo automaticamente. En CrowdStrike = <em>Falcon Fusion</em>." },
+    { cat: "herramientas", front: "NGAV", hint: "Next-Gen Antivirus", back: "Antivirus moderno que usa <strong>machine learning y analisis de comportamiento</strong>. Detecta amenazas desconocidas. En CrowdStrike = <em>Falcon Prevent</em>." },
+    { cat: "herramientas", front: "Sandbox", hint: "Entorno aislado", back: "<div class='translation'>Caja de arena</div>Entorno aislado donde se <strong>ejecuta un archivo sospechoso para ver que hace</strong> sin riesgo para el sistema real." },
+
+    // Falcon Platform
+    { cat: "falcon", front: "CrowdStrike Falcon", hint: "La plataforma", back: "Plataforma completa de ciberseguridad. <strong>Cloud-native</strong>, un solo sensor, todos los modulos integrados. No necesitas servidores propios." },
+    { cat: "falcon", front: "Falcon Sensor", hint: "El agente", back: "<strong>Agente ligero</strong> que se instala en cada endpoint. Recopila datos y los envia a la nube. <em>No necesita actualizaciones de firmas.</em>" },
+    { cat: "falcon", front: "Falcon Console", hint: "La interfaz", back: "<strong>Interfaz web</strong> donde gestionas todo: alertas, politicas, equipos, investigaciones. Es tu <em>panel de control diario</em>." },
+    { cat: "falcon", front: "Threat Graph", hint: "El cerebro", back: "Base de datos masiva que <strong>correlaciona eventos de todos los clientes</strong> en tiempo real. Billones de eventos/semana. Si un ataque se ve en un cliente, <em>todos se protegen</em>." },
+    { cat: "falcon", front: "CID", hint: "Customer ID", back: "Tu <strong>identificador unico como cliente</strong>. Lo necesitas para instalar sensores. Es la 'llave' que conecta equipos con tu cuenta." },
+
+    // Modulos
+    { cat: "modulos", front: "Falcon Prevent", hint: "Modulo de...", back: "<strong>NGAV</strong> - Antivirus de nueva generacion. Bloquea malware conocido y desconocido con machine learning. <em>Primera linea de defensa.</em>" },
+    { cat: "modulos", front: "Falcon Insight", hint: "Modulo de...", back: "<strong>EDR</strong> - Visibilidad completa en endpoints. Investigar incidentes con <em>process tree</em>, ver conexiones, archivos. Permite responder." },
+    { cat: "modulos", front: "Falcon OverWatch", hint: "Servicio de...", back: "<strong>Threat Hunting humano 24/7</strong>. Expertos de CrowdStrike buscando amenazas activamente. Complementa la IA." },
+    { cat: "modulos", front: "Falcon Discover", hint: "Modulo de...", back: "<strong>Higiene de TI</strong>. Inventario de <em>aplicaciones, cuentas, activos</em>. Detecta shadow IT y equipos sin sensor." },
+    { cat: "modulos", front: "Falcon Spotlight", hint: "Modulo de...", back: "<strong>Vulnerabilidades sin escaneos</strong>. Usa datos del sensor. <em>Cero impacto en rendimiento</em>. Informacion en tiempo real." },
+    { cat: "modulos", front: "Falcon Fusion", hint: "Modulo de...", back: "<strong>SOAR - Automatizacion</strong>. Flujos: Trigger → Condicion → Accion. Ej: deteccion critica → aislar equipo <em>automaticamente</em>." },
+    { cat: "modulos", front: "Falcon Identity Protection", hint: "Modulo de...", back: "<strong>Proteccion de identidades</strong>. Detecta ataques a Active Directory, <em>credenciales robadas</em>, movimiento lateral por identidad." },
+
+    // Gestion
+    { cat: "gestion", front: "Host Group", hint: "Configuracion", back: "<strong>Agrupacion de equipos</strong> para aplicar politicas. <em>Estaticos</em> = manuales. <em>Dinamicos</em> = automaticos por reglas (SO, tags, dominio)." },
+    { cat: "gestion", front: "Prevention Policy", hint: "Tipo de politica", back: "Define <strong>que bloquea Falcon automaticamente</strong>. Diferentes politicas para diferentes grupos. Se asignan a <em>Host Groups</em>." },
+    { cat: "gestion", front: "Sensor Update Policy", hint: "Tipo de politica", back: "Controla <strong>como se actualizan los sensores</strong>. Canales: <em>N</em> (ultima), <em>N-1</em> (una atras), <em>N-2</em> (dos atras)." },
+    { cat: "gestion", front: "Exclusion", hint: "Configuracion", back: "Regla para que Falcon <strong>ignore archivos/procesos legitimos</strong> (falsos positivos). <em>Cuidado: cada exclusion es un punto ciego.</em>" },
+    { cat: "gestion", front: "Network Containment", hint: "Accion de respuesta", back: "<strong>Aisla un equipo de la red</strong>. Solo puede hablar con CrowdStrike cloud. Se usa cuando un equipo esta <em>comprometido</em>." },
+    { cat: "gestion", front: "RTR", hint: "Real Time Response", back: "<strong>Acceso remoto al equipo</strong> desde la consola. Ejecutar comandos, recopilar archivos, matar procesos. Como un <em>SSH a traves de CrowdStrike</em>." },
+    { cat: "gestion", front: "Sensor Tags", hint: "Organizacion", back: "Etiquetas que se ponen al instalar el sensor. <strong>Muy utiles para Host Groups dinamicos</strong>. Ej: 'produccion', 'madrid', 'servidores'." },
+    { cat: "gestion", front: "RBAC", hint: "Role-Based Access Control", back: "<strong>Control de acceso por roles</strong>. Cada usuario solo ve/hace lo que necesita. Principio de <em>minimo privilegio</em>." },
+
+    // Red
+    { cat: "red", front: "Active Directory", hint: "Microsoft", back: "<div class='translation'>Directorio Activo</div>Gestiona <strong>usuarios, equipos y permisos</strong> en redes empresariales. <em>Objetivo #1 de atacantes</em>: quien lo controla, controla todo." },
+    { cat: "red", front: "C2 / C&C", hint: "Command and Control", back: "<div class='translation'>Comando y control</div><strong>Servidor del atacante</strong> que envia instrucciones al malware. El malware 'llama a casa' para recibir ordenes." },
+    { cat: "red", front: "Hash", hint: "Identificacion", back: "<strong>Huella digital unica de un archivo</strong>. Si cambias un byte, el hash cambia completamente. Tipos: MD5, SHA-256. Se usa como IOC." },
+    { cat: "red", front: "DNS", hint: "Domain Name System", back: "<strong>Traduce nombres a IPs</strong> (google.com → 142.250.x.x). Atacantes usan DNS para comunicarse con C2. CrowdStrike monitoriza DNS." },
+    { cat: "red", front: "PowerShell", hint: "Windows scripting", back: "Lenguaje de scripting de Windows. <strong>Usado por admins Y atacantes</strong>. CrowdStrike monitoriza la actividad de PowerShell muy de cerca." },
+
+    // Threat Actors
+    { cat: "actors", front: "BEAR", hint: "Nombre de animal", back: "<strong>Rusia</strong>. Ejemplos: FANCY BEAR (espionaje militar), COZY BEAR (espionaje politico). Asociados a inteligencia rusa." },
+    { cat: "actors", front: "PANDA", hint: "Nombre de animal", back: "<strong>China</strong>. Ejemplos: WICKED PANDA, GOBLIN PANDA. Normalmente enfocados en espionaje industrial y robo de propiedad intelectual." },
+    { cat: "actors", front: "KITTEN", hint: "Nombre de animal", back: "<strong>Iran</strong>. Ejemplo: CHARMING KITTEN. Enfocados en espionaje y operaciones de influencia en Oriente Medio." },
+    { cat: "actors", front: "SPIDER", hint: "Nombre de animal", back: "<strong>Cibercrimen (motivacion economica)</strong>. Ejemplo: WIZARD SPIDER (ransomware Ryuk/Conti). No son de un pais concreto, buscan dinero." },
+    { cat: "actors", front: "CHOLLIMA", hint: "Nombre de animal", back: "<strong>Corea del Norte</strong>. Ejemplo: LABYRINTH CHOLLIMA. Motivacion: financiar el regimen y espionaje. Robos de criptomonedas." },
+];
+
+let currentCards = [];
+let currentIdx = 0;
+let known = 0;
+let unknown = 0;
+
+function filterCards(cat) {
+    currentCards = cat === 'all' ? [...allCards] : allCards.filter(c => c.cat === cat);
+    currentCards.sort(() => Math.random() - 0.5);
+    currentIdx = 0;
+    known = 0;
+    unknown = 0;
+    renderCard();
+    updateStats();
+}
+
+function renderCard() {
+    if (currentCards.length === 0) return;
+    const c = currentCards[currentIdx];
+    document.getElementById('flashcard').classList.remove('flipped');
+    setTimeout(() => {
+        document.getElementById('fcFront').innerHTML = `
+            <div class="term">${c.front}</div>
+            <div class="hint">${c.hint}</div>
+            <div class="flip-hint">Clic para girar</div>
+        `;
+        document.getElementById('fcBack').innerHTML = `<div class="answer">${c.back}</div>`;
+    }, 150);
+    document.getElementById('fcCounter').textContent = `${currentIdx + 1} / ${currentCards.length}`;
+}
+
+function flipCard() {
+    document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function nextCard() {
+    if (currentIdx < currentCards.length - 1) { currentIdx++; renderCard(); }
+}
+
+function prevCard() {
+    if (currentIdx > 0) { currentIdx--; renderCard(); }
+}
+
+function markCard(isKnown) {
+    if (isKnown) known++; else unknown++;
+    updateStats();
+    nextCard();
+}
+
+function updateStats() {
+    document.getElementById('knownCount').textContent = known;
+    document.getElementById('unknownCount').textContent = unknown;
+    document.getElementById('remainCount').textContent = currentCards.length - known - unknown;
+}
+
+// Category selector
+document.querySelectorAll('.category-selector button').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.category-selector button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterCards(btn.dataset.cat);
+    });
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') { e.preventDefault(); flipCard(); }
+    if (e.code === 'ArrowRight') nextCard();
+    if (e.code === 'ArrowLeft') prevCard();
+    if (e.key === '1') markCard(true);
+    if (e.key === '2') markCard(false);
+});
+
+filterCards('all');
+</script>
+
+</body>
+</html>

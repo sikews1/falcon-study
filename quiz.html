@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - CrowdStrike Falcon Administrator</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Module selector */
+        .module-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .module-selector button {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid #2a3a4e;
+            background: transparent;
+            color: #8892a4;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .module-selector button:hover { border-color: #e94560; color: #e94560; }
+        .module-selector button.active { background: #e94560; border-color: #e94560; color: #fff; }
+
+        /* Question card */
+        .question-card {
+            background: #1a2738;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid #2a3a4e;
+        }
+
+        .question-counter {
+            color: #e94560;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .question-module-tag {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: rgba(93, 173, 226, 0.2);
+            color: #5dade2;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            color: #fff;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+
+        /* Options */
+        .options { list-style: none; }
+
+        .options li {
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 2px solid #2a3a4e;
+            background: #0f1923;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .options li:hover { border-color: #5dade2; background: rgba(93, 173, 226, 0.05); }
+
+        .options li .letter {
+            min-width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #2a3a4e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #8892a4;
+            transition: all 0.3s;
+        }
+
+        .options li:hover .letter { background: #5dade2; color: #fff; }
+
+        .options li.correct {
+            border-color: #27ae60;
+            background: rgba(39, 174, 96, 0.1);
+        }
+        .options li.correct .letter { background: #27ae60; color: #fff; }
+
+        .options li.wrong {
+            border-color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+        }
+        .options li.wrong .letter { background: #e74c3c; color: #fff; }
+
+        .options li.disabled { pointer-events: none; opacity: 0.6; }
+        .options li.correct.disabled, .options li.wrong.disabled { opacity: 1; }
+
+        /* Explanation */
+        .explanation {
+            background: rgba(93, 173, 226, 0.1);
+            border-left: 3px solid #5dade2;
+            padding: 15px 18px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 18px;
+            display: none;
+            font-size: 0.92rem;
+            color: #b0bec5;
+            line-height: 1.6;
+        }
+
+        .explanation strong { color: #5dade2; }
+
+        .explanation.show { display: block; animation: fadeIn 0.3s ease; }
+
+        /* Navigation */
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        /* Score */
+        .score-card {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .score-number {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .score-number.pass { color: #27ae60; }
+        .score-number.fail { color: #e74c3c; }
+
+        .score-text {
+            font-size: 1.1rem;
+            color: #8892a4;
+            margin-bottom: 25px;
+        }
+
+        .score-details {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .score-detail {
+            text-align: center;
+        }
+
+        .score-detail .number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .score-detail .label {
+            font-size: 0.8rem;
+            color: #8892a4;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #2a3a4e;
+            border-radius: 3px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e94560, #5dade2);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        /* Review section */
+        .review-item {
+            background: #1a2738;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-left: 4px solid;
+        }
+
+        .review-item.review-correct { border-color: #27ae60; }
+        .review-item.review-wrong { border-color: #e74c3c; }
+
+        .review-question { color: #fff; font-weight: 600; margin-bottom: 8px; }
+        .review-answer { font-size: 0.9rem; color: #b0bec5; }
+        .review-answer .correct-ans { color: #27ae60; }
+        .review-answer .wrong-ans { color: #e74c3c; text-decoration: line-through; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="glosario.html">Glosario</a>
+    <a href="quiz.html" class="active">Quiz</a>
+    <a href="flashcards.html">Flashcards</a>
+    <a href="examen.html">Simulador Examen</a>
+    <a href="escenarios.html">Escenarios</a>
+</div>
+
+<div class="header">
+    <h1><span>Quiz</span> Interactivo</h1>
+    <p>Preguntas por modulo - Practica para el examen</p>
+</div>
+
+<div class="container">
+    <div class="module-selector" id="moduleSelector">
+        <button class="active" data-module="all">Todos</button>
+        <button data-module="100">FALCON 100</button>
+        <button data-module="101">FALCON 101</button>
+        <button data-module="102">FALCON 102</button>
+        <button data-module="104">FALCON 104</button>
+        <button data-module="105">FALCON 105</button>
+        <button data-module="soar">SOAR 100</button>
+        <button data-module="general">Ciber General</button>
+    </div>
+
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
+
+    <div id="quizArea"></div>
+    <div id="scoreCard" class="score-card"></div>
+
+    <div class="quiz-nav" id="quizNav">
+        <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()">Anterior</button>
+        <span id="questionNum" style="color: #8892a4; font-size: 0.9rem;"></span>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Siguiente</button>
+    </div>
+</div>
+
+<div class="footer">CrowdStrike Falcon Administrator - Material de estudio</div>
+
+<script>
+const allQuestions = [
+    // FALCON 100 - Architecture
+    {
+        module: "100", moduleLabel: "FALCON 100",
+        question: "CrowdStrike Falcon es una plataforma de seguridad que funciona de forma...",
+        options: ["On-premises (en servidores locales)", "Cloud-native (nativa en la nube)", "Hibrida (mitad local, mitad nube)", "Solo funciona en redes locales sin internet"],
+        correct: 1,
+        explanation: "Falcon es <strong>cloud-native</strong>: toda la inteligencia y procesamiento esta en la nube de CrowdStrike. El sensor solo recopila datos y los envia. No necesitas servidores propios."
+    },
+    {
+        module: "100", moduleLabel: "FALCON 100",
+        question: "¿Que es el Threat Graph de CrowdStrike?",
+        options: ["Un grafico que muestra amenazas en tu red", "Una base de datos masiva que correlaciona eventos de todos los clientes en tiempo real", "Un informe semanal de amenazas", "El nombre del dashboard principal"],
+        correct: 1,
+        explanation: "El <strong>Threat Graph</strong> procesa billones de eventos por semana de todos los clientes de CrowdStrike. Si un ataque se detecta en un cliente, todos los demas se protegen automaticamente. Es la ventaja competitiva clave."
+    },
+    {
+        module: "100", moduleLabel: "FALCON 100",
+        question: "¿Cuantos agentes/sensores necesitas instalar para usar todos los modulos de Falcon (Prevent, Insight, Discover, etc.)?",
+        options: ["Uno por cada modulo", "Dos: uno para prevencion y otro para deteccion", "Solo uno: el Falcon Sensor", "Depende del sistema operativo"],
+        correct: 2,
+        explanation: "CrowdStrike usa una <strong>arquitectura de un solo agente</strong>. Un unico sensor ligero da acceso a todos los modulos. Esto simplifica el despliegue y reduce el impacto en el rendimiento."
+    },
+    {
+        module: "100", moduleLabel: "FALCON 100",
+        question: "¿Cual es la principal diferencia entre el enfoque de CrowdStrike y un antivirus clasico?",
+        options: ["CrowdStrike usa mas firmas de virus", "CrowdStrike se enfoca en IOAs (comportamiento) en vez de solo IOCs (firmas)", "CrowdStrike es gratuito", "CrowdStrike solo funciona en Windows"],
+        correct: 1,
+        explanation: "CrowdStrike se diferencia por su enfoque en <strong>IOAs (Indicators of Attack)</strong>: analiza el comportamiento en tiempo real. Un antivirus clasico se basa en <strong>IOCs</strong> (firmas conocidas) y solo detecta lo que ya conoce."
+    },
+    {
+        module: "100", moduleLabel: "FALCON 100",
+        question: "¿Que es el Falcon Sensor?",
+        options: ["Un hardware que se conecta a la red", "Un servidor que se instala en el data center", "Un agente ligero que se instala en cada endpoint", "Una aplicacion movil para administradores"],
+        correct: 2,
+        explanation: "El <strong>Falcon Sensor</strong> es un agente ligero que se instala en cada endpoint (PC, servidor). Recopila datos y los envia a la nube. Consume pocos recursos y no necesita actualizaciones de firmas."
+    },
+    {
+        module: "100", moduleLabel: "FALCON 100",
+        question: "¿Donde se gestiona la plataforma CrowdStrike Falcon?",
+        options: ["Desde una aplicacion de escritorio instalada en el PC del admin", "Desde la linea de comandos del servidor", "Desde la Falcon Console, una interfaz web", "Desde una app movil exclusiva"],
+        correct: 2,
+        explanation: "La <strong>Falcon Console</strong> es la interfaz web donde se gestiona todo: alertas, politicas, equipos, investigaciones. Se accede desde cualquier navegador."
+    },
+
+    // FALCON 101 - Essentials
+    {
+        module: "101", moduleLabel: "FALCON 101",
+        question: "¿Que modulo de Falcon actua como antivirus de nueva generacion (NGAV)?",
+        options: ["Falcon Insight", "Falcon Prevent", "Falcon OverWatch", "Falcon Discover"],
+        correct: 1,
+        explanation: "<strong>Falcon Prevent</strong> es el modulo NGAV. Bloquea malware conocido y desconocido usando machine learning e IOAs. Reemplaza al antivirus clasico."
+    },
+    {
+        module: "101", moduleLabel: "FALCON 101",
+        question: "¿Que modulo de Falcon proporciona la capacidad de EDR (investigar incidentes en endpoints)?",
+        options: ["Falcon Prevent", "Falcon Spotlight", "Falcon Insight", "Falcon Fusion"],
+        correct: 2,
+        explanation: "<strong>Falcon Insight</strong> es el modulo de EDR. Proporciona visibilidad completa de lo que pasa en cada endpoint y permite investigar incidentes con detalle (process tree, conexiones, archivos)."
+    },
+    {
+        module: "101", moduleLabel: "FALCON 101",
+        question: "Falcon OverWatch es un servicio de...",
+        options: ["Inteligencia artificial automatizada", "Threat hunting realizado por un equipo humano 24/7", "Gestion de vulnerabilidades", "Backup de datos en la nube"],
+        correct: 1,
+        explanation: "<strong>Falcon OverWatch</strong> es un equipo de expertos humanos que busca amenazas activamente 24/7. Complementan la IA detectando lo que las maquinas podrian no ver."
+    },
+    {
+        module: "101", moduleLabel: "FALCON 101",
+        question: "¿Que modulo de Falcon gestiona vulnerabilidades SIN necesidad de hacer escaneos?",
+        options: ["Falcon Discover", "Falcon Prevent", "Falcon Spotlight", "Falcon Fusion"],
+        correct: 2,
+        explanation: "<strong>Falcon Spotlight</strong> identifica vulnerabilidades usando los datos que el sensor ya recopila. No necesita escaneos programados, lo que significa cero impacto en el rendimiento."
+    },
+    {
+        module: "101", moduleLabel: "FALCON 101",
+        question: "¿Para que sirve Falcon Fusion?",
+        options: ["Para fusionar varios sensores en uno", "Para automatizar respuestas ante incidentes (SOAR)", "Para gestionar el firewall", "Para proteger dispositivos moviles"],
+        correct: 1,
+        explanation: "<strong>Falcon Fusion</strong> es el motor SOAR de CrowdStrike. Permite crear flujos automaticos: 'si pasa X, haz Y'. Ej: si se detecta ransomware, aislar el equipo automaticamente."
+    },
+    {
+        module: "101", moduleLabel: "FALCON 101",
+        question: "Falcon Discover te ayuda a...",
+        options: ["Descubrir nuevas amenazas zero-day", "Tener un inventario de aplicaciones, cuentas y activos en tu red", "Descubrir contrasenas debiles", "Descubrir vulnerabilidades en el codigo fuente"],
+        correct: 1,
+        explanation: "<strong>Falcon Discover</strong> es el modulo de higiene de TI. Te muestra que aplicaciones, cuentas de usuario y activos hay en tu red. Util para detectar shadow IT."
+    },
+
+    // FALCON 102 - Onboarding
+    {
+        module: "102", moduleLabel: "FALCON 102",
+        question: "¿Que necesitas para instalar el Falcon Sensor en un equipo?",
+        options: ["Solo la IP del equipo", "El CID (Customer ID) y el instalador", "Una licencia individual por equipo", "Acceso root al Threat Graph"],
+        correct: 1,
+        explanation: "Para instalar el sensor necesitas el <strong>CID (Customer ID)</strong>, que es tu identificador unico como cliente, y el instalador correcto para el sistema operativo. El CID conecta el equipo con tu cuenta de CrowdStrike."
+    },
+    {
+        module: "102", moduleLabel: "FALCON 102",
+        question: "¿Cual es la diferencia entre un Host Group estatico y uno dinamico?",
+        options: ["El estatico es mas rapido", "El estatico se llena manualmente, el dinamico se llena automaticamente por reglas", "El dinamico solo funciona en Windows", "No hay diferencia, son lo mismo"],
+        correct: 1,
+        explanation: "Los <strong>Host Groups estaticos</strong> requieren anadir equipos manualmente. Los <strong>dinamicos</strong> se llenan automaticamente segun reglas (SO, dominio, OU, tags...). Los dinamicos son mas utiles en entornos grandes."
+    },
+    {
+        module: "102", moduleLabel: "FALCON 102",
+        question: "Las Prevention Policies se asignan a...",
+        options: ["Usuarios individuales", "Direcciones IP", "Host Groups", "Modulos de Falcon"],
+        correct: 2,
+        explanation: "Las <strong>Prevention Policies</strong> se asignan a <strong>Host Groups</strong>. Asi puedes tener politicas diferentes para diferentes grupos de equipos (ej: servidores vs portatiles)."
+    },
+    {
+        module: "102", moduleLabel: "FALCON 102",
+        question: "¿Que es una exclusion en CrowdStrike Falcon?",
+        options: ["Excluir un usuario del sistema", "Una regla para que Falcon ignore ciertos archivos o procesos legitimos", "Eliminar un sensor de un equipo", "Bloquear un equipo de la red"],
+        correct: 1,
+        explanation: "Una <strong>exclusion</strong> indica a Falcon que ignore ciertos archivos, carpetas o procesos legitimos que causan falsos positivos. Cuidado: cada exclusion crea un punto ciego potencial."
+    },
+    {
+        module: "102", moduleLabel: "FALCON 102",
+        question: "¿Que principio de seguridad se aplica al configurar roles y permisos (RBAC)?",
+        options: ["Maximo privilegio", "Confianza total", "Minimo privilegio", "Acceso universal"],
+        correct: 2,
+        explanation: "El principio de <strong>minimo privilegio</strong>: cada usuario solo debe tener los permisos necesarios para su trabajo. Un analista junior no necesita cambiar politicas, un viewer no necesita modificar configuraciones."
+    },
+    {
+        module: "102", moduleLabel: "FALCON 102",
+        question: "¿Cual es el orden correcto del flujo de onboarding?",
+        options: ["Instalar sensor → Crear politicas → Crear usuarios", "Crear usuarios/roles → Instalar sensor → Crear Host Groups → Asignar politicas", "Crear Host Groups → Instalar sensor → Crear usuarios", "Asignar politicas → Crear Host Groups → Instalar sensor"],
+        correct: 1,
+        explanation: "El flujo correcto es: <strong>1) Crear usuarios/roles → 2) Instalar sensor (con CID) → 3) Crear Host Groups → 4) Crear/asignar Policies → 5) Verificar despliegue</strong>."
+    },
+
+    // FALCON 104 - Endpoint Security
+    {
+        module: "104", moduleLabel: "FALCON 104",
+        question: "¿Cual es el orden correcto de severidad de las detecciones (de menor a mayor)?",
+        options: ["Low → Medium → High → Critical", "Informational → Low → Medium → High → Critical", "Critical → High → Medium → Low", "Warning → Error → Critical → Fatal"],
+        correct: 1,
+        explanation: "El orden es: <strong>Informational → Low → Medium → High → Critical</strong>. Siempre prioriza Critical y High primero."
+    },
+    {
+        module: "104", moduleLabel: "FALCON 104",
+        question: "¿Que muestra el Process Tree en una deteccion?",
+        options: ["Los archivos del equipo", "La cadena de procesos: que proceso lanzo que otro", "El arbol de directorios", "Los usuarios que se conectaron"],
+        correct: 1,
+        explanation: "El <strong>Process Tree</strong> muestra la cadena de procesos: que proceso padre lanzo que proceso hijo. Ej: Word → PowerShell → cmd.exe → malware.exe. Es clave para investigar incidentes."
+    },
+    {
+        module: "104", moduleLabel: "FALCON 104",
+        question: "¿Que hace el 'Network Containment' en Falcon?",
+        options: ["Apaga el equipo remotamente", "Aisla el equipo de la red pero mantiene conexion con CrowdStrike", "Desinstala el sensor", "Bloquea todo el trafico de la empresa"],
+        correct: 1,
+        explanation: "<strong>Network Containment</strong> aisla un equipo comprometido de la red para que no pueda comunicarse con nada EXCEPTO con la nube de CrowdStrike. Asi puedes seguir investigando remotamente."
+    },
+    {
+        module: "104", moduleLabel: "FALCON 104",
+        question: "¿Que es RTR (Real Time Response)?",
+        options: ["Un informe en tiempo real", "Acceso remoto al equipo desde la consola para investigar y remediar", "Una politica de respuesta automatica", "Un tipo de deteccion"],
+        correct: 1,
+        explanation: "<strong>RTR (Real Time Response)</strong> permite conectarte remotamente a un equipo desde la consola. Puedes ejecutar comandos, recopilar archivos, matar procesos... Es como un SSH/RDP pero a traves de CrowdStrike."
+    },
+
+    // FALCON 105 - Sensor
+    {
+        module: "105", moduleLabel: "FALCON 105",
+        question: "¿Que son los Sensor Tags?",
+        options: ["Nombres de los sensores", "Etiquetas que se asignan durante la instalacion para organizar equipos", "Versiones del sensor", "Alertas del sensor"],
+        correct: 1,
+        explanation: "Los <strong>Sensor Tags</strong> son etiquetas que se ponen durante la instalacion. Son muy utiles para crear Host Groups dinamicos (ej: tag 'produccion', 'desarrollo', 'madrid')."
+    },
+    {
+        module: "105", moduleLabel: "FALCON 105",
+        question: "En las Sensor Update Policies, ¿que significa el canal N-1?",
+        options: ["La version mas antigua disponible", "Una version del sensor detras de la ultima", "No actualizar nunca", "Solo actualizaciones de seguridad"],
+        correct: 1,
+        explanation: "Los canales son: <strong>N</strong> (ultima version), <strong>N-1</strong> (una version atras), <strong>N-2</strong> (dos atras). Buena practica: usar N en un grupo piloto y N-1 en produccion para evitar problemas con versiones nuevas."
+    },
+
+    // SOAR 100
+    {
+        module: "soar", moduleLabel: "SOAR 100",
+        question: "¿Cual es la estructura basica de un workflow en Falcon Fusion?",
+        options: ["Input → Process → Output", "Trigger → Condicion → Accion", "Inicio → Medio → Fin", "Detectar → Analizar → Reportar"],
+        correct: 1,
+        explanation: "Un workflow de Falcon Fusion tiene: <strong>Trigger</strong> (que lo dispara), <strong>Condicion</strong> (cuando se aplica), y <strong>Accion</strong> (que hace). Ej: trigger=deteccion critica, condicion=en servidores, accion=aislar equipo."
+    },
+    {
+        module: "soar", moduleLabel: "SOAR 100",
+        question: "¿Cual es el principal beneficio de automatizar con Falcon Fusion SOAR?",
+        options: ["Ahorra dinero en licencias", "Reduce el tiempo de respuesta de horas a segundos", "Elimina la necesidad de analistas", "Mejora la velocidad de internet"],
+        correct: 1,
+        explanation: "SOAR reduce el tiempo de respuesta drasticamente. Un ataque que un humano tardaria horas en contener, <strong>Fusion puede contenerlo en segundos automaticamente</strong>."
+    },
+
+    // CIBER GENERAL
+    {
+        module: "general", moduleLabel: "Ciber General",
+        question: "¿Cual es la diferencia entre IOC e IOA?",
+        options: ["Son lo mismo, nombres diferentes", "IOC mira el pasado (evidencia), IOA mira el presente (comportamiento)", "IOA es mas antiguo que IOC", "IOC es para red, IOA es para endpoints"],
+        correct: 1,
+        explanation: "<strong>IOC</strong> = evidencia de que YA ocurrio un ataque (hash, IP maliciosa). Es reactivo. <strong>IOA</strong> = comportamiento que indica que un ataque esta ocurriendo AHORA. Es proactivo. CrowdStrike se enfoca en IOAs."
+    },
+    {
+        module: "general", moduleLabel: "Ciber General",
+        question: "¿Que significa EDR?",
+        options: ["Electronic Data Recovery", "Endpoint Detection and Response", "Enterprise Defense Router", "Emergency Data Relay"],
+        correct: 1,
+        explanation: "<strong>EDR = Endpoint Detection and Response</strong>. Software que monitoriza endpoints, detecta amenazas y permite responder. CrowdStrike Falcon es un EDR (y mucho mas: XDR)."
+    },
+    {
+        module: "general", moduleLabel: "Ciber General",
+        question: "En la nomenclatura de CrowdStrike, ¿que pais representa un BEAR?",
+        options: ["China", "Iran", "Rusia", "Corea del Norte"],
+        correct: 2,
+        explanation: "CrowdStrike usa animales: <strong>BEAR = Rusia</strong>, PANDA = China, KITTEN = Iran, CHOLLIMA = Corea del Norte, SPIDER = Cibercrimen."
+    },
+    {
+        module: "general", moduleLabel: "Ciber General",
+        question: "¿Que es un ataque 'fileless' (sin archivos)?",
+        options: ["Un ataque que borra todos los archivos", "Un ataque que se ejecuta en memoria sin dejar archivos en disco", "Un ataque que solo roba archivos", "Un ataque contra el sistema de archivos"],
+        correct: 1,
+        explanation: "Un <strong>ataque fileless</strong> se ejecuta directamente en memoria sin escribir archivos en disco. Los antivirus clasicos no lo detectan porque buscan archivos. CrowdStrike si lo detecta gracias a su enfoque en IOAs (comportamiento)."
+    },
+    {
+        module: "general", moduleLabel: "Ciber General",
+        question: "¿Que es MITRE ATT&CK?",
+        options: ["Un tipo de malware", "Un framework que clasifica todas las tecnicas conocidas de ciberataque", "Una herramienta de CrowdStrike", "Un tipo de ataque militar"],
+        correct: 1,
+        explanation: "<strong>MITRE ATT&CK</strong> es una base de datos publica que clasifica todas las tecnicas conocidas de ciberataque. CrowdStrike mapea sus detecciones a este framework para que entiendas que tipo de ataque se detecto."
+    },
+    {
+        module: "general", moduleLabel: "Ciber General",
+        question: "¿Que es un C2 (Command and Control)?",
+        options: ["Un tipo de certificacion", "El servidor del atacante que envia instrucciones al malware", "Un protocolo de red seguro", "Un modulo de CrowdStrike"],
+        correct: 1,
+        explanation: "<strong>C2 (Command and Control)</strong> es el servidor del atacante. El malware instalado en tus equipos 'llama a casa' (al C2) para recibir instrucciones. CrowdStrike detecta estas comunicaciones sospechosas."
+    },
+    {
+        module: "general", moduleLabel: "Ciber General",
+        question: "¿Que diferencia hay entre NGAV y un antivirus clasico?",
+        options: ["NGAV es mas barato", "NGAV usa machine learning y analisis de comportamiento, el clasico solo usa firmas", "No hay diferencia real", "El clasico es mejor porque tiene mas firmas"],
+        correct: 1,
+        explanation: "El antivirus clasico compara archivos con una <strong>base de datos de firmas conocidas</strong>. El <strong>NGAV usa machine learning y analisis de comportamiento</strong> para detectar amenazas nuevas y desconocidas. Falcon Prevent es un NGAV."
+    },
+    {
+        module: "general", moduleLabel: "Ciber General",
+        question: "Active Directory es un objetivo prioritario para los atacantes porque...",
+        options: ["Es facil de instalar", "Quien controla el AD controla todos los usuarios, equipos y permisos de la red", "Es un software gratuito", "Tiene muchas vulnerabilidades conocidas"],
+        correct: 1,
+        explanation: "<strong>Active Directory</strong> gestiona usuarios, equipos y permisos en redes empresariales. Si un atacante compromete el Domain Controller, tiene <strong>control total de toda la red</strong>. Por eso es el objetivo #1."
+    }
+];
+
+let currentQuestions = [];
+let currentIndex = 0;
+let answers = {};
+let quizFinished = false;
+
+function filterQuestions(module) {
+    if (module === 'all') {
+        currentQuestions = [...allQuestions].sort(() => Math.random() - 0.5);
+    } else {
+        currentQuestions = allQuestions.filter(q => q.module === module).sort(() => Math.random() - 0.5);
+    }
+    currentIndex = 0;
+    answers = {};
+    quizFinished = false;
+    document.getElementById('scoreCard').style.display = 'none';
+    document.getElementById('quizNav').style.display = 'flex';
+    renderQuestion();
+}
+
+function renderQuestion() {
+    if (currentQuestions.length === 0) return;
+
+    const q = currentQuestions[currentIndex];
+    const answered = answers[currentIndex] !== undefined;
+    const progress = ((currentIndex + 1) / currentQuestions.length) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
+    document.getElementById('questionNum').textContent = `${currentIndex + 1} / ${currentQuestions.length}`;
+
+    let optionsHtml = q.options.map((opt, i) => {
+        const letters = ['A', 'B', 'C', 'D'];
+        let classes = '';
+        if (answered) {
+            classes = 'disabled';
+            if (i === q.correct) classes += ' correct';
+            else if (i === answers[currentIndex] && i !== q.correct) classes += ' wrong';
+        }
+        return `<li class="${classes}" onclick="selectAnswer(${i})"><span class="letter">${letters[i]}</span>${opt}</li>`;
+    }).join('');
+
+    document.getElementById('quizArea').innerHTML = `
+        <div class="question-card">
+            <div class="question-counter">Pregunta ${currentIndex + 1} de ${currentQuestions.length}</div>
+            <span class="question-module-tag">${q.moduleLabel}</span>
+            <div class="question-text">${q.question}</div>
+            <ul class="options">${optionsHtml}</ul>
+            <div class="explanation ${answered ? 'show' : ''}">${q.explanation}</div>
+        </div>
+    `;
+
+    document.getElementById('prevBtn').style.visibility = currentIndex > 0 ? 'visible' : 'hidden';
+    document.getElementById('nextBtn').textContent = currentIndex === currentQuestions.length - 1 && answered ? 'Ver resultado' : 'Siguiente';
+}
+
+function selectAnswer(index) {
+    if (answers[currentIndex] !== undefined) return;
+    answers[currentIndex] = index;
+    renderQuestion();
+}
+
+function nextQuestion() {
+    if (currentIndex < currentQuestions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+    } else if (Object.keys(answers).length === currentQuestions.length) {
+        showScore();
+    }
+}
+
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+    }
+}
+
+function showScore() {
+    quizFinished = true;
+    const total = currentQuestions.length;
+    let correct = 0;
+    let reviewHtml = '';
+
+    currentQuestions.forEach((q, i) => {
+        const isCorrect = answers[i] === q.correct;
+        if (isCorrect) correct++;
+        const letters = ['A', 'B', 'C', 'D'];
+        reviewHtml += `
+            <div class="review-item ${isCorrect ? 'review-correct' : 'review-wrong'}">
+                <div class="review-question">${i + 1}. ${q.question}</div>
+                <div class="review-answer">
+                    ${isCorrect
+                        ? `<span class="correct-ans">&#10003; ${letters[answers[i]]}) ${q.options[answers[i]]}</span>`
+                        : `<span class="wrong-ans">&#10007; Tu respuesta: ${letters[answers[i]]}) ${q.options[answers[i]]}</span><br><span class="correct-ans">&#10003; Correcta: ${letters[q.correct]}) ${q.options[q.correct]}</span>`
+                    }
+                </div>
+            </div>
+        `;
+    });
+
+    const pct = Math.round((correct / total) * 100);
+    const passed = pct >= 70;
+
+    document.getElementById('quizArea').innerHTML = '';
+    document.getElementById('quizNav').style.display = 'none';
+    document.getElementById('scoreCard').style.display = 'block';
+    document.getElementById('scoreCard').innerHTML = `
+        <div class="score-number ${passed ? 'pass' : 'fail'}">${pct}%</div>
+        <div class="score-text">${passed ? '!Aprobado! Buen trabajo' : 'Necesitas repasar un poco mas. !Tu puedes!'}</div>
+        <div class="score-details">
+            <div class="score-detail"><div class="number" style="color: #27ae60">${correct}</div><div class="label">Correctas</div></div>
+            <div class="score-detail"><div class="number" style="color: #e74c3c">${total - correct}</div><div class="label">Incorrectas</div></div>
+            <div class="score-detail"><div class="number" style="color: #5dade2">${total}</div><div class="label">Total</div></div>
+        </div>
+        <button class="btn btn-primary" onclick="filterQuestions('all')" style="margin-right:10px">Repetir quiz</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('reviewSection').style.display='block'">Ver repaso de errores</button>
+        <div id="reviewSection" style="display:none; margin-top: 30px; text-align: left;">
+            <h3 style="color: #fff; margin-bottom: 15px;">Repaso de respuestas</h3>
+            ${reviewHtml}
+        </div>
+    `;
+}
+
+// Module selector events
+document.querySelectorAll('.module-selector button').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.module-selector button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterQuestions(btn.dataset.module);
+    });
+});
+
+// Init
+filterQuestions('all');
+</script>
+
+</body>
+</html>

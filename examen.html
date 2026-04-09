@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Examen - CrowdStrike Falcon Administrator</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Exam config */
+        .exam-config {
+            background: #1a2738;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid #2a3a4e;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .exam-config h2 { color: #fff; margin-bottom: 10px; }
+        .exam-config p { color: #8892a4; margin-bottom: 25px; }
+
+        .config-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .config-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            background: #0f1923;
+            border-radius: 10px;
+            border: 1px solid #2a3a4e;
+        }
+
+        .config-option label { color: #e0e6ed; font-weight: 600; }
+
+        .config-option select, .config-option input {
+            background: #2a3a4e;
+            border: none;
+            color: #e0e6ed;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Timer */
+        .timer-bar {
+            position: fixed;
+            top: 42px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #2a3a4e;
+            z-index: 150;
+        }
+
+        .timer-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #27ae60, #f1c40f, #e74c3c);
+            transition: width 1s linear;
+        }
+
+        .timer-display {
+            position: fixed;
+            top: 48px;
+            right: 20px;
+            background: #1a2738;
+            padding: 8px 16px;
+            border-radius: 0 0 10px 10px;
+            border: 1px solid #2a3a4e;
+            border-top: none;
+            z-index: 150;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .timer-display.warning { color: #f1c40f; }
+        .timer-display.danger { color: #e74c3c; animation: pulse 1s infinite; }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* Question */
+        .exam-question {
+            background: #1a2738;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 15px;
+            border: 1px solid #2a3a4e;
+        }
+
+        .eq-number {
+            color: #e94560;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        .eq-text {
+            color: #fff;
+            font-size: 1.05rem;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .eq-options { list-style: none; }
+
+        .eq-options li {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border: 2px solid #2a3a4e;
+            background: #0f1923;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.92rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .eq-options li:hover { border-color: #5dade2; }
+        .eq-options li.selected { border-color: #e94560; background: rgba(233, 69, 96, 0.1); }
+
+        .eq-options li .letter {
+            min-width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #2a3a4e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #8892a4;
+        }
+
+        .eq-options li.selected .letter { background: #e94560; color: #fff; }
+
+        /* Question nav dots */
+        .question-dots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #1a2738;
+            border-radius: 10px;
+        }
+
+        .question-dots .dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #2a3a4e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #8892a4;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dot.current { border-color: #e94560; color: #e94560; }
+        .dot.answered { background: #e94560; border-color: #e94560; color: #fff; }
+
+        /* Results */
+        .results {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .result-score {
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .result-pass { color: #27ae60; }
+        .result-fail { color: #e74c3c; }
+
+        .result-msg {
+            font-size: 1.2rem;
+            color: #8892a4;
+            margin-bottom: 30px;
+        }
+
+        .result-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .result-stat .num { font-size: 2.5rem; font-weight: 700; }
+        .result-stat .lbl { font-size: 0.85rem; color: #8892a4; }
+
+        /* Review */
+        .review-item {
+            text-align: left;
+            background: #1a2738;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
+        }
+
+        .review-item.r-correct { border-color: #27ae60; }
+        .review-item.r-wrong { border-color: #e74c3c; }
+
+        .review-q { color: #fff; font-weight: 600; margin-bottom: 8px; font-size: 0.95rem; }
+        .review-a { font-size: 0.85rem; color: #b0bec5; }
+        .review-a .r-ok { color: #27ae60; }
+        .review-a .r-fail { color: #e74c3c; text-decoration: line-through; }
+        .review-explanation { margin-top: 8px; font-size: 0.85rem; color: #5dade2; }
+
+        /* History panel */
+        .history-panel {
+            background: #1a2738;
+            border-radius: 14px;
+            padding: 25px;
+            border: 1px solid #2a3a4e;
+            margin-top: 25px;
+        }
+
+        .history-panel h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .history-stat {
+            background: #0f1923;
+            border-radius: 10px;
+            padding: 15px 20px;
+            text-align: center;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .history-stat .h-num {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .history-stat .h-lbl {
+            font-size: 0.75rem;
+            color: #8892a4;
+            margin-top: 2px;
+        }
+
+        .history-list { list-style: none; }
+
+        .history-list li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            background: #0f1923;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            border-left: 4px solid;
+        }
+
+        .history-list li.h-pass { border-color: #27ae60; }
+        .history-list li.h-fail { border-color: #e74c3c; }
+
+        .h-date { color: #8892a4; }
+        .h-score { font-weight: 700; }
+        .h-score.pass { color: #27ae60; }
+        .h-score.fail { color: #e74c3c; }
+        .h-detail { color: #5dade2; font-size: 0.8rem; }
+
+        /* Mistakes section */
+        .mistakes-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mistakes-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3); }
+
+        .mistakes-badge {
+            background: #fff;
+            color: #e74c3c;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .clear-history-btn {
+            background: transparent;
+            border: 1px solid #2a3a4e;
+            color: #8892a4;
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .clear-history-btn:hover { border-color: #e74c3c; color: #e74c3c; }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="glosario.html">Glosario</a>
+    <a href="quiz.html">Quiz</a>
+    <a href="flashcards.html">Flashcards</a>
+    <a href="examen.html" class="active">Simulador Examen</a>
+    <a href="escenarios.html">Escenarios</a>
+</div>
+
+<div class="header">
+    <h1><span>Simulador</span> de Examen</h1>
+    <p>Examinate con tiempo limitado - Simula el examen real</p>
+</div>
+
+<div class="timer-bar" id="timerBar" style="display:none"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>
+<div class="timer-display" id="timerDisplay" style="display:none">30:00</div>
+
+<div class="container">
+    <div id="examConfig" class="exam-config">
+        <h2>Configurar examen</h2>
+        <p>Personaliza tu simulacro antes de empezar</p>
+        <div class="config-options">
+            <div class="config-option">
+                <label>Numero de preguntas</label>
+                <select id="numQuestions">
+                    <option value="10">10 preguntas</option>
+                    <option value="15">15 preguntas</option>
+                    <option value="20" selected>20 preguntas</option>
+                    <option value="30">30 preguntas (todas)</option>
+                </select>
+            </div>
+            <div class="config-option">
+                <label>Tiempo limite</label>
+                <select id="timeLimit">
+                    <option value="15">15 minutos</option>
+                    <option value="20">20 minutos</option>
+                    <option value="30" selected>30 minutos</option>
+                    <option value="45">45 minutos</option>
+                    <option value="0">Sin limite</option>
+                </select>
+            </div>
+            <div class="config-option">
+                <label>Nota para aprobar</label>
+                <select id="passScore">
+                    <option value="60">60%</option>
+                    <option value="70" selected>70%</option>
+                    <option value="80">80%</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="startExam()" style="font-size: 1.1rem; padding: 15px 50px;">Comenzar examen</button>
+        <div style="margin-top: 15px;">
+            <button class="mistakes-btn" id="mistakesBtn" onclick="startMistakesExam()" style="display:none">
+                Examen con mis errores <span class="mistakes-badge" id="mistakesBadge">0</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- HISTORIAL -->
+    <div id="historyPanel" class="history-panel" style="display:none">
+        <h3>
+            Tu historial
+            <button class="clear-history-btn" onclick="clearHistory()">Borrar historial</button>
+        </h3>
+        <div class="history-stats" id="historyStats"></div>
+        <ul class="history-list" id="historyList"></ul>
+    </div>
+
+    <div id="examArea" style="display:none">
+        <div class="question-dots" id="questionDots"></div>
+        <div id="currentQuestion"></div>
+        <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+            <button class="btn btn-secondary" id="examPrev" onclick="examNav(-1)">Anterior</button>
+            <button class="btn btn-primary" id="examNext" onclick="examNav(1)">Siguiente</button>
+            <button class="btn btn-success" id="examSubmit" onclick="submitExam()" style="display:none">Entregar examen</button>
+        </div>
+    </div>
+
+    <div id="examResults" style="display:none"></div>
+</div>
+
+<div class="footer">CrowdStrike Falcon Administrator - Material de estudio</div>
+
+<script>
+const questionBank = [
+    { id:0, q: "CrowdStrike Falcon es una plataforma de seguridad que funciona de forma...", o: ["On-premises", "Cloud-native (nativa en la nube)", "Hibrida", "Solo en redes locales"], c: 1, e: "Falcon es <strong>cloud-native</strong>: toda la inteligencia esta en la nube." },
+    { id:1, q: "¿Que es el Threat Graph?", o: ["Un grafico de amenazas", "Una base de datos masiva que correlaciona eventos de todos los clientes", "Un informe semanal", "El dashboard principal"], c: 1, e: "El <strong>Threat Graph</strong> procesa billones de eventos de todos los clientes en tiempo real." },
+    { id:2, q: "¿Cuantos sensores necesitas para todos los modulos de Falcon?", o: ["Uno por modulo", "Dos", "Solo uno", "Depende del SO"], c: 2, e: "<strong>Un solo sensor</strong> da acceso a todos los modulos." },
+    { id:3, q: "¿Cual es la diferencia principal entre CrowdStrike y un antivirus clasico?", o: ["Mas firmas", "Enfoque en IOAs (comportamiento) vs IOCs (firmas)", "Es gratuito", "Solo Windows"], c: 1, e: "CrowdStrike se enfoca en <strong>IOAs (comportamiento en tiempo real)</strong>." },
+    { id:4, q: "¿Que modulo de Falcon es el NGAV?", o: ["Insight", "Prevent", "OverWatch", "Discover"], c: 1, e: "<strong>Falcon Prevent</strong> = NGAV." },
+    { id:5, q: "¿Que modulo proporciona EDR?", o: ["Prevent", "Spotlight", "Insight", "Fusion"], c: 2, e: "<strong>Falcon Insight</strong> = EDR." },
+    { id:6, q: "Falcon OverWatch es un servicio de...", o: ["IA automatizada", "Threat hunting humano 24/7", "Vulnerabilidades", "Backup"], c: 1, e: "OverWatch = <strong>equipo humano de threat hunting 24/7</strong>." },
+    { id:7, q: "¿Que modulo gestiona vulnerabilidades sin escaneos?", o: ["Discover", "Prevent", "Spotlight", "Fusion"], c: 2, e: "<strong>Falcon Spotlight</strong> = vulnerabilidades sin escaneos." },
+    { id:8, q: "¿Para que sirve Falcon Fusion?", o: ["Fusionar sensores", "Automatizar respuestas (SOAR)", "Gestionar firewall", "Proteger moviles"], c: 1, e: "<strong>Falcon Fusion</strong> = SOAR, automatizacion." },
+    { id:9, q: "¿Que necesitas para instalar el Falcon Sensor?", o: ["Solo la IP", "El CID y el instalador", "Licencia individual", "Acceso root"], c: 1, e: "Necesitas el <strong>CID (Customer ID)</strong> y el instalador." },
+    { id:10, q: "Diferencia entre Host Group estatico y dinamico:", o: ["El estatico es mas rapido", "Estatico = manual, dinamico = automatico por reglas", "Dinamico solo en Windows", "Son lo mismo"], c: 1, e: "<strong>Estatico</strong> = manual. <strong>Dinamico</strong> = se llena automaticamente." },
+    { id:11, q: "Las Prevention Policies se asignan a...", o: ["Usuarios", "IPs", "Host Groups", "Modulos"], c: 2, e: "Se asignan a <strong>Host Groups</strong>." },
+    { id:12, q: "¿Que es una exclusion en Falcon?", o: ["Excluir un usuario", "Ignorar archivos/procesos legitimos", "Eliminar un sensor", "Bloquear un equipo"], c: 1, e: "Exclusion = ignorar falsos positivos. <strong>Cuidado: crea puntos ciegos.</strong>" },
+    { id:13, q: "¿Que principio aplica RBAC?", o: ["Maximo privilegio", "Confianza total", "Minimo privilegio", "Acceso universal"], c: 2, e: "<strong>Minimo privilegio</strong>: solo los permisos necesarios." },
+    { id:14, q: "Orden correcto del onboarding:", o: ["Sensor → Politicas → Usuarios", "Usuarios → Sensor → Host Groups → Politicas", "Host Groups → Sensor → Usuarios", "Politicas → Host Groups → Sensor"], c: 1, e: "<strong>Usuarios → Sensor → Host Groups → Politicas → Verificar</strong>." },
+    { id:15, q: "Orden de severidad (menor a mayor):", o: ["Low → Medium → High → Critical", "Informational → Low → Medium → High → Critical", "Critical → High → Medium → Low", "Warning → Error → Critical"], c: 1, e: "<strong>Informational → Low → Medium → High → Critical</strong>." },
+    { id:16, q: "¿Que muestra el Process Tree?", o: ["Archivos", "Cadena de procesos: padre → hijo", "Arbol de directorios", "Usuarios conectados"], c: 1, e: "El <strong>Process Tree</strong> muestra que proceso lanzo que otro." },
+    { id:17, q: "¿Que hace Network Containment?", o: ["Apaga el equipo", "Aisla de la red pero mantiene conexion con CrowdStrike", "Desinstala el sensor", "Bloquea todo el trafico"], c: 1, e: "<strong>Network Containment</strong> aisla el equipo pero permite gestion via CrowdStrike." },
+    { id:18, q: "¿Que es RTR?", o: ["Un informe", "Acceso remoto para investigar y remediar", "Politica automatica", "Tipo de deteccion"], c: 1, e: "<strong>RTR</strong> = acceso remoto al equipo desde la consola." },
+    { id:19, q: "¿Que son los Sensor Tags?", o: ["Nombres de sensores", "Etiquetas para organizar equipos", "Versiones del sensor", "Alertas"], c: 1, e: "<strong>Sensor Tags</strong> = etiquetas para organizar y crear Host Groups dinamicos." },
+    { id:20, q: "Canal N-1 en Sensor Update Policies significa:", o: ["Version mas antigua", "Una version detras de la ultima", "No actualizar", "Solo parches de seguridad"], c: 1, e: "<strong>N</strong> = ultima, <strong>N-1</strong> = una atras, <strong>N-2</strong> = dos atras." },
+    { id:21, q: "Estructura de un workflow en Falcon Fusion:", o: ["Input → Process → Output", "Trigger → Condicion → Accion", "Inicio → Medio → Fin", "Detectar → Analizar → Reportar"], c: 1, e: "<strong>Trigger → Condicion → Accion</strong>." },
+    { id:22, q: "Diferencia entre IOC e IOA:", o: ["Son lo mismo", "IOC = pasado, IOA = presente (comportamiento)", "IOA es mas antiguo", "IOC para red, IOA para endpoints"], c: 1, e: "<strong>IOC</strong> = pasado (evidencia). <strong>IOA</strong> = presente (comportamiento)." },
+    { id:23, q: "¿Que significa EDR?", o: ["Electronic Data Recovery", "Endpoint Detection and Response", "Enterprise Defense Router", "Emergency Data Relay"], c: 1, e: "EDR = <strong>Endpoint Detection and Response</strong>." },
+    { id:24, q: "En CrowdStrike, BEAR representa a...", o: ["China", "Iran", "Rusia", "Corea del Norte"], c: 2, e: "<strong>BEAR = Rusia</strong>. PANDA = China. KITTEN = Iran." },
+    { id:25, q: "Un ataque fileless se ejecuta en...", o: ["El disco duro", "La memoria (sin archivos en disco)", "La nube", "El firewall"], c: 1, e: "<strong>Fileless</strong> = en memoria, sin dejar archivos. CrowdStrike lo detecta por IOAs." },
+    { id:26, q: "MITRE ATT&CK es...", o: ["Un malware", "Un framework que clasifica tecnicas de ataque", "Una herramienta de CrowdStrike", "Un ataque militar"], c: 1, e: "<strong>MITRE ATT&CK</strong> = base de datos de tecnicas de ciberataque." },
+    { id:27, q: "¿Que es un C2?", o: ["Una certificacion", "El servidor del atacante que controla el malware", "Un protocolo seguro", "Un modulo de CrowdStrike"], c: 1, e: "<strong>C2</strong> = servidor del atacante. El malware 'llama a casa' para recibir ordenes." },
+    { id:28, q: "Falcon Discover puede encontrar...", o: ["Vulnerabilidades zero-day", "Equipos sin sensor instalado (unmanaged hosts)", "Contrasenas debiles", "Malware oculto"], c: 1, e: "Discover encuentra <strong>unmanaged hosts</strong> y shadow IT." },
+    { id:29, q: "El modo monitor en Falcon Firewall Management...", o: ["Bloquea todo el trafico", "Solo registra sin bloquear, para probar reglas", "Desactiva el firewall", "Muestra un dashboard"], c: 1, e: "<strong>Monitor</strong> = registra sin bloquear. <strong>Enforce</strong> = bloquea de verdad." },
+];
+
+// === LOCALSTORAGE: Historial y errores ===
+const STORAGE_KEY = 'falcon_exam_history';
+const MISTAKES_KEY = 'falcon_exam_mistakes';
+
+function getHistory() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; }
+}
+
+function saveHistory(entry) {
+    const history = getHistory();
+    history.unshift(entry);
+    if (history.length > 50) history.pop();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+}
+
+function getMistakes() {
+    try { return JSON.parse(localStorage.getItem(MISTAKES_KEY)) || {}; } catch { return {}; }
+}
+
+function saveMistake(questionId) {
+    const mistakes = getMistakes();
+    mistakes[questionId] = (mistakes[questionId] || 0) + 1;
+    localStorage.setItem(MISTAKES_KEY, JSON.stringify(mistakes));
+}
+
+function removeMistake(questionId) {
+    const mistakes = getMistakes();
+    if (mistakes[questionId]) {
+        mistakes[questionId]--;
+        if (mistakes[questionId] <= 0) delete mistakes[questionId];
+    }
+    localStorage.setItem(MISTAKES_KEY, JSON.stringify(mistakes));
+}
+
+function clearHistory() {
+    if (confirm('¿Borrar todo el historial y los errores guardados?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(MISTAKES_KEY);
+        renderHistory();
+    }
+}
+
+function renderHistory() {
+    const history = getHistory();
+    const mistakes = getMistakes();
+    const mistakeIds = Object.keys(mistakes);
+    const panel = document.getElementById('historyPanel');
+    const mistakesBtn = document.getElementById('mistakesBtn');
+    const mistakesBadge = document.getElementById('mistakesBadge');
+
+    // Show mistakes button
+    if (mistakeIds.length > 0) {
+        mistakesBtn.style.display = 'inline-flex';
+        mistakesBadge.textContent = mistakeIds.length;
+    } else {
+        mistakesBtn.style.display = 'none';
+    }
+
+    if (history.length === 0) {
+        panel.style.display = 'none';
+        return;
+    }
+
+    panel.style.display = 'block';
+
+    // Stats
+    const totalExams = history.length;
+    const scores = history.map(h => h.score);
+    const bestScore = Math.max(...scores);
+    const lastScore = scores[0];
+    const avgScore = Math.round(scores.reduce((a,b) => a + b, 0) / scores.length);
+    const passCount = history.filter(h => h.passed).length;
+
+    document.getElementById('historyStats').innerHTML = `
+        <div class="history-stat"><div class="h-num" style="color:#5dade2">${totalExams}</div><div class="h-lbl">Examenes</div></div>
+        <div class="history-stat"><div class="h-num" style="color:#27ae60">${bestScore}%</div><div class="h-lbl">Mejor nota</div></div>
+        <div class="history-stat"><div class="h-num" style="color:#f1c40f">${avgScore}%</div><div class="h-lbl">Media</div></div>
+        <div class="history-stat"><div class="h-num" style="color:${passCount > 0 ? '#27ae60' : '#e74c3c'}">${passCount}/${totalExams}</div><div class="h-lbl">Aprobados</div></div>
+        <div class="history-stat"><div class="h-num" style="color:#e74c3c">${mistakeIds.length}</div><div class="h-lbl">Errores unicos</div></div>
+    `;
+
+    // List (last 10)
+    const listHtml = history.slice(0, 10).map(h => `
+        <li class="${h.passed ? 'h-pass' : 'h-fail'}">
+            <span class="h-date">${h.date}</span>
+            <span class="h-detail">${h.correct}/${h.total} preguntas</span>
+            <span class="h-score ${h.passed ? 'pass' : 'fail'}">${h.score}%</span>
+        </li>
+    `).join('');
+
+    document.getElementById('historyList').innerHTML = listHtml;
+}
+
+// === EXAM LOGIC ===
+let examQuestions = [];
+let examAnswers = {};
+let examIdx = 0;
+let examTimer = null;
+let timeLeft = 0;
+let totalTime = 0;
+let passScore = 70;
+let isMistakesExam = false;
+
+function startExam() {
+    const numQ = parseInt(document.getElementById('numQuestions').value);
+    const timeMins = parseInt(document.getElementById('timeLimit').value);
+    passScore = parseInt(document.getElementById('passScore').value);
+    isMistakesExam = false;
+
+    examQuestions = [...questionBank].sort(() => Math.random() - 0.5).slice(0, numQ);
+    beginExam(timeMins);
+}
+
+function startMistakesExam() {
+    const mistakes = getMistakes();
+    const mistakeIds = Object.keys(mistakes).map(Number);
+
+    if (mistakeIds.length === 0) {
+        alert('No tienes errores guardados. !Buen trabajo!');
+        return;
+    }
+
+    passScore = parseInt(document.getElementById('passScore').value);
+    isMistakesExam = true;
+
+    // Get questions that were failed, sorted by most failed first
+    examQuestions = questionBank
+        .filter(q => mistakeIds.includes(q.id))
+        .sort((a, b) => (mistakes[b.id] || 0) - (mistakes[a.id] || 0));
+
+    const timeMins = parseInt(document.getElementById('timeLimit').value);
+    beginExam(timeMins);
+}
+
+function beginExam(timeMins) {
+    examAnswers = {};
+    examIdx = 0;
+
+    document.getElementById('examConfig').style.display = 'none';
+    document.getElementById('historyPanel').style.display = 'none';
+    document.getElementById('examArea').style.display = 'block';
+
+    if (timeMins > 0) {
+        timeLeft = timeMins * 60;
+        totalTime = timeLeft;
+        document.getElementById('timerBar').style.display = 'block';
+        document.getElementById('timerDisplay').style.display = 'block';
+        examTimer = setInterval(updateTimer, 1000);
+    } else {
+        totalTime = 0;
+        document.getElementById('timerBar').style.display = 'none';
+        document.getElementById('timerDisplay').style.display = 'none';
+    }
+
+    renderDots();
+    renderExamQ();
+}
+
+function updateTimer() {
+    timeLeft--;
+    const mins = Math.floor(timeLeft / 60);
+    const secs = timeLeft % 60;
+    const display = document.getElementById('timerDisplay');
+    display.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    document.getElementById('timerFill').style.width = `${(timeLeft / totalTime) * 100}%`;
+
+    display.className = 'timer-display';
+    if (timeLeft <= totalTime * 0.2) display.classList.add('danger');
+    else if (timeLeft <= totalTime * 0.4) display.classList.add('warning');
+
+    if (timeLeft <= 0) { clearInterval(examTimer); submitExam(); }
+}
+
+function renderDots() {
+    const dots = examQuestions.map((_, i) => {
+        let cls = 'dot';
+        if (i === examIdx) cls += ' current';
+        if (examAnswers[i] !== undefined) cls += ' answered';
+        return `<div class="${cls}" onclick="goToQ(${i})">${i + 1}</div>`;
+    }).join('');
+    document.getElementById('questionDots').innerHTML = dots;
+}
+
+function renderExamQ() {
+    const q = examQuestions[examIdx];
+    const letters = ['A', 'B', 'C', 'D'];
+    const mistakes = getMistakes();
+    const failCount = mistakes[q.id] || 0;
+    const failBadge = failCount > 0 ? `<span style="background:rgba(231,76,60,0.2);color:#e74c3c;padding:2px 10px;border-radius:10px;font-size:0.7rem;font-weight:700;margin-left:10px;">Fallada ${failCount}x</span>` : '';
+
+    const opts = q.o.map((opt, i) => {
+        const sel = examAnswers[examIdx] === i ? 'selected' : '';
+        return `<li class="${sel}" onclick="selectExamAnswer(${i})"><span class="letter">${letters[i]}</span>${opt}</li>`;
+    }).join('');
+
+    document.getElementById('currentQuestion').innerHTML = `
+        <div class="exam-question">
+            <div class="eq-number">Pregunta ${examIdx + 1} de ${examQuestions.length} ${isMistakesExam ? '<span style="color:#e74c3c;font-weight:700;"> - REPASO DE ERRORES</span>' : ''} ${failBadge}</div>
+            <div class="eq-text">${q.q}</div>
+            <ul class="eq-options">${opts}</ul>
+        </div>
+    `;
+
+    document.getElementById('examPrev').style.visibility = examIdx > 0 ? 'visible' : 'hidden';
+    const allAnswered = Object.keys(examAnswers).length === examQuestions.length;
+    const isLast = examIdx === examQuestions.length - 1;
+    document.getElementById('examNext').style.display = isLast ? 'none' : '';
+    document.getElementById('examSubmit').style.display = (isLast || allAnswered) ? '' : 'none';
+    renderDots();
+}
+
+function selectExamAnswer(i) { examAnswers[examIdx] = i; renderExamQ(); }
+function examNav(dir) { examIdx = Math.max(0, Math.min(examQuestions.length - 1, examIdx + dir)); renderExamQ(); }
+function goToQ(i) { examIdx = i; renderExamQ(); }
+
+function submitExam() {
+    if (examTimer) clearInterval(examTimer);
+    document.getElementById('timerBar').style.display = 'none';
+    document.getElementById('timerDisplay').style.display = 'none';
+    document.getElementById('examArea').style.display = 'none';
+    document.getElementById('examResults').style.display = 'block';
+
+    let correct = 0;
+    let wrongQuestions = [];
+    let reviewHtml = '';
+    const letters = ['A', 'B', 'C', 'D'];
+
+    examQuestions.forEach((q, i) => {
+        const userAns = examAnswers[i];
+        const isCorrect = userAns === q.c;
+        if (isCorrect) {
+            correct++;
+            // If this was a mistakes exam and they got it right, reduce the mistake counter
+            if (isMistakesExam) removeMistake(q.id);
+        } else {
+            wrongQuestions.push(q);
+            saveMistake(q.id);
+        }
+
+        reviewHtml += `
+            <div class="review-item ${isCorrect ? 'r-correct' : 'r-wrong'}">
+                <div class="review-q">${i + 1}. ${q.q}</div>
+                <div class="review-a">
+                    ${userAns === undefined
+                        ? '<span class="r-fail">Sin responder</span><br>'
+                        : isCorrect
+                            ? `<span class="r-ok">&#10003; ${letters[userAns]}) ${q.o[userAns]}</span>`
+                            : `<span class="r-fail">&#10007; ${letters[userAns]}) ${q.o[userAns]}</span><br><span class="r-ok">&#10003; ${letters[q.c]}) ${q.o[q.c]}</span>`
+                    }
+                </div>
+                <div class="review-explanation">${q.e}</div>
+            </div>
+        `;
+    });
+
+    const total = examQuestions.length;
+    const pct = Math.round((correct / total) * 100);
+    const passed = pct >= passScore;
+    const timeUsed = totalTime > 0 ? totalTime - timeLeft : 0;
+    const minsUsed = Math.floor(timeUsed / 60);
+    const secsUsed = timeUsed % 60;
+
+    // Save to history
+    const now = new Date();
+    const dateStr = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    saveHistory({
+        date: dateStr,
+        score: pct,
+        correct: correct,
+        total: total,
+        passed: passed,
+        type: isMistakesExam ? 'errores' : 'normal',
+        timeUsed: totalTime > 0 ? `${minsUsed}:${String(secsUsed).padStart(2,'0')}` : null
+    });
+
+    const mistakesCount = Object.keys(getMistakes()).length;
+
+    // Only wrong questions review
+    let wrongOnlyHtml = '';
+    if (wrongQuestions.length > 0) {
+        wrongOnlyHtml = `
+            <div style="margin-top:25px; text-align:left;">
+                <h3 style="color:#e74c3c; margin-bottom:15px;">Tus ${wrongQuestions.length} errores en este examen</h3>
+                <p style="color:#8892a4; font-size:0.85rem; margin-bottom:15px;">Estas preguntas se han guardado automaticamente. Usa el boton "Examen con mis errores" para repasarlas.</p>
+                ${wrongQuestions.map((q, i) => {
+                    const userAns = examAnswers[examQuestions.indexOf(q)];
+                    return `
+                        <div class="review-item r-wrong">
+                            <div class="review-q">${q.q}</div>
+                            <div class="review-a">
+                                <span class="r-fail">&#10007; Tu respuesta: ${letters[userAns]}) ${q.o[userAns]}</span><br>
+                                <span class="r-ok">&#10003; Correcta: ${letters[q.c]}) ${q.o[q.c]}</span>
+                            </div>
+                            <div class="review-explanation">${q.e}</div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    }
+
+    document.getElementById('examResults').innerHTML = `
+        <div class="results">
+            <div class="result-score ${passed ? 'result-pass' : 'result-fail'}">${pct}%</div>
+            <div class="result-msg">${passed
+                ? '!APROBADO! !Enhorabuena!'
+                : `Necesitas ${passScore}% para aprobar. !Sigue estudiando!`}
+                ${isMistakesExam ? '<br><span style="color:#5dade2;font-size:0.9rem;">Examen de repaso de errores</span>' : ''}
+            </div>
+            <div class="result-stats">
+                <div class="result-stat"><div class="num" style="color:#27ae60">${correct}</div><div class="lbl">Correctas</div></div>
+                <div class="result-stat"><div class="num" style="color:#e74c3c">${total - correct}</div><div class="lbl">Incorrectas</div></div>
+                ${totalTime > 0 ? `<div class="result-stat"><div class="num" style="color:#5dade2">${minsUsed}:${String(secsUsed).padStart(2,'0')}</div><div class="lbl">Tiempo usado</div></div>` : ''}
+                <div class="result-stat"><div class="num" style="color:#f1c40f">${mistakesCount}</div><div class="lbl">Errores acumulados</div></div>
+            </div>
+
+            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:10px;">
+                <button class="btn btn-primary" onclick="resetExam()">Nuevo examen</button>
+                ${mistakesCount > 0 ? '<button class="mistakes-btn" onclick="resetAndMistakes()">Repasar mis errores <span class="mistakes-badge">' + mistakesCount + '</span></button>' : ''}
+            </div>
+
+            ${wrongOnlyHtml}
+
+            <div style="margin-top:25px; text-align:left;">
+                <button class="btn btn-secondary" onclick="document.getElementById('fullReview').style.display = document.getElementById('fullReview').style.display === 'none' ? 'block' : 'none'" style="margin-bottom:15px;">Ver todas las respuestas</button>
+                <div id="fullReview" style="display:none;">
+                    <h3 style="color:#fff; margin-bottom:15px;">Repaso completo (${total} preguntas)</h3>
+                    ${reviewHtml}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function resetExam() {
+    document.getElementById('examResults').style.display = 'none';
+    document.getElementById('examConfig').style.display = 'block';
+    renderHistory();
+}
+
+function resetAndMistakes() {
+    document.getElementById('examResults').style.display = 'none';
+    document.getElementById('examConfig').style.display = 'block';
+    renderHistory();
+    setTimeout(() => startMistakesExam(), 100);
+}
+
+// Init
+renderHistory();
+</script>
+
+</body>
+</html>

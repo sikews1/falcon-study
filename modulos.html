@@ -8,11 +8,11 @@
     <style>
         /* Progress overview */
         .progress-overview {
-            background: #131316;
+            background: var(--bg-raised);
             border-radius: 16px;
             padding: 25px 30px;
             margin-bottom: 30px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--border-subtle);
             display: flex;
             align-items: center;
             gap: 30px;
@@ -30,7 +30,7 @@
 
         .progress-circle .circle-bg {
             fill: none;
-            stroke: rgba(255,255,255,0.08);
+            stroke: var(--border-subtle);
             stroke-width: 8;
         }
 
@@ -49,13 +49,13 @@
             transform: translate(-50%, -50%);
             font-size: 1.5rem;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-primary);
         }
 
         .progress-info { flex: 1; }
 
         .progress-info h2 {
-            color: #fff;
+            color: var(--text-primary);
             font-size: 1.2rem;
             margin-bottom: 8px;
         }
@@ -90,23 +90,23 @@
             top: 0;
             bottom: 0;
             width: 3px;
-            background: rgba(255,255,255,0.08);
+            background: var(--border-subtle);
             border-radius: 2px;
         }
 
         /* Module card */
         .module-card {
             position: relative;
-            background: #131316;
+            background: var(--bg-raised);
             border-radius: 16px;
             margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--border-subtle);
             overflow: hidden;
             transition: all 0.3s;
         }
 
         .module-card:hover {
-            border-color: #f97316;
+            border-color: var(--accent);
             box-shadow: 0 8px 25px rgba(249, 115, 22, 0.1);
         }
 
@@ -131,7 +131,7 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            border: 3px solid #09090b;
+            border: 3px solid var(--bg-base);
             z-index: 2;
         }
 
@@ -157,9 +157,9 @@
             letter-spacing: 0.5px;
         }
 
-        .completed .module-code { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
-        .in-progress .module-code { background: rgba(234, 179, 8, 0.2); color: #eab308; }
-        .not-started .module-code { background: rgba(82, 82, 91, 0.2); color: #a1a1aa; }
+        .completed .module-code { background: rgba(34, 197, 94, 0.2); color: var(--green); }
+        .in-progress .module-code { background: rgba(234, 179, 8, 0.2); color: var(--yellow); }
+        .not-started .module-code { background: rgba(82, 82, 91, 0.2); color: var(--text-secondary); }
 
         /* Status changer */
         .status-changer {
@@ -172,7 +172,7 @@
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.08);
+            border: 2px solid var(--border-subtle);
             background: transparent;
             cursor: pointer;
             font-size: 0.7rem;
@@ -183,12 +183,12 @@
         }
 
         .status-btn:hover { transform: scale(1.2); }
-        .status-btn[data-status="completed"] { border-color: #22c55e; color: #22c55e; }
-        .status-btn[data-status="completed"]:hover, .status-btn[data-status="completed"].active { background: #22c55e; color: #fff; }
-        .status-btn[data-status="in-progress"] { border-color: #eab308; color: #eab308; }
-        .status-btn[data-status="in-progress"]:hover, .status-btn[data-status="in-progress"].active { background: #eab308; color: #fff; }
-        .status-btn[data-status="not-started"] { border-color: #52525b; color: #52525b; }
-        .status-btn[data-status="not-started"]:hover, .status-btn[data-status="not-started"].active { background: #52525b; color: #fff; }
+        .status-btn[data-status="completed"] { border-color: var(--green); color: var(--green); }
+        .status-btn[data-status="completed"]:hover, .status-btn[data-status="completed"].active { background: #22c55e; color: var(--text-primary); }
+        .status-btn[data-status="in-progress"] { border-color: var(--yellow); color: var(--yellow); }
+        .status-btn[data-status="in-progress"]:hover, .status-btn[data-status="in-progress"].active { background: #eab308; color: var(--text-primary); }
+        .status-btn[data-status="not-started"] { border-color: var(--text-muted); color: var(--text-muted); }
+        .status-btn[data-status="not-started"]:hover, .status-btn[data-status="not-started"].active { background: #52525b; color: var(--text-primary); }
 
         .module-title-text {
             flex: 1;
@@ -196,18 +196,18 @@
         }
 
         .module-title-text h3 {
-            color: #fff;
+            color: var(--text-primary);
             font-size: 1.1rem;
             margin-bottom: 3px;
         }
 
         .module-title-text .module-meta {
-            color: #a1a1aa;
+            color: var(--text-secondary);
             font-size: 0.8rem;
         }
 
         .module-toggle {
-            color: #a1a1aa;
+            color: var(--text-secondary);
             font-size: 1.2rem;
             transition: transform 0.3s;
             min-width: 20px;
@@ -242,17 +242,17 @@
         .module-tabs button {
             padding: 7px 16px;
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--border-subtle);
             background: transparent;
-            color: #a1a1aa;
+            color: var(--text-secondary);
             cursor: pointer;
             font-size: 0.8rem;
             font-weight: 600;
             transition: all 0.2s;
         }
 
-        .module-tabs button:hover { border-color: #3b82f6; color: #3b82f6; }
-        .module-tabs button.active { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+        .module-tabs button:hover { border-color: var(--blue); color: var(--blue); }
+        .module-tabs button.active { background: #3b82f6; border-color: var(--blue); color: var(--text-primary); }
 
         .module-tab-content { display: none; }
         .module-tab-content.active { display: block; }
@@ -264,12 +264,12 @@
             padding: 14px 18px;
             border-radius: 0 10px 10px 0;
             margin-bottom: 20px;
-            color: #a1a1aa;
+            color: var(--text-secondary);
             font-size: 0.92rem;
             line-height: 1.6;
         }
 
-        .objective strong { color: #3b82f6; }
+        .objective strong { color: var(--blue); }
 
         /* Key points */
         .key-points { list-style: none; padding: 0; }
@@ -277,16 +277,16 @@
         .key-points li {
             padding: 12px 16px;
             margin-bottom: 8px;
-            background: #09090b;
+            background: var(--bg-base);
             border-radius: 8px;
             border-left: 3px solid #f97316;
-            color: #a1a1aa;
+            color: var(--text-secondary);
             font-size: 0.92rem;
             line-height: 1.6;
         }
 
-        .key-points li strong { color: #fff; }
-        .key-points li em { color: #eab308; font-style: normal; }
+        .key-points li strong { color: var(--text-primary); }
+        .key-points li em { color: var(--yellow); font-style: normal; }
 
         /* Exam tip */
         .exam-tip {
@@ -296,7 +296,7 @@
             padding: 15px 18px;
             margin-top: 15px;
             font-size: 0.88rem;
-            color: #a1a1aa;
+            color: var(--text-secondary);
         }
 
         .exam-tip::before {
@@ -304,7 +304,7 @@
             display: block;
             font-size: 0.7rem;
             font-weight: 700;
-            color: #eab308;
+            color: var(--yellow);
             letter-spacing: 1px;
             margin-bottom: 6px;
         }
@@ -317,27 +317,27 @@
         }
 
         .vocab-item {
-            background: #09090b;
+            background: var(--bg-base);
             border-radius: 8px;
             padding: 12px 16px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--border-subtle);
         }
 
         .vocab-en {
-            color: #f97316;
+            color: var(--accent);
             font-weight: 700;
             font-size: 0.9rem;
             margin-bottom: 2px;
         }
 
         .vocab-es {
-            color: #3b82f6;
+            color: var(--blue);
             font-size: 0.8rem;
             margin-bottom: 6px;
         }
 
         .vocab-def {
-            color: #a1a1aa;
+            color: var(--text-secondary);
             font-size: 0.82rem;
             line-height: 1.5;
         }
@@ -354,14 +354,14 @@
             padding: 8px 16px;
             border-radius: 20px;
             background: rgba(249, 115, 22, 0.15);
-            color: #f97316;
+            color: var(--accent);
             text-decoration: none;
             font-size: 0.8rem;
             font-weight: 600;
             transition: all 0.2s;
         }
 
-        .related-links a:hover { background: #f97316; color: #fff; }
+        .related-links a:hover { background: #f97316; color: var(--text-primary); }
 
         @media (max-width: 600px) {
             .timeline { padding-left: 25px; }
@@ -406,7 +406,7 @@
                 <span><span class="dot-yellow"></span> 0 en progreso</span>
                 <span><span class="dot-gray"></span> 12 pendientes</span>
             </div>
-            <p style="color: #a1a1aa; font-size: 0.8rem; margin-top: 8px;">12 modulos | 6h 25min tiempo total estimado</p>
+            <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 8px;">12 modulos | 6h 25min tiempo total estimado</p>
         </div>
     </div>
 
@@ -458,7 +458,7 @@
                 </div>
 
                 <div class="module-tab-content" data-tab="practica">
-                    <p style="color: #a1a1aa; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
                     <div class="related-links">
                         <a href="quiz.html?module=100">Quiz FALCON 100</a>
                         <a href="flashcards.html?cat=falcon">Flashcards Falcon</a>
@@ -516,7 +516,7 @@
                 </div>
 
                 <div class="module-tab-content" data-tab="practica">
-                    <p style="color: #a1a1aa; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
                     <div class="related-links">
                         <a href="quiz.html?module=101">Quiz FALCON 101</a>
                         <a href="flashcards.html?cat=modulos">Flashcards Modulos</a>
@@ -573,7 +573,7 @@
                 </div>
 
                 <div class="module-tab-content" data-tab="practica">
-                    <p style="color: #a1a1aa; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
                     <div class="related-links">
                         <a href="quiz.html?module=102">Quiz FALCON 102</a>
                         <a href="flashcards.html?cat=gestion">Flashcards Gestion</a>
@@ -628,7 +628,7 @@
                 </div>
 
                 <div class="module-tab-content" data-tab="practica">
-                    <p style="color: #a1a1aa; margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 15px;">Practica los conceptos de este modulo:</p>
                     <div class="related-links">
                         <a href="quiz.html?module=104">Quiz FALCON 104</a>
                         <a href="escenarios.html">Escenario: Ransomware detectado</a>
@@ -924,6 +924,7 @@ function switchTab(btn, tabName) {
 loadProgress();
 </script>
 
+<script src="theme.js"></script>
 <script src="auth.js"></script>
 </body>
 </html>

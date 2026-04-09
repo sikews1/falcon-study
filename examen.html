@@ -8,17 +8,17 @@
     <style>
         /* Exam config */
         .exam-config {
-            background: #131316;
+            background: var(--bg-raised);
             border-radius: 16px;
             padding: 40px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--border-subtle);
             max-width: 600px;
             margin: 0 auto;
         }
 
-        .exam-config h2 { color: #fff; margin-bottom: 10px; }
-        .exam-config p { color: #a1a1aa; margin-bottom: 25px; }
+        .exam-config h2 { color: var(--text-primary); margin-bottom: 10px; }
+        .exam-config p { color: var(--text-secondary); margin-bottom: 25px; }
 
         .config-options {
             display: flex;
@@ -33,17 +33,17 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px 18px;
-            background: #09090b;
+            background: var(--bg-base);
             border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--border-subtle);
         }
 
-        .config-option label { color: #fafafa; font-weight: 600; }
+        .config-option label { color: var(--text-primary); font-weight: 600; }
 
         .config-option select, .config-option input {
-            background: rgba(255,255,255,0.08);
+            background: var(--border-subtle);
             border: none;
-            color: #fafafa;
+            color: var(--text-primary);
             padding: 8px 14px;
             border-radius: 8px;
             font-size: 0.9rem;
@@ -56,7 +56,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: rgba(255,255,255,0.08);
+            background: var(--border-subtle);
             z-index: 150;
         }
 
@@ -70,40 +70,40 @@
             position: fixed;
             top: 48px;
             right: 20px;
-            background: #131316;
+            background: var(--bg-raised);
             padding: 8px 16px;
             border-radius: 0 0 10px 10px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--border-subtle);
             border-top: none;
             z-index: 150;
             font-weight: 700;
             font-size: 1.1rem;
-            color: #fff;
+            color: var(--text-primary);
         }
 
-        .timer-display.warning { color: #eab308; }
-        .timer-display.danger { color: #ef4444; animation: pulse 1s infinite; }
+        .timer-display.warning { color: var(--yellow); }
+        .timer-display.danger { color: var(--red); animation: pulse 1s infinite; }
 
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
         /* Question */
         .exam-question {
-            background: #131316;
+            background: var(--bg-raised);
             border-radius: 12px;
             padding: 25px;
             margin-bottom: 15px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--border-subtle);
         }
 
         .eq-number {
-            color: #f97316;
+            color: var(--accent);
             font-weight: 700;
             font-size: 0.85rem;
             margin-bottom: 10px;
         }
 
         .eq-text {
-            color: #fff;
+            color: var(--text-primary);
             font-size: 1.05rem;
             margin-bottom: 18px;
             line-height: 1.5;
@@ -115,8 +115,8 @@
             padding: 12px 16px;
             margin-bottom: 8px;
             border-radius: 8px;
-            border: 2px solid rgba(255,255,255,0.08);
-            background: #09090b;
+            border: 2px solid var(--border-subtle);
+            background: var(--bg-base);
             cursor: pointer;
             transition: all 0.2s;
             font-size: 0.92rem;
@@ -125,23 +125,23 @@
             gap: 10px;
         }
 
-        .eq-options li:hover { border-color: #3b82f6; }
-        .eq-options li.selected { border-color: #f97316; background: rgba(249, 115, 22, 0.1); }
+        .eq-options li:hover { border-color: var(--blue); }
+        .eq-options li.selected { border-color: var(--accent); background: rgba(249, 115, 22, 0.1); }
 
         .eq-options li .letter {
             min-width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.08);
+            background: var(--border-subtle);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
             font-size: 0.8rem;
-            color: #a1a1aa;
+            color: var(--text-secondary);
         }
 
-        .eq-options li.selected .letter { background: #f97316; color: #fff; }
+        .eq-options li.selected .letter { background: #f97316; color: var(--text-primary); }
 
         /* Question nav dots */
         .question-dots {
@@ -151,7 +151,7 @@
             justify-content: center;
             margin-bottom: 20px;
             padding: 15px;
-            background: #131316;
+            background: var(--bg-raised);
             border-radius: 10px;
         }
 
@@ -159,19 +159,19 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.08);
+            border: 2px solid var(--border-subtle);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.7rem;
             font-weight: 700;
-            color: #a1a1aa;
+            color: var(--text-secondary);
             cursor: pointer;
             transition: all 0.2s;
         }
 
-        .dot.current { border-color: #f97316; color: #f97316; }
-        .dot.answered { background: #f97316; border-color: #f97316; color: #fff; }
+        .dot.current { border-color: var(--accent); color: var(--accent); }
+        .dot.answered { background: #f97316; border-color: var(--accent); color: var(--text-primary); }
 
         /* Results */
         .results {
@@ -185,12 +185,12 @@
             margin-bottom: 10px;
         }
 
-        .result-pass { color: #22c55e; }
-        .result-fail { color: #ef4444; }
+        .result-pass { color: var(--green); }
+        .result-fail { color: var(--red); }
 
         .result-msg {
             font-size: 1.2rem;
-            color: #a1a1aa;
+            color: var(--text-secondary);
             margin-bottom: 30px;
         }
 
@@ -202,38 +202,38 @@
         }
 
         .result-stat .num { font-size: 2.5rem; font-weight: 700; }
-        .result-stat .lbl { font-size: 0.85rem; color: #a1a1aa; }
+        .result-stat .lbl { font-size: 0.85rem; color: var(--text-secondary); }
 
         /* Review */
         .review-item {
             text-align: left;
-            background: #131316;
+            background: var(--bg-raised);
             border-radius: 10px;
             padding: 18px;
             margin-bottom: 10px;
             border-left: 4px solid;
         }
 
-        .review-item.r-correct { border-color: #22c55e; }
-        .review-item.r-wrong { border-color: #ef4444; }
+        .review-item.r-correct { border-color: var(--green); }
+        .review-item.r-wrong { border-color: var(--red); }
 
-        .review-q { color: #fff; font-weight: 600; margin-bottom: 8px; font-size: 0.95rem; }
-        .review-a { font-size: 0.85rem; color: #a1a1aa; }
-        .review-a .r-ok { color: #22c55e; }
-        .review-a .r-fail { color: #ef4444; text-decoration: line-through; }
-        .review-explanation { margin-top: 8px; font-size: 0.85rem; color: #3b82f6; }
+        .review-q { color: var(--text-primary); font-weight: 600; margin-bottom: 8px; font-size: 0.95rem; }
+        .review-a { font-size: 0.85rem; color: var(--text-secondary); }
+        .review-a .r-ok { color: var(--green); }
+        .review-a .r-fail { color: var(--red); text-decoration: line-through; }
+        .review-explanation { margin-top: 8px; font-size: 0.85rem; color: var(--blue); }
 
         /* History panel */
         .history-panel {
-            background: #131316;
+            background: var(--bg-raised);
             border-radius: 14px;
             padding: 25px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--border-subtle);
             margin-top: 25px;
         }
 
         .history-panel h3 {
-            color: #fff;
+            color: var(--text-primary);
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -248,7 +248,7 @@
         }
 
         .history-stat {
-            background: #09090b;
+            background: var(--bg-base);
             border-radius: 10px;
             padding: 15px 20px;
             text-align: center;
@@ -263,7 +263,7 @@
 
         .history-stat .h-lbl {
             font-size: 0.75rem;
-            color: #a1a1aa;
+            color: var(--text-secondary);
             margin-top: 2px;
         }
 
@@ -275,25 +275,25 @@
             justify-content: space-between;
             padding: 10px 14px;
             margin-bottom: 6px;
-            background: #09090b;
+            background: var(--bg-base);
             border-radius: 8px;
             font-size: 0.85rem;
             border-left: 4px solid;
         }
 
-        .history-list li.h-pass { border-color: #22c55e; }
-        .history-list li.h-fail { border-color: #ef4444; }
+        .history-list li.h-pass { border-color: var(--green); }
+        .history-list li.h-fail { border-color: var(--red); }
 
-        .h-date { color: #a1a1aa; }
+        .h-date { color: var(--text-secondary); }
         .h-score { font-weight: 700; }
-        .h-score.pass { color: #22c55e; }
-        .h-score.fail { color: #ef4444; }
-        .h-detail { color: #3b82f6; font-size: 0.8rem; }
+        .h-score.pass { color: var(--green); }
+        .h-score.fail { color: var(--red); }
+        .h-detail { color: var(--blue); font-size: 0.8rem; }
 
         /* Mistakes section */
         .mistakes-btn {
             background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: #fff;
+            color: var(--text-primary);
             border: none;
             padding: 12px 25px;
             border-radius: 25px;
@@ -310,7 +310,7 @@
 
         .mistakes-badge {
             background: #fff;
-            color: #ef4444;
+            color: var(--red);
             border-radius: 50%;
             width: 24px;
             height: 24px;
@@ -323,8 +323,8 @@
 
         .clear-history-btn {
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.08);
-            color: #a1a1aa;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
             padding: 6px 14px;
             border-radius: 15px;
             font-size: 0.75rem;
@@ -332,7 +332,7 @@
             transition: all 0.3s;
         }
 
-        .clear-history-btn:hover { border-color: #ef4444; color: #ef4444; }
+        .clear-history-btn:hover { border-color: var(--red); color: var(--red); }
     </style>
 </head>
 <body>
@@ -528,11 +528,11 @@ function renderHistory() {
     const passCount = history.filter(h => h.passed).length;
 
     document.getElementById('historyStats').innerHTML = `
-        <div class="history-stat"><div class="h-num" style="color:#3b82f6">${totalExams}</div><div class="h-lbl">Examenes</div></div>
-        <div class="history-stat"><div class="h-num" style="color:#22c55e">${bestScore}%</div><div class="h-lbl">Mejor nota</div></div>
-        <div class="history-stat"><div class="h-num" style="color:#eab308">${avgScore}%</div><div class="h-lbl">Media</div></div>
+        <div class="history-stat"><div class="h-num" style="color: var(--blue)">${totalExams}</div><div class="h-lbl">Examenes</div></div>
+        <div class="history-stat"><div class="h-num" style="color: var(--green)">${bestScore}%</div><div class="h-lbl">Mejor nota</div></div>
+        <div class="history-stat"><div class="h-num" style="color: var(--yellow)">${avgScore}%</div><div class="h-lbl">Media</div></div>
         <div class="history-stat"><div class="h-num" style="color:${passCount > 0 ? '#22c55e' : '#ef4444'}">${passCount}/${totalExams}</div><div class="h-lbl">Aprobados</div></div>
-        <div class="history-stat"><div class="h-num" style="color:#ef4444">${mistakeIds.length}</div><div class="h-lbl">Errores unicos</div></div>
+        <div class="history-stat"><div class="h-num" style="color: var(--red)">${mistakeIds.length}</div><div class="h-lbl">Errores unicos</div></div>
     `;
 
     // List (last 10)
@@ -642,7 +642,7 @@ function renderExamQ() {
     const letters = ['A', 'B', 'C', 'D'];
     const mistakes = getMistakes();
     const failCount = mistakes[q.id] || 0;
-    const failBadge = failCount > 0 ? `<span style="background:rgba(231,76,60,0.2);color:#ef4444;padding:2px 10px;border-radius:10px;font-size:0.7rem;font-weight:700;margin-left:10px;">Fallada ${failCount}x</span>` : '';
+    const failBadge = failCount > 0 ? `<span style="background:rgba(231,76,60,0.2);color: var(--red);padding:2px 10px;border-radius:10px;font-size:0.7rem;font-weight:700;margin-left:10px;">Fallada ${failCount}x</span>` : '';
 
     const opts = q.o.map((opt, i) => {
         const sel = examAnswers[examIdx] === i ? 'selected' : '';
@@ -651,7 +651,7 @@ function renderExamQ() {
 
     document.getElementById('currentQuestion').innerHTML = `
         <div class="exam-question">
-            <div class="eq-number">Pregunta ${examIdx + 1} de ${examQuestions.length} ${isMistakesExam ? '<span style="color:#ef4444;font-weight:700;"> - REPASO DE ERRORES</span>' : ''} ${failBadge}</div>
+            <div class="eq-number">Pregunta ${examIdx + 1} de ${examQuestions.length} ${isMistakesExam ? '<span style="color: var(--red);font-weight:700;"> - REPASO DE ERRORES</span>' : ''} ${failBadge}</div>
             <div class="eq-text">${q.q}</div>
             <ul class="eq-options">${opts}</ul>
         </div>
@@ -736,8 +736,8 @@ function submitExam() {
     if (wrongQuestions.length > 0) {
         wrongOnlyHtml = `
             <div style="margin-top:25px; text-align:left;">
-                <h3 style="color:#ef4444; margin-bottom:15px;">Tus ${wrongQuestions.length} errores en este examen</h3>
-                <p style="color:#a1a1aa; font-size:0.85rem; margin-bottom:15px;">Estas preguntas se han guardado automaticamente. Usa el boton "Examen con mis errores" para repasarlas.</p>
+                <h3 style="color: var(--red); margin-bottom:15px;">Tus ${wrongQuestions.length} errores en este examen</h3>
+                <p style="color: var(--text-secondary); font-size:0.85rem; margin-bottom:15px;">Estas preguntas se han guardado automaticamente. Usa el boton "Examen con mis errores" para repasarlas.</p>
                 ${wrongQuestions.map((q, i) => {
                     const userAns = examAnswers[examQuestions.indexOf(q)];
                     return `
@@ -761,13 +761,13 @@ function submitExam() {
             <div class="result-msg">${passed
                 ? '!APROBADO! !Enhorabuena!'
                 : `Necesitas ${passScore}% para aprobar. !Sigue estudiando!`}
-                ${isMistakesExam ? '<br><span style="color:#3b82f6;font-size:0.9rem;">Examen de repaso de errores</span>' : ''}
+                ${isMistakesExam ? '<br><span style="color: var(--blue);font-size:0.9rem;">Examen de repaso de errores</span>' : ''}
             </div>
             <div class="result-stats">
-                <div class="result-stat"><div class="num" style="color:#22c55e">${correct}</div><div class="lbl">Correctas</div></div>
-                <div class="result-stat"><div class="num" style="color:#ef4444">${total - correct}</div><div class="lbl">Incorrectas</div></div>
-                ${totalTime > 0 ? `<div class="result-stat"><div class="num" style="color:#3b82f6">${minsUsed}:${String(secsUsed).padStart(2,'0')}</div><div class="lbl">Tiempo usado</div></div>` : ''}
-                <div class="result-stat"><div class="num" style="color:#eab308">${mistakesCount}</div><div class="lbl">Errores acumulados</div></div>
+                <div class="result-stat"><div class="num" style="color: var(--green)">${correct}</div><div class="lbl">Correctas</div></div>
+                <div class="result-stat"><div class="num" style="color: var(--red)">${total - correct}</div><div class="lbl">Incorrectas</div></div>
+                ${totalTime > 0 ? `<div class="result-stat"><div class="num" style="color: var(--blue)">${minsUsed}:${String(secsUsed).padStart(2,'0')}</div><div class="lbl">Tiempo usado</div></div>` : ''}
+                <div class="result-stat"><div class="num" style="color: var(--yellow)">${mistakesCount}</div><div class="lbl">Errores acumulados</div></div>
             </div>
 
             <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:10px;">
@@ -780,7 +780,7 @@ function submitExam() {
             <div style="margin-top:25px; text-align:left;">
                 <button class="btn btn-secondary" onclick="document.getElementById('fullReview').style.display = document.getElementById('fullReview').style.display === 'none' ? 'block' : 'none'" style="margin-bottom:15px;">Ver todas las respuestas</button>
                 <div id="fullReview" style="display:none;">
-                    <h3 style="color:#fff; margin-bottom:15px;">Repaso completo (${total} preguntas)</h3>
+                    <h3 style="color: var(--text-primary); margin-bottom:15px;">Repaso completo (${total} preguntas)</h3>
                     ${reviewHtml}
                 </div>
             </div>
@@ -805,6 +805,7 @@ function resetAndMistakes() {
 renderHistory();
 </script>
 
+<script src="theme.js"></script>
 <script src="auth.js"></script>
 </body>
 </html>

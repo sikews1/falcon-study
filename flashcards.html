@@ -17,17 +17,17 @@
         .category-selector button {
             padding: 8px 18px;
             border-radius: 25px;
-            border: 2px solid rgba(255,255,255,0.08);
+            border: 2px solid var(--border-subtle);
             background: transparent;
-            color: #a1a1aa;
+            color: var(--text-secondary);
             cursor: pointer;
             font-size: 0.8rem;
             font-weight: 600;
             transition: all 0.3s;
         }
 
-        .category-selector button:hover { border-color: #f97316; color: #f97316; }
-        .category-selector button.active { background: #f97316; border-color: #f97316; color: #fff; }
+        .category-selector button:hover { border-color: var(--accent); color: var(--accent); }
+        .category-selector button.active { background: #f97316; border-color: var(--accent); color: var(--text-primary); }
 
         /* Flashcard */
         .flashcard-container {
@@ -63,12 +63,12 @@
         }
 
         .flashcard-front {
-            background: linear-gradient(135deg, #131316, #131316);
-            border: 2px solid rgba(255,255,255,0.08);
+            background: linear-gradient(135deg, var(--bg-raised), var(--bg-raised));
+            border: 2px solid var(--border-subtle);
         }
 
         .flashcard-back {
-            background: linear-gradient(135deg, #131316, #1a1a1f);
+            background: linear-gradient(135deg, var(--bg-raised), var(--bg-overlay));
             border: 2px solid #3b82f6;
             transform: rotateY(180deg);
         }
@@ -76,18 +76,18 @@
         .flashcard-front .term {
             font-size: 1.6rem;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-primary);
             margin-bottom: 10px;
         }
 
         .flashcard-front .hint {
-            color: #f97316;
+            color: var(--accent);
             font-size: 0.85rem;
             font-weight: 600;
         }
 
         .flashcard-front .flip-hint {
-            color: #52525b;
+            color: var(--text-muted);
             font-size: 0.8rem;
             position: absolute;
             bottom: 20px;
@@ -95,15 +95,15 @@
 
         .flashcard-back .answer {
             font-size: 1.05rem;
-            color: #fafafa;
+            color: var(--text-primary);
             line-height: 1.7;
         }
 
-        .flashcard-back .answer strong { color: #3b82f6; }
-        .flashcard-back .answer em { color: #eab308; font-style: normal; }
+        .flashcard-back .answer strong { color: var(--blue); }
+        .flashcard-back .answer em { color: var(--yellow); font-style: normal; }
 
         .flashcard-back .translation {
-            color: #f97316;
+            color: var(--accent);
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 15px;
@@ -119,7 +119,7 @@
         }
 
         .fc-counter {
-            color: #a1a1aa;
+            color: var(--text-secondary);
             font-size: 0.9rem;
             min-width: 80px;
             text-align: center;
@@ -143,9 +143,9 @@
             transition: all 0.3s;
         }
 
-        .btn-know { background: #22c55e; color: #fff; }
+        .btn-know { background: #22c55e; color: var(--text-primary); }
         .btn-know:hover { background: #16a34a; transform: translateY(-2px); }
-        .btn-dontknow { background: #ef4444; color: #fff; }
+        .btn-dontknow { background: #ef4444; color: var(--text-primary); }
         .btn-dontknow:hover { background: #dc2626; transform: translateY(-2px); }
 
         /* Stats */
@@ -155,7 +155,7 @@
             gap: 30px;
             margin-top: 20px;
             padding: 15px;
-            background: #131316;
+            background: var(--bg-raised);
             border-radius: 12px;
         }
 
@@ -170,22 +170,22 @@
 
         .fc-stat .lbl {
             font-size: 0.75rem;
-            color: #a1a1aa;
+            color: var(--text-secondary);
         }
 
         /* Keyboard shortcuts info */
         .shortcuts-info {
             text-align: center;
-            color: #52525b;
+            color: var(--text-muted);
             font-size: 0.8rem;
             margin-top: 15px;
         }
 
         .shortcuts-info kbd {
-            background: rgba(255,255,255,0.08);
+            background: var(--border-subtle);
             padding: 2px 8px;
             border-radius: 4px;
-            color: #a1a1aa;
+            color: var(--text-secondary);
             font-size: 0.75rem;
         }
     </style>
@@ -238,9 +238,9 @@
     </div>
 
     <div class="fc-stats">
-        <div class="fc-stat"><div class="num" style="color: #22c55e" id="knownCount">0</div><div class="lbl">Lo se</div></div>
-        <div class="fc-stat"><div class="num" style="color: #ef4444" id="unknownCount">0</div><div class="lbl">No lo se</div></div>
-        <div class="fc-stat"><div class="num" style="color: #3b82f6" id="remainCount">0</div><div class="lbl">Pendientes</div></div>
+        <div class="fc-stat"><div class="num" style="color: var(--green)" id="knownCount">0</div><div class="lbl">Lo se</div></div>
+        <div class="fc-stat"><div class="num" style="color: var(--red)" id="unknownCount">0</div><div class="lbl">No lo se</div></div>
+        <div class="fc-stat"><div class="num" style="color: var(--blue)" id="remainCount">0</div><div class="lbl">Pendientes</div></div>
     </div>
 
     <div class="shortcuts-info">
@@ -425,10 +425,10 @@ function showSummary() {
 
     let wrongHtml = '';
     if (wrongCards.length > 0) {
-        wrongHtml = '<div style="text-align:left;margin-top:25px;"><h3 style="color:#f97316;margin-bottom:12px;">Tarjetas para repasar:</h3>' +
-            wrongCards.map(c => `<div style="background:#09090b;border-radius:10px;padding:14px 18px;margin-bottom:8px;border-left:3px solid #f97316;">
-                <div style="color:#fff;font-weight:700;margin-bottom:6px;">${c.front} <span style="color:#3b82f6;font-size:0.8rem;">(${c.hint})</span></div>
-                <div style="color:#a1a1aa;font-size:0.9rem;">${c.back}</div>
+        wrongHtml = '<div style="text-align:left;margin-top:25px;"><h3 style="color: var(--accent);margin-bottom:12px;">Tarjetas para repasar:</h3>' +
+            wrongCards.map(c => `<div style="background:var(--bg-base);border-radius:10px;padding:14px 18px;margin-bottom:8px;border-left:3px solid #f97316;">
+                <div style="color: var(--text-primary);font-weight:700;margin-bottom:6px;">${c.front} <span style="color: var(--blue);font-size:0.8rem;">(${c.hint})</span></div>
+                <div style="color: var(--text-secondary);font-size:0.9rem;">${c.back}</div>
             </div>`).join('') + '</div>';
     }
 
@@ -437,13 +437,13 @@ function showSummary() {
     summary.innerHTML = `
         <div style="text-align:center;padding:30px 0;">
             <div style="font-size:3.5rem;font-weight:700;color:${pct >= 70 ? '#22c55e' : '#ef4444'};margin-bottom:8px;">${pct}%</div>
-            <div style="color:#a1a1aa;font-size:1rem;margin-bottom:25px;">${known} de ${currentCards.length} tarjetas correctas</div>
+            <div style="color: var(--text-secondary);font-size:1rem;margin-bottom:25px;">${known} de ${currentCards.length} tarjetas correctas</div>
             <div style="display:flex;justify-content:center;gap:25px;margin-bottom:25px;">
-                <div><div style="font-size:2rem;font-weight:700;color:#22c55e;">${known}</div><div style="color:#a1a1aa;font-size:0.8rem;">Lo se</div></div>
-                <div><div style="font-size:2rem;font-weight:700;color:#ef4444;">${unknown}</div><div style="color:#a1a1aa;font-size:0.8rem;">No lo se</div></div>
+                <div><div style="font-size:2rem;font-weight:700;color: var(--green);">${known}</div><div style="color: var(--text-secondary);font-size:0.8rem;">Lo se</div></div>
+                <div><div style="font-size:2rem;font-weight:700;color: var(--red);">${unknown}</div><div style="color: var(--text-secondary);font-size:0.8rem;">No lo se</div></div>
             </div>
             <button class="btn btn-primary" onclick="filterCards(document.querySelector('.category-selector .active').dataset.cat)" style="margin-right:10px;">Repetir</button>
-            ${wrongCards.length > 0 ? '<button class="btn btn-secondary" onclick="retryWrong()" style="border-color:#f97316;color:#f97316;">Solo las que falle (' + wrongCards.length + ')</button>' : ''}
+            ${wrongCards.length > 0 ? '<button class="btn btn-secondary" onclick="retryWrong()" style="border-color: var(--accent);color: var(--accent);">Solo las que falle (' + wrongCards.length + ')</button>' : ''}
             ${wrongHtml}
         </div>
     `;
@@ -494,6 +494,7 @@ if (urlCat) {
 }
 </script>
 
+<script src="theme.js"></script>
 <script src="auth.js"></script>
 </body>
 </html>

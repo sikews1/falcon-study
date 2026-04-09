@@ -1,32 +1,40 @@
 /* ============================================================
    CrowdStrike Falcon Study Platform
-   Design System v3.0 — Premium Dark
+   Design System v4.0 — Premium Light (duetri-inspired)
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
+/* ============================================================
+   LIGHT MODE (default)
+   ============================================================ */
 :root {
-    /* --- Surfaces (neutral, no blue) --- */
-    --bg-base: #09090b;
-    --bg-raised: #131316;
-    --bg-overlay: #1a1a1f;
-    --bg-hover: #222228;
-    --bg-glass: rgba(255, 255, 255, 0.03);
-    --border-subtle: rgba(255, 255, 255, 0.06);
-    --border-default: rgba(255, 255, 255, 0.1);
-    --border-strong: rgba(255, 255, 255, 0.15);
+    /* --- Surfaces --- */
+    --bg-base: #fafafa;
+    --bg-raised: #ffffff;
+    --bg-overlay: #f4f4f5;
+    --bg-hover: #e4e4e7;
+    --bg-glass: rgba(255, 255, 255, 0.7);
+    --border-subtle: rgba(0, 0, 0, 0.06);
+    --border-default: rgba(0, 0, 0, 0.1);
+    --border-strong: rgba(0, 0, 0, 0.15);
 
-    /* --- Accent --- */
+    /* --- Accent (orange) --- */
     --accent: #f97316;
     --accent-hover: #fb923c;
+    --accent-muted: #ea580c;
     --accent-soft: rgba(249, 115, 22, 0.1);
-    --accent-glow: rgba(249, 115, 22, 0.2);
+    --accent-glow: rgba(249, 115, 22, 0.18);
     --gradient-accent: linear-gradient(135deg, #f97316, #ef4444);
     --gradient-accent-2: linear-gradient(135deg, #f97316, #ec4899);
     --gradient-accent-3: linear-gradient(135deg, #8b5cf6, #06b6d4);
     --gradient-warm: linear-gradient(135deg, #fbbf24, #f97316, #ef4444);
 
-    /* --- Semantic --- */
+    /* --- Card gradient border (purple-blue-teal) --- */
+    --gradient-border: linear-gradient(135deg, #8b5cf6, #3b82f6, #06b6d4);
+    --card-glow-color: rgba(139, 92, 246, 0.12);
+
+    /* --- Semantic colors --- */
     --green: #22c55e;
     --green-soft: rgba(34, 197, 94, 0.1);
     --red: #ef4444;
@@ -36,14 +44,15 @@
     --yellow: #eab308;
     --yellow-soft: rgba(234, 179, 8, 0.1);
     --purple: #8b5cf6;
-    --purple-soft: rgba(139, 92, 246, 0.1);
+    --purple-soft: rgba(139, 92, 246, 0.08);
     --teal: #14b8a6;
     --teal-soft: rgba(20, 184, 166, 0.1);
 
     /* --- Text --- */
-    --text-primary: #fafafa;
-    --text-secondary: #a1a1aa;
-    --text-muted: #52525b;
+    --text-primary: #18181b;
+    --text-secondary: #52525b;
+    --text-muted: #a1a1aa;
+    --text-inverted: #fafafa;
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
     /* --- Radius --- */
@@ -53,21 +62,76 @@
     --radius-xl: 20px;
     --radius-full: 9999px;
 
-    /* --- Shadows --- */
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
-    --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
-    --shadow-lg: 0 12px 40px rgba(0,0,0,0.6);
-    --shadow-glow: 0 0 40px rgba(249, 115, 22, 0.15);
+    /* --- Shadows (light mode: soft, diffused) --- */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+    --shadow-glow: 0 0 40px rgba(249, 115, 22, 0.12);
+    --shadow-card-hover: 0 20px 60px rgba(139, 92, 246, 0.1), 0 8px 20px rgba(0, 0, 0, 0.06);
 
     /* --- Transitions --- */
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
     --t-fast: 0.15s var(--ease);
     --t-base: 0.25s var(--ease);
     --t-slow: 0.4s var(--ease);
+    --t-theme: 0.35s ease;
 }
 
-/* === RESET === */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+[data-theme="dark"] {
+    /* --- Surfaces --- */
+    --bg-base: #09090b;
+    --bg-raised: #131316;
+    --bg-overlay: #1a1a1f;
+    --bg-hover: #222228;
+    --bg-glass: rgba(255, 255, 255, 0.04);
+    --border-subtle: rgba(255, 255, 255, 0.06);
+    --border-default: rgba(255, 255, 255, 0.1);
+    --border-strong: rgba(255, 255, 255, 0.15);
+
+    /* --- Accent (unchanged) --- */
+    --accent-soft: rgba(249, 115, 22, 0.12);
+    --accent-glow: rgba(249, 115, 22, 0.22);
+
+    /* --- Card gradient border --- */
+    --card-glow-color: rgba(139, 92, 246, 0.18);
+
+    /* --- Semantic soft backgrounds (brighter in dark) --- */
+    --green-soft: rgba(34, 197, 94, 0.12);
+    --red-soft: rgba(239, 68, 68, 0.12);
+    --blue-soft: rgba(59, 130, 246, 0.12);
+    --yellow-soft: rgba(234, 179, 8, 0.12);
+    --purple-soft: rgba(139, 92, 246, 0.12);
+    --teal-soft: rgba(20, 184, 166, 0.12);
+
+    /* --- Text --- */
+    --text-primary: #fafafa;
+    --text-secondary: #a1a1aa;
+    --text-muted: #52525b;
+    --text-inverted: #18181b;
+
+    /* --- Shadows (dark mode: deeper) --- */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 0 40px rgba(249, 115, 22, 0.15);
+    --shadow-card-hover: 0 20px 60px rgba(139, 92, 246, 0.15), 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Scrollbar dark mode */
+[data-theme="dark"] ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); }
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 html {
     -webkit-font-smoothing: antialiased;
@@ -82,17 +146,20 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     position: relative;
+    transition:
+        background var(--t-theme),
+        color var(--t-theme);
 }
 
-/* Ambient glow background */
+/* Subtle ambient gradient blobs */
 body::before {
     content: '';
     position: fixed;
     top: -20%;
     left: -10%;
-    width: 40%;
-    height: 40%;
-    background: radial-gradient(circle, rgba(249, 115, 22, 0.06) 0%, transparent 70%);
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.04) 0%, transparent 70%);
     pointer-events: none;
     z-index: -1;
 }
@@ -104,48 +171,106 @@ body::after {
     right: -10%;
     width: 50%;
     height: 50%;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.04) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.03) 0%, transparent 70%);
     pointer-events: none;
     z-index: -1;
 }
 
-::selection {
-    background: rgba(249, 115, 22, 0.3);
-    color: #fff;
+[data-theme="dark"] body::before {
+    background: radial-gradient(circle, rgba(249, 115, 22, 0.05) 0%, transparent 70%);
 }
 
-/* Custom scrollbar */
+[data-theme="dark"] body::after {
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.04) 0%, transparent 70%);
+}
+
+::selection {
+    background: rgba(139, 92, 246, 0.2);
+    color: var(--text-primary);
+}
+
+/* Custom scrollbar (light mode) */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.12); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.2); }
 
-/* === TOP NAV === */
+/* ============================================================
+   THEME TOGGLE BUTTON
+   ============================================================ */
+.theme-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border-default);
+    background: var(--bg-raised);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition:
+        background var(--t-base),
+        border-color var(--t-base),
+        color var(--t-base),
+        transform var(--t-fast),
+        box-shadow var(--t-base);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+    border-color: var(--purple);
+    color: var(--purple);
+    background: var(--purple-soft);
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+/* ============================================================
+   TOP NAV — Glassmorphism
+   ============================================================ */
 .top-bar {
-    background: rgba(9, 9, 11, 0.8);
-    backdrop-filter: blur(20px) saturate(1.5);
-    -webkit-backdrop-filter: blur(20px) saturate(1.5);
-    padding: 12px 20px;
+    background: var(--bg-glass);
+    backdrop-filter: blur(24px) saturate(1.8);
+    -webkit-backdrop-filter: blur(24px) saturate(1.8);
+    padding: 10px 20px;
     display: flex;
     justify-content: center;
-    gap: 4px;
+    align-items: center;
+    gap: 2px;
     flex-wrap: wrap;
     border-bottom: 1px solid var(--border-subtle);
     position: sticky;
     top: 0;
     z-index: 200;
+    transition:
+        background var(--t-theme),
+        border-color var(--t-theme);
+}
+
+[data-theme="dark"] .top-bar {
+    background: rgba(9, 9, 11, 0.75);
 }
 
 .top-bar a {
-    padding: 8px 16px;
+    padding: 8px 18px;
     border-radius: var(--radius-full);
     border: none;
-    color: var(--text-secondary);
+    color: var(--text-muted);
     text-decoration: none;
     font-size: 0.82rem;
     font-weight: 500;
     transition: all var(--t-base);
     background: transparent;
+    letter-spacing: 0.01em;
 }
 
 .top-bar a:hover {
@@ -153,31 +278,56 @@ body::after {
     background: var(--bg-hover);
 }
 
+/* Active tab: orange accent text, subtle underline feel */
 .top-bar a.active {
-    background: var(--text-primary);
-    color: var(--bg-base);
+    background: transparent;
+    color: var(--accent);
     font-weight: 600;
+    position: relative;
 }
 
-/* === HEADER === */
+.top-bar a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
 .header {
-    padding: 48px 24px 40px;
+    padding: 52px 24px 44px;
     text-align: center;
     position: relative;
     overflow: hidden;
     background: var(--bg-base);
     border-bottom: 1px solid var(--border-subtle);
+    transition:
+        background var(--t-theme),
+        border-color var(--t-theme);
 }
 
-/* Gradient mesh background */
+/* Soft gradient mesh */
 .header::before {
     content: '';
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse 50% 80% at 30% 0%, rgba(249, 115, 22, 0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 60% at 70% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 60%);
+        radial-gradient(ellipse 60% 80% at 25% 0%, rgba(139, 92, 246, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 70% at 75% 10%, rgba(6, 182, 212, 0.04) 0%, transparent 60%);
     pointer-events: none;
+}
+
+[data-theme="dark"] .header::before {
+    background:
+        radial-gradient(ellipse 50% 80% at 30% 0%, rgba(249, 115, 22, 0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 70% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 60%);
 }
 
 .header::after {
@@ -187,20 +337,21 @@ body::after {
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.3), rgba(139, 92, 246, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.2), transparent);
 }
 
 .header h1 {
-    font-size: 2rem;
+    font-size: 2.1rem;
     font-weight: 800;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.035em;
     color: var(--text-primary);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     position: relative;
+    line-height: 1.2;
 }
 
 .header h1 span {
-    background: var(--gradient-accent);
+    background: var(--gradient-border);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -208,35 +359,41 @@ body::after {
 
 .header p {
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     font-weight: 400;
     position: relative;
-}
-
-/* === CONTAINER === */
-.container {
-    max-width: 900px;
+    max-width: 540px;
     margin: 0 auto;
-    padding: 32px 20px;
+    line-height: 1.6;
 }
 
-/* === CARDS === */
+/* ============================================================
+   CONTAINER
+   ============================================================ */
+.container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 36px 24px;
+}
+
+/* ============================================================
+   CARDS — Gradient border + mouse-track glow
+   ============================================================ */
 .card {
     background: var(--bg-raised);
     border-radius: var(--radius-lg);
-    padding: 20px 22px;
+    padding: 22px 24px;
     border: 1px solid var(--border-subtle);
-    transition: all var(--t-base);
+    transition:
+        border-color var(--t-base),
+        transform var(--t-base),
+        box-shadow var(--t-base),
+        background var(--t-theme);
     position: relative;
+    overflow: hidden;
 }
 
-.card:hover {
-    border-color: var(--border-default);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-}
-
-/* Gradient border glow on hover */
+/* Gradient border glow (behind the card) */
 .card::before {
     content: '';
     position: absolute;
@@ -245,18 +402,56 @@ body::after {
     right: -1px;
     bottom: -1px;
     border-radius: inherit;
-    background: var(--gradient-accent);
+    background: var(--gradient-border);
     opacity: 0;
     z-index: -1;
     transition: opacity var(--t-base);
-    filter: blur(8px);
+    filter: blur(10px);
+}
+
+/* Mouse-tracking glow overlay */
+.card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: radial-gradient(
+        300px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        var(--card-glow-color) 0%,
+        transparent 70%
+    );
+    opacity: 0;
+    transition: opacity var(--t-base);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.card:hover {
+    border-color: rgba(139, 92, 246, 0.25);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
 }
 
 .card:hover::before {
-    opacity: 0.15;
+    opacity: 0.2;
 }
 
-/* === BUTTONS === */
+.card:hover::after {
+    opacity: 1;
+}
+
+/* Ensure card content sits above the glow */
+.card > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
 .btn {
     padding: 10px 24px;
     border-radius: var(--radius-full);
@@ -270,6 +465,7 @@ body::after {
     justify-content: center;
     gap: 6px;
     font-family: var(--font-sans);
+    letter-spacing: 0.01em;
 }
 
 .btn:active { transform: scale(0.97); }
@@ -283,6 +479,7 @@ body::after {
 .btn-primary:hover {
     box-shadow: var(--shadow-glow);
     transform: translateY(-1px);
+    filter: brightness(1.05);
 }
 
 .btn-secondary {
@@ -307,36 +504,114 @@ body::after {
     transform: translateY(-1px);
 }
 
-/* === TAGS === */
+/* ============================================================
+   TAGS
+   ============================================================ */
 .tag {
     display: inline-block;
     padding: 3px 10px;
     border-radius: var(--radius-full);
     font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
 }
 
-.tag-red { background: var(--red-soft); color: var(--red); }
-.tag-blue { background: var(--blue-soft); color: var(--blue); }
+.tag-red    { background: var(--red-soft);    color: var(--red);    }
+.tag-blue   { background: var(--blue-soft);   color: var(--blue);   }
 .tag-yellow { background: var(--yellow-soft); color: var(--yellow); }
-.tag-green { background: var(--green-soft); color: var(--green); }
+.tag-green  { background: var(--green-soft);  color: var(--green);  }
+.tag-purple { background: var(--purple-soft); color: var(--purple); }
 
-/* === FOOTER === */
+/* ============================================================
+   INPUTS & FORM ELEMENTS (shared)
+   ============================================================ */
+input, textarea, select {
+    transition:
+        border-color var(--t-base),
+        box-shadow var(--t-base),
+        background var(--t-theme),
+        color var(--t-theme);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
 .footer {
     text-align: center;
-    padding: 40px 20px;
+    padding: 44px 20px;
     color: var(--text-muted);
     font-size: 0.78rem;
     border-top: 1px solid var(--border-subtle);
     margin-top: 60px;
+    transition:
+        border-color var(--t-theme),
+        color var(--t-theme);
 }
 
-/* === RESPONSIVE === */
+/* ============================================================
+   UTILITY: Smooth theme transition on ALL themed elements
+   ============================================================ */
+.top-bar,
+.header,
+.card,
+.btn-secondary,
+.footer,
+.nav,
+.search-container input {
+    transition:
+        background var(--t-theme),
+        border-color var(--t-theme),
+        color var(--t-theme),
+        box-shadow var(--t-base);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 @media (max-width: 640px) {
-    .header h1 { font-size: 1.4rem; }
+    .header h1 { font-size: 1.5rem; }
     .container { padding: 20px 16px; }
     .top-bar { padding: 8px 12px; }
     .top-bar a { padding: 6px 12px; font-size: 0.75rem; }
+    .card { padding: 16px 18px; }
 }
+
+/* ============================================================
+   MOUSE-TRACKING GLOW — inline JS helper
+   ============================================================
+   Add this <script> at the bottom of each page (or in a shared JS):
+
+   <script>
+   document.addEventListener('mousemove', e => {
+     document.querySelectorAll('.card').forEach(card => {
+       const rect = card.getBoundingClientRect();
+       const x = e.clientX - rect.left;
+       const y = e.clientY - rect.top;
+       card.style.setProperty('--mouse-x', x + 'px');
+       card.style.setProperty('--mouse-y', y + 'px');
+     });
+   });
+   </script>
+
+   ============================================================
+
+   THEME TOGGLE — inline JS helper
+   ============================================================
+   Add a button like:
+   <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+
+   <script>
+   function toggleTheme() {
+     const html = document.documentElement;
+     const isDark = html.getAttribute('data-theme') === 'dark';
+     html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+     localStorage.setItem('theme', isDark ? 'light' : 'dark');
+   }
+   // Load saved preference
+   (function() {
+     const saved = localStorage.getItem('theme');
+     if (saved) document.documentElement.setAttribute('data-theme', saved);
+   })();
+   </script>
+   ============================================================ */

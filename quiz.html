@@ -18,29 +18,29 @@
         .module-selector button {
             padding: 10px 20px;
             border-radius: 25px;
-            border: 2px solid rgba(255,255,255,0.08);
+            border: 2px solid var(--border-subtle);
             background: transparent;
-            color: #a1a1aa;
+            color: var(--text-secondary);
             cursor: pointer;
             font-size: 0.85rem;
             font-weight: 600;
             transition: all 0.3s;
         }
 
-        .module-selector button:hover { border-color: #f97316; color: #f97316; }
-        .module-selector button.active { background: #f97316; border-color: #f97316; color: #fff; }
+        .module-selector button:hover { border-color: var(--accent); color: var(--accent); }
+        .module-selector button.active { background: #f97316; border-color: var(--accent); color: var(--text-primary); }
 
         /* Question card */
         .question-card {
-            background: #131316;
+            background: var(--bg-raised);
             border-radius: 16px;
             padding: 30px;
             margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--border-subtle);
         }
 
         .question-counter {
-            color: #f97316;
+            color: var(--accent);
             font-size: 0.85rem;
             font-weight: 700;
             margin-bottom: 5px;
@@ -53,13 +53,13 @@
             font-size: 0.7rem;
             font-weight: 600;
             background: rgba(59, 130, 246, 0.2);
-            color: #3b82f6;
+            color: var(--blue);
             margin-bottom: 15px;
         }
 
         .question-text {
             font-size: 1.15rem;
-            color: #fff;
+            color: var(--text-primary);
             margin-bottom: 22px;
             line-height: 1.5;
         }
@@ -71,8 +71,8 @@
             padding: 14px 18px;
             margin-bottom: 10px;
             border-radius: 10px;
-            border: 2px solid rgba(255,255,255,0.08);
-            background: #09090b;
+            border: 2px solid var(--border-subtle);
+            background: var(--bg-base);
             cursor: pointer;
             transition: all 0.3s;
             font-size: 0.95rem;
@@ -81,35 +81,35 @@
             gap: 12px;
         }
 
-        .options li:hover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
+        .options li:hover { border-color: var(--blue); background: rgba(59, 130, 246, 0.05); }
 
         .options li .letter {
             min-width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.08);
+            background: var(--border-subtle);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
             font-size: 0.85rem;
-            color: #a1a1aa;
+            color: var(--text-secondary);
             transition: all 0.3s;
         }
 
-        .options li:hover .letter { background: #3b82f6; color: #fff; }
+        .options li:hover .letter { background: #3b82f6; color: var(--text-primary); }
 
         .options li.correct {
-            border-color: #22c55e;
+            border-color: var(--green);
             background: rgba(34, 197, 94, 0.1);
         }
-        .options li.correct .letter { background: #22c55e; color: #fff; }
+        .options li.correct .letter { background: #22c55e; color: var(--text-primary); }
 
         .options li.wrong {
-            border-color: #ef4444;
+            border-color: var(--red);
             background: rgba(239, 68, 68, 0.1);
         }
-        .options li.wrong .letter { background: #ef4444; color: #fff; }
+        .options li.wrong .letter { background: #ef4444; color: var(--text-primary); }
 
         .options li.disabled { pointer-events: none; opacity: 0.6; }
         .options li.correct.disabled, .options li.wrong.disabled { opacity: 1; }
@@ -123,11 +123,11 @@
             margin-top: 18px;
             display: none;
             font-size: 0.92rem;
-            color: #a1a1aa;
+            color: var(--text-secondary);
             line-height: 1.6;
         }
 
-        .explanation strong { color: #3b82f6; }
+        .explanation strong { color: var(--blue); }
 
         .explanation.show { display: block; animation: fadeIn 0.3s ease; }
 
@@ -152,12 +152,12 @@
             margin-bottom: 10px;
         }
 
-        .score-number.pass { color: #22c55e; }
-        .score-number.fail { color: #ef4444; }
+        .score-number.pass { color: var(--green); }
+        .score-number.fail { color: var(--red); }
 
         .score-text {
             font-size: 1.1rem;
-            color: #a1a1aa;
+            color: var(--text-secondary);
             margin-bottom: 25px;
         }
 
@@ -179,14 +179,14 @@
 
         .score-detail .label {
             font-size: 0.8rem;
-            color: #a1a1aa;
+            color: var(--text-secondary);
         }
 
         /* Progress bar */
         .progress-bar {
             width: 100%;
             height: 6px;
-            background: rgba(255,255,255,0.08);
+            background: var(--border-subtle);
             border-radius: 3px;
             margin-bottom: 25px;
             overflow: hidden;
@@ -201,20 +201,20 @@
 
         /* Review section */
         .review-item {
-            background: #131316;
+            background: var(--bg-raised);
             border-radius: 10px;
             padding: 18px;
             margin-bottom: 12px;
             border-left: 4px solid;
         }
 
-        .review-item.review-correct { border-color: #22c55e; }
-        .review-item.review-wrong { border-color: #ef4444; }
+        .review-item.review-correct { border-color: var(--green); }
+        .review-item.review-wrong { border-color: var(--red); }
 
-        .review-question { color: #fff; font-weight: 600; margin-bottom: 8px; }
-        .review-answer { font-size: 0.9rem; color: #a1a1aa; }
-        .review-answer .correct-ans { color: #22c55e; }
-        .review-answer .wrong-ans { color: #ef4444; text-decoration: line-through; }
+        .review-question { color: var(--text-primary); font-weight: 600; margin-bottom: 8px; }
+        .review-answer { font-size: 0.9rem; color: var(--text-secondary); }
+        .review-answer .correct-ans { color: var(--green); }
+        .review-answer .wrong-ans { color: var(--red); text-decoration: line-through; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -254,7 +254,7 @@
 
     <div class="quiz-nav" id="quizNav">
         <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()">Anterior</button>
-        <span id="questionNum" style="color: #a1a1aa; font-size: 0.9rem;"></span>
+        <span id="questionNum" style="color: var(--text-secondary); font-size: 0.9rem;"></span>
         <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Siguiente</button>
     </div>
 </div>
@@ -624,14 +624,14 @@ function showScore() {
         <div class="score-number ${passed ? 'pass' : 'fail'}">${pct}%</div>
         <div class="score-text">${passed ? '!Aprobado! Buen trabajo' : 'Necesitas repasar un poco mas. !Tu puedes!'}</div>
         <div class="score-details">
-            <div class="score-detail"><div class="number" style="color: #22c55e">${correct}</div><div class="label">Correctas</div></div>
-            <div class="score-detail"><div class="number" style="color: #ef4444">${total - correct}</div><div class="label">Incorrectas</div></div>
-            <div class="score-detail"><div class="number" style="color: #3b82f6">${total}</div><div class="label">Total</div></div>
+            <div class="score-detail"><div class="number" style="color: var(--green)">${correct}</div><div class="label">Correctas</div></div>
+            <div class="score-detail"><div class="number" style="color: var(--red)">${total - correct}</div><div class="label">Incorrectas</div></div>
+            <div class="score-detail"><div class="number" style="color: var(--blue)">${total}</div><div class="label">Total</div></div>
         </div>
         <button class="btn btn-primary" onclick="filterQuestions('all')" style="margin-right:10px">Repetir quiz</button>
         <button class="btn btn-secondary" onclick="document.getElementById('reviewSection').style.display='block'">Ver repaso de errores</button>
         <div id="reviewSection" style="display:none; margin-top: 30px; text-align: left;">
-            <h3 style="color: #fff; margin-bottom: 15px;">Repaso de respuestas</h3>
+            <h3 style="color: var(--text-primary); margin-bottom: 15px;">Repaso de respuestas</h3>
             ${reviewHtml}
         </div>
     `;
@@ -656,6 +656,7 @@ if (urlModule) {
 }
 </script>
 
+<script src="theme.js"></script>
 <script src="auth.js"></script>
 </body>
 </html>

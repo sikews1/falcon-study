@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C1 Catala - Mossos d'Esquadra</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .cat-nav {
+            background: rgba(var(--bg-base-rgb, 240,240,243), 0.85);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+
+        .cat-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            border: none;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.25s;
+            background: transparent;
+        }
+
+        .cat-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .cat-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .cat-nav a.home { color: var(--accent); font-weight: 600; }
+        .cat-nav a.home:hover { background: var(--accent-soft); }
+
+        .hero {
+            text-align: center;
+            padding: 48px 24px 40px;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 50% 80% at 30% 0%, rgba(251, 191, 36, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 60% at 70% 20%, rgba(239, 68, 68, 0.04) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #fbbf24, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .hero .badge-mossos {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            background: var(--yellow-soft);
+            color: var(--yellow);
+            font-size: 0.8rem;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+
+        /* Topic cards */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            margin-top: 24px;
+        }
+
+        .topic-card {
+            background: var(--bg-raised);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.25s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .topic-card:hover {
+            border-color: var(--border-default);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .topic-card .topic-num {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, #fbbf24, #ef4444);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .topic-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .topic-card p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            margin-bottom: 20px;
+        }
+
+        /* Info box */
+        .info-box {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .info-box h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-box li {
+            padding: 8px 0;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-box li:last-child { border-bottom: none; }
+
+        .info-box li strong { color: var(--text-primary); min-width: 140px; }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .tool-card {
+            background: var(--bg-raised);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 1px solid var(--border-subtle);
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.25s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tool-card:hover {
+            border-color: var(--border-default);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .tool-card .tool-icon { font-size: 1.8rem; margin-bottom: 8px; }
+        .tool-card h4 { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+        .tool-card p { font-size: 0.78rem; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+<div class="cat-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html" class="active">Inici</a>
+    <a href="gramatica.html">Gramàtica</a>
+    <a href="quiz.html">Quiz</a>
+    <a href="flashcards.html">Flashcards</a>
+    <a href="redaccio.html">Redacció</a>
+</div>
+
+<div class="hero">
+    <h1>Nivell <span>C1</span> de Català</h1>
+    <p>Preparació per a les oposicions de Mossos d'Esquadra</p>
+    <div class="badge-mossos">&#x1F6E1;&#xFE0F; Mossos d'Esquadra</div>
+</div>
+
+<div class="container">
+
+    <!-- EXAM INFO -->
+    <div class="info-box">
+        <h3>Què entra a l'examen?</h3>
+        <ul>
+            <li><strong>Prova escrita (1h 30min)</strong> Redacció de mínim 180 paraules + 5 blocs de gramàtica i sintaxi</li>
+            <li><strong>Prova oral (10 min)</strong> Monòleg i diàleg amb preparació prèvia de 25 minuts</li>
+            <li><strong>Avaluació</strong> Apte / No apte. Cal demostrar textos clars, coherents i amb bona correcció lingüística</li>
+            <li><strong>Exempció</strong> Si tens el certificat C1 oficial, no cal fer la prova de català</li>
+        </ul>
+    </div>
+
+    <!-- FOCUS AREAS -->
+    <h2 class="section-title">El teu punt feble: l'escriptura</h2>
+    <p class="section-desc">Entens i parles bé el català, però escriure't costa. Ens centrem en el que necessites per aprovar la part escrita.</p>
+
+    <div class="topics-grid">
+        <a href="gramatica.html#accentuacio" class="topic-card">
+            <div class="topic-num">1</div>
+            <h3>Accentuació</h3>
+            <p>Accent obert vs tancat, regles d'accentuació, excepcions importants</p>
+        </a>
+        <a href="gramatica.html#apostrofacio" class="topic-card">
+            <div class="topic-num">2</div>
+            <h3>Apostrofació i contraccions</h3>
+            <p>L', d', al, del, pel. Regles i excepcions que sempre surten a l'examen</p>
+        </a>
+        <a href="gramatica.html#pronoms" class="topic-card">
+            <div class="topic-num">3</div>
+            <h3>Pronoms febles</h3>
+            <p>En, hi, ho, el, la, combinacions. El tema més difícil del C1</p>
+        </a>
+        <a href="gramatica.html#verbs" class="topic-card">
+            <div class="topic-num">4</div>
+            <h3>Verbs irregulars</h3>
+            <p>Conjugacions que calen saber de memòria per escriure bé</p>
+        </a>
+        <a href="gramatica.html#bv" class="topic-card">
+            <div class="topic-num">5</div>
+            <h3>B / V</h3>
+            <p>Quan s'escriu b i quan v? Regles clares i exemples</p>
+        </a>
+        <a href="gramatica.html#plurals" class="topic-card">
+            <div class="topic-num">6</div>
+            <h3>Plurals i femenins</h3>
+            <p>Plurals irregulars, femenins especials, paraules trampa</p>
+        </a>
+        <a href="gramatica.html#preposicions" class="topic-card">
+            <div class="topic-num">7</div>
+            <h3>Preposicions</h3>
+            <p>Per / per a, a / en, amb. Errors típics dels castellanoparlants</p>
+        </a>
+        <a href="gramatica.html#connectors" class="topic-card">
+            <div class="topic-num">8</div>
+            <h3>Connectors textuals</h3>
+            <p>Paraules d'enllaç per escriure textos formals i coherents</p>
+        </a>
+        <a href="gramatica.html#castellanismes" class="topic-card">
+            <div class="topic-num">9</div>
+            <h3>Castellanismes</h3>
+            <p>Errors freqüents per influència del castellà. El que més penalitzen</p>
+        </a>
+        <a href="gramatica.html#registre" class="topic-card">
+            <div class="topic-num">10</div>
+            <h3>Registre formal</h3>
+            <p>Com escriure en registre formal: instàncies, informes, textos oficials</p>
+        </a>
+    </div>
+
+    <!-- TOOLS -->
+    <h2 class="section-title" style="margin-top: 40px;">Eines d'estudi</h2>
+    <p class="section-desc">Practica amb les eines interactives</p>
+
+    <div class="tools-grid">
+        <a href="gramatica.html" class="tool-card">
+            <div class="tool-icon">&#x1F4D6;</div>
+            <h4>Gramàtica</h4>
+            <p>Regles explicades amb exemples</p>
+        </a>
+        <a href="quiz.html" class="tool-card">
+            <div class="tool-icon">&#x2753;</div>
+            <h4>Quiz</h4>
+            <p>Preguntes de gramàtica i ortografia</p>
+        </a>
+        <a href="flashcards.html" class="tool-card">
+            <div class="tool-icon">&#x1F4C7;</div>
+            <h4>Flashcards</h4>
+            <p>Targetes per memoritzar regles</p>
+        </a>
+        <a href="redaccio.html" class="tool-card">
+            <div class="tool-icon">&#x270D;&#xFE0F;</div>
+            <h4>Redacció</h4>
+            <p>Guies i plantilles per escriure</p>
+        </a>
+    </div>
+
+</div>
+
+<div class="footer">C1 Català - Material d'estudi per a Mossos d'Esquadra</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+</body>
+</html>

@@ -1,2 +1,198 @@
 <!DOCTYPE html>
-<html><head><meta http-equiv="refresh" content="0; url=glosario.html"></head></html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Hub - Plataforma de Estudio</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .hub-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .hub-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hub-title h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .hub-title h1 span {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hub-title p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+
+        .course-card {
+            background: var(--bg-raised);
+            border-radius: var(--radius-xl);
+            padding: 32px 28px;
+            border: 1px solid var(--border-subtle);
+            transition: all var(--t-base);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        }
+
+        .course-card:hover {
+            border-color: var(--border-default);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .course-card .course-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .course-card h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .course-card .course-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .course-card .course-stats {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .course-card .stat {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .course-card .stat strong {
+            color: var(--text-secondary);
+        }
+
+        /* CrowdStrike card */
+        .card-crowdstrike::before { background: linear-gradient(90deg, #f97316, #ef4444); }
+        .card-crowdstrike .course-icon { background: linear-gradient(135deg, #f97316, #ef4444); color: #fff; }
+        .card-crowdstrike:hover { border-color: #f97316; }
+
+        /* Catalan card */
+        .card-catalan::before { background: linear-gradient(90deg, #fbbf24, #ef4444); }
+        .card-catalan .course-icon { background: linear-gradient(135deg, #fbbf24, #ef4444); color: #fff; }
+        .card-catalan:hover { border-color: #fbbf24; }
+
+        /* Coming soon badge */
+        .coming-soon {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--yellow-soft);
+            color: var(--yellow);
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .hub-footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 640px) {
+            .course-grid { grid-template-columns: 1fr; }
+            .hub-title h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hub-container">
+    <div class="hub-title">
+        <h1><span>Study</span> Hub</h1>
+        <p>Elige tu curso de estudio</p>
+    </div>
+
+    <div class="course-grid">
+        <a href="glosario.html" class="course-card card-crowdstrike">
+            <div class="course-icon">&#x1F6E1;&#xFE0F;</div>
+            <h2>CrowdStrike Falcon Administrator</h2>
+            <div class="course-subtitle">Certificacion de administrador de la plataforma de ciberseguridad CrowdStrike Falcon. Glosario, quiz, flashcards, simulador de examen y escenarios practicos.</div>
+            <div class="course-stats">
+                <div class="stat"><strong>12</strong> modulos</div>
+                <div class="stat"><strong>34</strong> preguntas quiz</div>
+                <div class="stat"><strong>45</strong> flashcards</div>
+                <div class="stat"><strong>6</strong> escenarios</div>
+            </div>
+        </a>
+
+        <a href="catalan/index.html" class="course-card card-catalan">
+            <div class="course-icon">&#x1F4DD;</div>
+            <h2>C1 Catala <span class="coming-soon">Nou</span></h2>
+            <div class="course-subtitle">Preparacio del nivell C1 de catala per a les oposicions de Mossos d'Esquadra. Gramàtica, ortografia, pronoms febles, redaccio i exercicis.</div>
+            <div class="course-stats">
+                <div class="stat"><strong>10</strong> temes</div>
+                <div class="stat"><strong>Quiz</strong> gramàtica</div>
+                <div class="stat"><strong>Flashcards</strong> regles</div>
+                <div class="stat"><strong>Redaccio</strong> guiada</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="hub-footer">
+        Plataforma de estudio personal
+    </div>
+</div>
+
+<script src="theme.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>

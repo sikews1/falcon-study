@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Redaccio - C1 Catala</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .cat-nav {
+            background: rgba(var(--bg-base-rgb, 240,240,243), 0.85);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+
+        .cat-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            border: none;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.25s;
+            background: transparent;
+        }
+
+        .cat-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .cat-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .cat-nav a.home { color: var(--accent); font-weight: 600; }
+        .cat-nav a.home:hover { background: var(--accent-soft); }
+
+        .hero {
+            text-align: center;
+            padding: 48px 24px 40px;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 50% 80% at 30% 0%, rgba(251, 191, 36, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 60% at 70% 20%, rgba(239, 68, 68, 0.04) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #fbbf24, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+
+        /* Collapsible sections */
+        .section {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .section:hover {
+            border-color: var(--border-default);
+        }
+
+        .section-header {
+            padding: 20px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .section-header:hover {
+            background: var(--bg-overlay);
+        }
+
+        .section-header .section-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, #fbbf24, #ef4444);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .section-header h2 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .section-header .chevron {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+
+        .section.open .section-header .chevron {
+            transform: rotate(180deg);
+        }
+
+        .section-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .section.open .section-body {
+            max-height: 8000px;
+        }
+
+        .section-content {
+            padding: 0 24px 24px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin: 20px 0 10px;
+        }
+
+        .section-content h3:first-child {
+            margin-top: 4px;
+        }
+
+        .section-content p {
+            margin-bottom: 10px;
+        }
+
+        .section-content ul, .section-content ol {
+            margin: 8px 0 14px 20px;
+        }
+
+        .section-content li {
+            margin-bottom: 6px;
+        }
+
+        /* Highlight boxes */
+        .highlight {
+            background: var(--bg-overlay);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            margin: 14px 0;
+            border-left: 3px solid #fbbf24;
+        }
+
+        .highlight.green { border-left-color: var(--green); }
+        .highlight.blue { border-left-color: var(--blue); }
+        .highlight.red { border-left-color: var(--red); }
+        .highlight.purple { border-left-color: var(--purple); }
+
+        .highlight strong { color: var(--text-primary); }
+
+        /* Template box */
+        .template-box {
+            background: var(--bg-base);
+            border: 2px dashed var(--border-default);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin: 14px 0;
+        }
+
+        .template-box .template-label {
+            display: inline-block;
+            background: linear-gradient(135deg, #fbbf24, #ef4444);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .template-box .placeholder {
+            color: var(--text-muted);
+            font-style: italic;
+            border-bottom: 1px dashed var(--border-default);
+            padding-bottom: 2px;
+        }
+
+        /* Example composition */
+        .example-comp {
+            background: var(--bg-base);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin: 14px 0;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .example-comp .comp-topic {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .example-comp .comp-text {
+            font-size: 0.88rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .example-comp .comp-text .connector {
+            background: var(--yellow-soft);
+            color: var(--yellow);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 0.84rem;
+        }
+
+        .example-comp .comp-text .formal {
+            background: var(--purple-soft);
+            color: var(--purple);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 0.84rem;
+        }
+
+        .example-comp .comp-text .structure {
+            background: var(--blue-soft);
+            color: var(--blue);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 0.84rem;
+        }
+
+        .example-comp .comp-legend {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-subtle);
+            font-size: 0.78rem;
+        }
+
+        .example-comp .comp-legend span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Formula tables */
+        .formula-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 0.85rem;
+        }
+
+        .formula-table th {
+            background: var(--bg-overlay);
+            color: var(--text-primary);
+            font-weight: 700;
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 2px solid var(--border-default);
+        }
+
+        .formula-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            vertical-align: top;
+        }
+
+        .formula-table tr:hover td {
+            background: var(--bg-overlay);
+        }
+
+        /* Error list */
+        .error-item {
+            background: var(--red-soft);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .error-item .error-wrong {
+            color: var(--red);
+            font-weight: 600;
+            text-decoration: line-through;
+            min-width: 40%;
+        }
+
+        .error-item .error-right {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+            .section-header { padding: 16px 18px; }
+            .section-content { padding: 0 18px 18px; }
+            .section-header h2 { font-size: 0.95rem; }
+            .error-item { flex-direction: column; gap: 4px; }
+            .example-comp .comp-legend { flex-direction: column; gap: 6px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="cat-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="gramatica.html">Gramatica</a>
+    <a href="quiz.html">Quiz</a>
+    <a href="flashcards.html">Flashcards</a>
+    <a href="redaccio.html" class="active">Redaccio</a>
+</div>
+
+<div class="hero">
+    <h1>Guia de <span>Redaccio</span></h1>
+    <p>Com escriure textos formals per a l'examen C1</p>
+</div>
+
+<div class="container">
+
+    <!-- SECTION 1: Estructura -->
+    <div class="section open" id="sec1">
+        <div class="section-header" onclick="toggleSection('sec1')">
+            <div class="section-icon">1</div>
+            <h2>Estructura d'un text formal</h2>
+            <span class="chevron">&#9660;</span>
+        </div>
+        <div class="section-body">
+            <div class="section-content">
+                <p>Tot text formal per a l'examen C1 ha de tenir <strong>tres parts ben diferenciades</strong>. El text ha de tenir un minim de <strong>180 paraules</strong> (idealment entre 180 i 220).</p>
+
+                <h3>Introduccio (30-40 paraules)</h3>
+                <p>Presenta el tema de manera clara. Explica breument de que tractaras i, si escau, dona la teva posicio inicial.</p>
+                <div class="highlight">
+                    <strong>Funcio:</strong> Captar l'atencio, presentar el tema, contextualitzar.<br>
+                    <strong>Extensio:</strong> 2-3 frases curtes i clares.
+                </div>
+
+                <h3>Desenvolupament (100-130 paraules)</h3>
+                <p>Es el cos del text. Desenvolupa els arguments, dona exemples, contrasta idees. Organitza les idees en <strong>2 o 3 paragrafs</strong>, cadascun amb una idea principal.</p>
+                <div class="highlight green">
+                    <strong>Funcio:</strong> Argumentar, exemplificar, aprofundir.<br>
+                    <strong>Extensio:</strong> 2-3 paragrafs amb connectors entre ells.<br>
+                    <strong>Clau:</strong> Cada paragraf = 1 idea + 1 exemple o argument de suport.
+                </div>
+
+                <h3>Conclusio (30-40 paraules)</h3>
+                <p>Tanca el text amb un resum de la teva posicio i una reflexio final. Mai introdueixis idees noves a la conclusio.</p>
+                <div class="highlight blue">
+                    <strong>Funcio:</strong> Resumir, concloure, reflexionar.<br>
+                    <strong>Extensio:</strong> 2-3 frases que tanquin el text de manera rodona.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: Plantilla -->
+    <div class="section" id="sec2">
+        <div class="section-header" onclick="toggleSection('sec2')">
+            <div class="section-icon">2</div>
+            <h2>Plantilla de redaccio</h2>
+            <span class="chevron">&#9660;</span>
+        </div>
+        <div class="section-body">
+            <div class="section-content">
+                <p>Utilitza aquesta plantilla com a guia per estructurar els teus textos. Les parts en <em>cursiva</em> son els espais que has d'omplir.</p>
+
+                <div class="template-box">
+                    <div class="template-label">Introduccio</div>
+                    <p><strong>En l'actualitat,</strong> <span class="placeholder">[tema del text]</span> <strong>es una questio que genera un ampli debat a la nostra societat.</strong> <span class="placeholder">[Opinio breu o contextualitzacio]</span>. <strong>En aquest text,</strong> <span class="placeholder">[analitzare / reflexionare sobre / argumentare a favor de]</span> <span class="placeholder">[aspecte concret]</span>.</p>
+                </div>
+
+                <div class="template-box">
+                    <div class="template-label">Desenvolupament - Paragraf 1</div>
+                    <p><strong>En primer lloc, cal destacar que</strong> <span class="placeholder">[argument 1]</span>. <span class="placeholder">[Desenvolupament de l'argument amb un exemple concret]</span>. <strong>Per tant,</strong> <span class="placeholder">[consequencia o conclusio parcial]</span>.</p>
+                </div>
+
+                <div class="template-box">
+                    <div class="template-label">Desenvolupament - Paragraf 2</div>
+                    <p><strong>D'altra banda,</strong> <span class="placeholder">[argument 2 o contraargument]</span>. <strong>A mes a mes,</strong> <span class="placeholder">[informacio addicional o exemple]</span>. <strong>Aixi doncs,</strong> <span class="placeholder">[conclusio parcial]</span>.</p>
+                </div>
+
+                <div class="template-box">
+                    <div class="template-label">Desenvolupament - Paragraf 3 (opcional)</div>
+                    <p><strong>Tanmateix,</strong> <span class="placeholder">[matisacio, contraargument o punt de vista alternatiu]</span>. <strong>Malgrat aixo,</strong> <span class="placeholder">[resposta al contraargument]</span>.</p>
+                </div>
+
+                <div class="template-box">
+                    <div class="template-label">Conclusio</div>
+                    <p><strong>En definitiva,</strong> <span class="placeholder">[resum de la posicio]</span>. <strong>Al meu parer,</strong> <span class="placeholder">[opinio final]</span>. <strong>Caldria que</strong> <span class="placeholder">[proposta o reflexio de tancament]</span>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 3: Connectors per paragraf -->
+    <div class="section" id="sec3">
+        <div class="section-header" onclick="toggleSection('sec3')">
+            <div class="section-icon">3</div>
+            <h2>Connectors per paragraf</h2>
+            <span class="chevron">&#9660;</span>
+        </div>
+        <div class="section-body">
+            <div class="section-content">
+                <p>Utilitza connectors <strong>variats</strong> per demostrar riquesa linguistica. Mai repeteixis el mateix connector.</p>
+
+                <h3>Per a la Introduccio</h3>
+                <div class="highlight">
+                    <strong>Presentar el tema:</strong> En l'actualitat, Avui dia, Darrerament, Des de fa uns anys, Es ben sabut que<br>
+                    <strong>Situar el context:</strong> Pel que fa a, Quant a, Respecte a, En relacio amb<br>
+                    <strong>Anunciar l'objectiu:</strong> En aquest text, L'objectiu d'aquest escrit es, A continuacio
+                </div>
+
+                <h3>Per al Desenvolupament (1r paragraf)</h3>
+                <div class="highlight green">
+                    <strong>Iniciar l'argumentacio:</strong> En primer lloc, D'entrada, Per comencar, D'una banda<br>
+                    <strong>Exemplificar:</strong> Per exemple, Com a mostra, Un bon exemple es, N'es un cas<br>
+                    <strong>Causar:</strong> Perque, Ja que, Ates que, Com que, A causa de, Gracies a
+                </div>
+
+                <h3>Per al Desenvolupament (2n paragraf)</h3>
+                <div class="highlight blue">
+                    <strong>Afegir idees:</strong> En segon lloc, D'altra banda, A mes a mes, Aixi mateix, Tambe cal dir que<br>
+                    <strong>Contrastar:</strong> Tanmateix, No obstant aixo, En canvi, Ara be, Si be, Malgrat que, Tot i que<br>
+                    <strong>Consequencia:</strong> Per tant, Doncs, En consequencia, D'aquesta manera, Aixi doncs
+                </div>
+
+                <h3>Per a la Conclusio</h3>
+                <div class="highlight purple">
+                    <strong>Resumir:</strong> En definitiva, En resum, Per concloure, En conclusio, Recapitulant<br>
+                    <strong>Opinio final:</strong> Al meu parer, Des del meu punt de vista, Considero que, Crec fermament que<br>
+                    <strong>Proposta:</strong> Caldria que, Seria convenient que, Es necessari que, Fora bo que
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 4: Formules formals -->
+    <div class="section" id="sec4">
+        <div class="section-header" onclick="toggleSection('sec4')">
+            <div class="section-icon">4</div>
+            <h2>Formules formals</h2>
+            <span class="chevron">&#9660;</span>
+        </div>
+        <div class="section-body">
+            <div class="section-content">
+                <p>Segons el tipus de text, has d'usar formules d'obertura i tancament especifiques.</p>
+
+                <h3>Instancia (sol·licitud formal)</h3>
+                <table class="formula-table">
+                    <tr><th>Part</th><th>Formula</th></tr>
+                    <tr><td><strong>Identificacio</strong></td><td><em>[Nom i cognoms]</em>, amb DNI <em>[numero]</em>, i amb domicili a <em>[adreca]</em></td></tr>
+                    <tr><td><strong>Exposicio</strong></td><td><strong>EXPOSO:</strong> Que <em>[motiu de la sol·licitud]</em>...</td></tr>
+                    <tr><td><strong>Peticio</strong></td><td><strong>SOL·LICITO:</strong> Que <em>[el que demanes]</em>...</td></tr>
+                    <tr><td><strong>Tancament</strong></td><td><em>[Localitat]</em>, <em>[data]</em>. Signatura.</td></tr>
+                </table>
+
+                <h3>Carta formal</h3>
+                <table class="formula-table">
+                    <tr><th>Part</th><th>Formula</th></tr>
+                    <tr><td><strong>Salutacio</strong></td><td>Distingit senyor / Distingida senyora,<br>Benvolgut/da senyor/a,</td></tr>
+                    <tr><td><strong>Introduccio</strong></td><td>Em dirigeixo a voste per...<br>Li escric en relacio amb...<br>Tinc el plaer de comunicar-li que...</td></tr>
+                    <tr><td><strong>Comiat</strong></td><td>Atentament,<br>Ben cordialment,<br>Resto a la seva disposicio.<br>Aprofito l'avinentesa per saludar-lo/la atentament.</td></tr>
+                </table>
+
+                <h3>Informe</h3>
+                <table class="formula-table">
+                    <tr><th>Part</th><th>Formula</th></tr>
+                    <tr><td><strong>Encapcalament</strong></td><td><strong>INFORME</strong> sobre <em>[tema]</em>. Data: <em>[data]</em>. Elaborat per: <em>[nom]</em>.</td></tr>
+                    <tr><td><strong>Cos</strong></td><td>1. Antecedents: <em>[context]</em><br>2. Fets: <em>[descripcio objectiva]</em><br>3. Conclusions: <em>[valoracio]</em></td></tr>
+                    <tr><td><strong>Tancament</strong></td><td>Es tot el que tinc a informar.<br>Aixo es el que, en el meu parer, correspon informar.</td></tr>
+                </table>
+
+                <h3>Opinio argumentada</h3>
+                <table class="formula-table">
+                    <tr><th>Part</th><th>Formula</th></tr>
+                    <tr><td><strong>Presentacio</strong></td><td>En l'actualitat... es un tema de gran rellevancia.<br>Avui dia... genera un intens debat.</td></tr>
+                    <tr><td><strong>Posicio</strong></td><td>Al meu parer... / Considero que... / Estic convençut/da que...<br>Des del meu punt de vista...</td></tr>
+                    <tr><td><strong>Tancament</strong></td><td>En definitiva, crec que...<br>Per tot plegat, considero que...</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 5: Exemples -->
+    <div class="section" id="sec5">
+        <div class="section-header" onclick="toggleSection('sec5')">
+            <div class="section-icon">5</div>
+            <h2>Exemples de redaccions</h2>
+            <span class="chevron">&#9660;</span>
+        </div>
+        <div class="section-body">
+            <div class="section-content">
+                <p>Tres exemples complets amb anotacions. Fixa't en l'us de connectors, el registre formal i l'estructura.</p>
+
+                <!-- Example 1 -->
+                <div class="example-comp">
+                    <div class="comp-topic">Tema 1: Els avantatges de la tecnologia en la seguretat publica</div>
+                    <div class="comp-text">
+                        <p><span class="structure">[INTRO]</span> <span class="connector">En l'actualitat,</span> la tecnologia s'ha convertit en una eina fonamental per garantir la seguretat publica. Els cossos de seguretat disposen cada vegada de mes recursos tecnologics que els permeten actuar de manera mes eficient. <span class="connector">En aquest text,</span> <span class="formal">analitzare</span> els principals avantatges d'aquesta evolucio.</p>
+
+                        <p><span class="structure">[DESENV. 1]</span> <span class="connector">En primer lloc,</span> cal destacar que les cameras de videovigilancia han contribuit significativament a la prevencio del delicte. <span class="connector">Per exemple,</span> en moltes ciutats catalanes, la instal·lacio de cameras en zones conflictives ha reduit els actes delictius. <span class="connector">A mes a mes,</span> els sistemes de reconeixement facial permeten identificar sospitosos de manera rapida i precisa.</p>
+
+                        <p><span class="structure">[DESENV. 2]</span> <span class="connector">D'altra banda,</span> les bases de dades informatiques faciliten la coordinacio entre diferents cossos policials. <span class="connector">Gracies a</span> aquestes eines, <span class="formal">es possible</span> compartir informacio en temps real i agilitzar les investigacions. <span class="connector">Tanmateix,</span> cal vetllar per la proteccio de les dades personals dels ciutadans.</p>
+
+                        <p><span class="structure">[CONCL.]</span> <span class="connector">En definitiva,</span> la tecnologia <span class="formal">representa</span> un aliat indispensable per a la seguretat publica. <span class="connector">Al meu parer,</span> <span class="formal">caldria</span> continuar invertint en innovacio tecnologica, sempre respectant els drets fonamentals de la ciutadania.</p>
+                    </div>
+                    <div class="comp-legend">
+                        <span><span class="connector">text</span> Connectors</span>
+                        <span><span class="formal">text</span> Registre formal</span>
+                        <span><span class="structure">text</span> Estructura</span>
+                    </div>
+                </div>
+
+                <!-- Example 2 -->
+                <div class="example-comp">
+                    <div class="comp-topic">Tema 2: La importancia de la formacio continua en els cossos de seguretat</div>
+                    <div class="comp-text">
+                        <p><span class="structure">[INTRO]</span> <span class="connector">Avui dia,</span> la societat evoluciona a un ritme accelerat i, amb ella, les formes de delinquencia. <span class="connector">Per aquesta rao,</span> la formacio continua dels agents de seguretat <span class="formal">resulta imprescindible</span> per fer front als nous reptes professionals.</p>
+
+                        <p><span class="structure">[DESENV. 1]</span> <span class="connector">D'entrada,</span> cal assenyalar que els delictes informatics han augmentat exponencialment en els ultims anys. Els agents necessiten coneixements actualitzats en ciberseguretat per poder investigar i prevenir aquests delictes. <span class="connector">Aixi mateix,</span> la formacio en mediacio i resolucio de conflictes <span class="formal">esdeve</span> essencial per gestionar situacions de convivencia.</p>
+
+                        <p><span class="structure">[DESENV. 2]</span> <span class="connector">A mes a mes,</span> la formacio continua millora la motivacio i el rendiment professional dels agents. Un policia ben format se sent mes segur i competent en les seves actuacions. <span class="connector">No obstant aixo,</span> <span class="formal">es necessari</span> que les administracions facilitin l'acces a aquesta formacio amb horaris compatibles i recursos economics adequats.</p>
+
+                        <p><span class="structure">[CONCL.]</span> <span class="connector">Per concloure,</span> la formacio continua no es un luxe, sino una necessitat. <span class="connector">Des del meu punt de vista,</span> <span class="formal">seria convenient</span> establir plans formatius obligatoris i adaptats a les necessitats reals dels cossos de seguretat.</p>
+                    </div>
+                    <div class="comp-legend">
+                        <span><span class="connector">text</span> Connectors</span>
+                        <span><span class="formal">text</span> Registre formal</span>
+                        <span><span class="structure">text</span> Estructura</span>
+                    </div>
+                </div>
+
+                <!-- Example 3 -->
+                <div class="example-comp">
+                    <div class="comp-topic">Tema 3: El paper de la policia en la convivencia ciutadana</div>
+                    <div class="comp-text">
+                        <p><span class="structure">[INTRO]</span> <span class="connector">Des de fa uns anys,</span> el model policial ha evolucionat cap a un enfocament mes proper a la ciutadania. La policia ja no es percep unicament com un organ repressiu, sino com un servei public orientat a la convivencia. <span class="connector">En aquest escrit,</span> <span class="formal">reflexionare</span> sobre aquest canvi de paradigma.</p>
+
+                        <p><span class="structure">[DESENV. 1]</span> <span class="connector">En primer lloc,</span> la policia comunitaria ha demostrat ser un model eficac per millorar la relacio entre agents i veins. <span class="connector">Per exemple,</span> els programes de policia de barri permeten coneixer les necessitats especifiques de cada zona. <span class="connector">Com a consequencia,</span> la confianca de la poblacio en les forces de seguretat <span class="formal">s'incrementa</span> notablement.</p>
+
+                        <p><span class="structure">[DESENV. 2]</span> <span class="connector">Ara be,</span> aquest model requereix una preparacio especifica dels agents en habilitats socials i comunicatives. <span class="connector">Malgrat que</span> la formacio tecnica es fonamental, la capacitat d'escoltar i dialogar <span class="formal">resulta igualment</span> rellevant. <span class="connector">Aixi doncs,</span> cal reforcar la formacio en empatia i gestio emocional.</p>
+
+                        <p><span class="structure">[CONCL.]</span> <span class="connector">En resum,</span> el paper de la policia en la convivencia ciutadana es clau per a una societat cohesionada. <span class="connector">Considero que</span> <span class="formal">caldria</span> apostar decididament per un model policial que prioritzi el dialeg, la proximitat i el respecte mutu.</p>
+                    </div>
+                    <div class="comp-legend">
+                        <span><span class="connector">text</span> Connectors</span>
+                        <span><span class="formal">text</span> Registre formal</span>
+                        <span><span class="structure">text</span> Estructura</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 6: Errors habituals -->
+    <div class="section" id="sec6">
+        <div class="section-header" onclick="toggleSection('sec6')">
+            <div class="section-icon">6</div>
+            <h2>Errors habituals en redaccions</h2>
+            <span class="chevron">&#9660;</span>
+        </div>
+        <div class="section-body">
+            <div class="section-content">
+                <p>Aquests son els errors mes frequents en la prova escrita del C1. Evita'ls!</p>
+
+                <h3>Errors d'estructura</h3>
+                <div class="error-item">
+                    <span class="error-wrong">Escriure tot el text en un sol paragraf</span>
+                    <span class="error-right">Separar en introduccio, desenvolupament i conclusio</span>
+                </div>
+                <div class="error-item">
+                    <span class="error-wrong">Introduir idees noves a la conclusio</span>
+                    <span class="error-right">La conclusio nomes resumeix i tanca</span>
+                </div>
+                <div class="error-item">
+                    <span class="error-wrong">No usar connectors entre paragrafs</span>
+                    <span class="error-right">Cada paragraf ha de comencar amb un connector</span>
+                </div>
+
+                <h3>Errors de registre</h3>
+                <div class="error-item">
+                    <span class="error-wrong">Usar llenguatge col·loquial: "lio", "mola", "tio"</span>
+                    <span class="error-right">Registre formal: "embolic", "es excellent", "persona"</span>
+                </div>
+                <div class="error-item">
+                    <span class="error-wrong">Repetir "jo penso que" constantment</span>
+                    <span class="error-right">Variar: "Considero que", "Al meu parer", "Des del meu punt de vista"</span>
+                </div>
+                <div class="error-item">
+                    <span class="error-wrong">Usar frases massa curtes i simples</span>
+                    <span class="error-right">Combinar frases curtes amb subordinades i coordinades</span>
+                </div>
+
+                <h3>Errors ortografics frequents</h3>
+                <div class="error-item">
+                    <span class="error-wrong">*Havien moltes persones</span>
+                    <span class="error-right">Hi havia moltes persones (haver-hi: sempre singular)</span>
+                </div>
+                <div class="error-item">
+                    <span class="error-wrong">*Demanar-les que vinguessin</span>
+                    <span class="error-right">Demanar-los que vinguessin (CI = los/les en catala central)</span>
+                </div>
+                <div class="error-item">
+                    <span class="error-wrong">*En canvi de fer-ho aixi</span>
+                    <span class="error-right">En lloc de fer-ho aixi / En comptes de fer-ho aixi</span>
+                </div>
+                <div class="error-item">
+                    <span class="error-wrong">*Degut a que hi ha problemes</span>
+                    <span class="error-right">A causa que hi ha problemes / Pel fet que hi ha problemes</span>
+                </div>
+
+                <h3>Errors de castellanismes</h3>
+                <div class="error-item">
+                    <span class="error-wrong">*Doncs be, el que passa es que...</span>
+                    <span class="error-right">Cal dir que... / S'ha de tenir en compte que...</span>
+                </div>
+                <div class="error-item">
+                    <span class="error-wrong">*Desde el meu punt de vista</span>
+                    <span class="error-right">Des del meu punt de vista</span>
+                </div>
+                <div class="error-item">
+                    <span class="error-wrong">*Es necesari invertir en formacio</span>
+                    <span class="error-right">Es necessari invertir en formacio (doble s)</span>
+                </div>
+                <div class="error-item">
+                    <span class="error-wrong">*Per altre banda, tambe cal dir</span>
+                    <span class="error-right">D'altra banda, tambe cal dir</span>
+                </div>
+
+                <h3>Consells finals</h3>
+                <div class="highlight green">
+                    <strong>Abans d'entregar el text:</strong><br>
+                    1. Compta les paraules (minim 180)<br>
+                    2. Revisa que cada paragraf tingui un connector<br>
+                    3. Comprova l'accentuacio (accents oberts i tancats)<br>
+                    4. Verifica que no hi hagi castellanismes<br>
+                    5. Assegura't que el registre sigui formal i coherent<br>
+                    6. Rellegeix la conclusio: ha de tancar el text, no obrir temes nous
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">C1 Catala - Material d'estudi per a Mossos d'Esquadra</div>
+
+<script>
+function toggleSection(id) {
+    const section = document.getElementById(id);
+    section.classList.toggle('open');
+}
+</script>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+</body>
+</html>

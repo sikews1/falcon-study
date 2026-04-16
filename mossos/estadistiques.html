@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estad&iacute;stiques - Mossos d'Esquadra</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        /* === Mossos Navigation === */
+        .mossos-nav {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-raised);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 8px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+        .mossos-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all var(--t-fast);
+        }
+        .mossos-nav a:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .mossos-nav a.active { background: linear-gradient(135deg, #1e3a5f, #2563eb); color: #fff; }
+        .mossos-nav a.home { margin-right: auto; color: var(--text-muted); }
+        .mossos-nav a.home:hover { color: var(--text-primary); }
+
+        /* === Page === */
+        .stats-page { max-width: 1100px; margin: 0 auto; padding: 28px 20px 60px; }
+
+        /* === Header === */
+        .stats-header {
+            background: linear-gradient(135deg, #1e3a5f, #2563eb);
+            border-radius: var(--radius-xl);
+            padding: 40px 28px 36px;
+            margin-bottom: 28px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .stats-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        .stats-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 0 0 8px;
+            letter-spacing: -0.03em;
+        }
+        .stats-header .subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 1.05rem;
+            margin: 0;
+        }
+
+        /* === Overview Cards === */
+        .overview-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .overview-card {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            text-align: center;
+        }
+        .overview-card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        .overview-card .card-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+        .overview-card .card-label {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        /* === Section titles === */
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 32px 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title .icon { font-size: 1.1rem; }
+
+        /* === Ambit Progress === */
+        .ambit-block {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .ambit-block-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .ambit-block-header .bar {
+            width: 4px;
+            height: 28px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        .ambit-block-header .bar.a { background: #2563eb; }
+        .ambit-block-header .bar.b { background: #8b5cf6; }
+        .ambit-block-header .bar.c { background: #f97316; }
+        .ambit-block-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .ambit-block-header .ambit-pct {
+            margin-left: auto;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .tema-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .tema-row:last-child { border-bottom: none; }
+        .tema-row .tema-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 50px;
+            flex-shrink: 0;
+        }
+        .tema-row .tema-name {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            flex: 1;
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .tema-row .tema-status-icon {
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+        .tema-row .score-bar-wrap {
+            width: 100px;
+            height: 8px;
+            background: var(--bg-overlay);
+            border-radius: 4px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .tema-row .score-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+        .score-bar.high { background: #22c55e; }
+        .score-bar.mid { background: #eab308; }
+        .score-bar.low { background: #ef4444; }
+        .score-bar.none { background: transparent; }
+        .tema-row .score-val {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            min-width: 36px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        /* === Quiz History Table === */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .history-table th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border-subtle);
+            background: var(--bg-overlay);
+        }
+        .history-table td {
+            padding: 10px 16px;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .history-table tr:last-child td { border-bottom: none; }
+        .history-table .score-good { color: #22c55e; font-weight: 700; }
+        .history-table .score-ok { color: #eab308; font-weight: 700; }
+        .history-table .score-bad { color: #ef4444; font-weight: 700; }
+
+        .empty-msg {
+            text-align: center;
+            padding: 32px 20px;
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+        }
+
+        /* === Weakest topics === */
+        .weak-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+        .weak-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: inherit;
+            transition: all var(--t-base);
+        }
+        .weak-card:hover {
+            border-color: var(--border-strong);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+        .weak-card .weak-rank {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #ef4444;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+        .weak-card .weak-info { flex: 1; min-width: 0; }
+        .weak-card .weak-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .weak-card .weak-detail {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* === Export/Import === */
+        .data-section {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .data-section .data-info { flex: 1; min-width: 200px; }
+        .data-section .data-info h4 {
+            margin: 0 0 4px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+        .data-section .data-info p {
+            margin: 0;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+        .data-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .data-actions button {
+            padding: 8px 18px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-default);
+            background: var(--bg-overlay);
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--t-fast);
+            font-family: var(--font-sans);
+        }
+        .data-actions button:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .data-actions button.primary {
+            background: linear-gradient(135deg, #1e3a5f, #2563eb);
+            color: #fff;
+            border-color: transparent;
+        }
+        .data-actions button.primary:hover { opacity: 0.9; }
+        #importFile { display: none; }
+
+        /* === Responsive === */
+        @media (max-width: 640px) {
+            .stats-header h1 { font-size: 1.7rem; }
+            .overview-cards { grid-template-columns: repeat(2, 1fr); }
+            .tema-row .tema-name { display: none; }
+            .score-bar-wrap { width: 60px !important; }
+            .weak-list { grid-template-columns: 1fr; }
+            .data-section { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="mossos-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="examen.html">Simulador</a>
+    <a href="examens-reals.html">Ex&agrave;mens reals</a>
+    <a href="estadistiques.html" class="active">Estad&iacute;stiques</a>
+</div>
+
+<div class="stats-page">
+
+    <!-- Header -->
+    <div class="stats-header">
+        <h1>Estad&iacute;stiques</h1>
+        <p class="subtitle">El teu progr&eacute;s d'estudi</p>
+    </div>
+
+    <!-- Overview Cards -->
+    <div class="overview-cards" id="overviewCards">
+        <div class="overview-card">
+            <div class="card-icon">&#128218;</div>
+            <div class="card-value" id="cardStudied">0</div>
+            <div class="card-label">Temes estudiats</div>
+        </div>
+        <div class="overview-card">
+            <div class="card-icon">&#127942;</div>
+            <div class="card-value" id="cardMastered">0%</div>
+            <div class="card-label">Dominats</div>
+        </div>
+        <div class="overview-card">
+            <div class="card-icon">&#128200;</div>
+            <div class="card-value" id="cardAvg">0%</div>
+            <div class="card-label">Puntuaci&oacute; mitjana</div>
+        </div>
+        <div class="overview-card">
+            <div class="card-icon">&#10060;</div>
+            <div class="card-value" id="cardMistakes">0</div>
+            <div class="card-label">Errors totals</div>
+        </div>
+    </div>
+
+    <!-- Progress by Ambit -->
+    <div class="section-title"><span class="icon">&#128202;</span> Progr&eacute;s per &agrave;mbit</div>
+    <div id="ambitProgress"></div>
+
+    <!-- Quiz History -->
+    <div class="section-title"><span class="icon">&#128203;</span> Historial de qu&uuml;estionaris</div>
+    <div id="quizHistory"></div>
+
+    <!-- Weakest Topics -->
+    <div class="section-title"><span class="icon">&#9888;&#65039;</span> Temes m&eacute;s febles</div>
+    <div id="weakTopics"></div>
+
+    <!-- Export/Import -->
+    <div class="section-title"><span class="icon">&#128190;</span> Dades</div>
+    <div class="data-section">
+        <div class="data-info">
+            <h4>Exportar i importar progr&eacute;s</h4>
+            <p>Desa el teu progr&eacute;s en un fitxer JSON o restaura'l des d'una c&ograve;pia anterior.</p>
+        </div>
+        <div class="data-actions">
+            <button class="primary" onclick="exportProgress()">&#128190; Exportar</button>
+            <button onclick="document.getElementById('importFile').click()">&#128194; Importar</button>
+            <input type="file" id="importFile" accept=".json" onchange="if(this.files[0]) importProgress(this.files[0])">
+        </div>
+    </div>
+
+</div>
+
+<script src="progress.js"></script>
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+// === Tema catalog ===
+const TEMES = {
+    A: {
+        title: "\u00c0mbit A \u2014 Coneixement de l'entorn",
+        color: 'a',
+        temes: [
+            { id: 'a1', number: 'A.1', title: "Hist\u00f2ria de Catalunya (part I)" },
+            { id: 'a2', number: 'A.2', title: "Hist\u00f2ria de Catalunya (part II)" },
+            { id: 'a3', number: 'A.3', title: "Marc geogr\u00e0fic de Catalunya" },
+            { id: 'a4', number: 'A.4', title: "Cultura i patrimoni de Catalunya" },
+            { id: 'a5', number: 'A.5', title: "Institucions pol\u00edtiques de Catalunya" },
+            { id: 'a6', number: 'A.6', title: "La Uni\u00f3 Europea" },
+            { id: 'a7', number: 'A.7', title: "Actualitat pol\u00edtica i social" },
+        ]
+    },
+    B: {
+        title: "\u00c0mbit B \u2014 Institucional",
+        color: 'b',
+        temes: [
+            { id: 'b1', number: 'B.1', title: "La Constituci\u00f3 espanyola de 1978" },
+            { id: 'b2', number: 'B.2', title: "L'Estatut d'autonomia de Catalunya" },
+            { id: 'b3', number: 'B.3', title: "El Govern i l'Administraci\u00f3 de la Generalitat" },
+            { id: 'b4', number: 'B.4', title: "El Departament d'Interior" },
+            { id: 'b5', number: 'B.5', title: "La policia a Catalunya" },
+            { id: 'b6', number: 'B.6', title: "Drets i deures de la ciutadania" },
+            { id: 'b7', number: 'B.7', title: "Dret penal i processal" },
+            { id: 'b8', number: 'B.8', title: "Seguretat vi\u00e0ria i prevenci\u00f3" },
+        ]
+    },
+    C: {
+        title: "\u00c0mbit C \u2014 Seguretat i policia",
+        color: 'c',
+        temes: [
+            { id: 'c1', number: 'C.1', title: "Models policials comparats" },
+            { id: 'c2', number: 'C.2', title: "\u00c8tica i deontologia policial" },
+            { id: 'c3', number: 'C.3', title: "Habilitats socials i comunicaci\u00f3" },
+            { id: 'c4', number: 'C.4', title: "Diversitat i igualtat" },
+            { id: 'c5', number: 'C.5', title: "Seguretat ciutadana i prevenci\u00f3" },
+        ]
+    }
+};
+
+const STATUS_ICON = { 'mastered': '\uD83D\uDFE2', 'seen': '\uD83D\uDFE1', 'not-studied': '\uD83D\uDD34' };
+
+function renderStats() {
+    const stats = getOverallStats();
+    const progress = getProgress();
+
+    // Overview cards
+    const studied = stats.mastered + stats.seen;
+    const masteredPct = stats.total > 0 ? Math.round((stats.mastered / stats.total) * 100) : 0;
+    document.getElementById('cardStudied').textContent = studied + ' / ' + stats.total;
+    document.getElementById('cardMastered').textContent = masteredPct + '%';
+    document.getElementById('cardAvg').textContent = stats.avgScore + '%';
+    document.getElementById('cardMistakes').textContent = stats.mistakeCount;
+
+    // Progress by ambit
+    const ambitContainer = document.getElementById('ambitProgress');
+    ambitContainer.innerHTML = '';
+
+    for (const [key, ambit] of Object.entries(TEMES)) {
+        const lk = ambit.color;
+        const masteredCount = ambit.temes.filter(t => getTemaStatus(t.id) === 'mastered').length;
+        const ambitPct = ambit.temes.length > 0 ? Math.round((masteredCount / ambit.temes.length) * 100) : 0;
+
+        let rows = ambit.temes.map(t => {
+            const status = getTemaStatus(t.id);
+            const best = getBestScore(t.id);
+            const barPct = best !== null ? best : 0;
+            let barClass = 'none';
+            if (best !== null) {
+                barClass = best >= 80 ? 'high' : (best >= 50 ? 'mid' : 'low');
+            }
+            const scoreText = best !== null ? best + '%' : '--';
+            return `
+                <div class="tema-row">
+                    <span class="tema-label">${t.number}</span>
+                    <span class="tema-name">${t.title}</span>
+                    <span class="tema-status-icon">${STATUS_ICON[status]}</span>
+                    <div class="score-bar-wrap">
+                        <div class="score-bar ${barClass}" style="width:${barPct}%"></div>
+                    </div>
+                    <span class="score-val">${scoreText}</span>
+                </div>`;
+        }).join('');
+
+        ambitContainer.innerHTML += `
+            <div class="ambit-block">
+                <div class="ambit-block-header">
+                    <div class="bar ${lk}"></div>
+                    <h3>${ambit.title}</h3>
+                    <span class="ambit-pct">${masteredCount}/${ambit.temes.length} dominats (${ambitPct}%)</span>
+                </div>
+                ${rows}
+            </div>`;
+    }
+
+    // Quiz history
+    const historyContainer = document.getElementById('quizHistory');
+    const history = getQuizHistory();
+    if (history.length === 0) {
+        historyContainer.innerHTML = '<div class="empty-msg">Encara no has fet cap qu&uuml;estionari. Comen&ccedil;a amb el <a href="examen.html">Simulador</a>!</div>';
+    } else {
+        let tableRows = history.slice(0, 20).map(h => {
+            const date = h.date ? new Date(h.date).toLocaleDateString('ca-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '--';
+            const pct = h.total > 0 ? Math.round((h.score / h.total) * 100) : 0;
+            const cls = pct >= 80 ? 'score-good' : (pct >= 50 ? 'score-ok' : 'score-bad');
+            const type = h.type || h.tema || 'General';
+            return `<tr>
+                <td>${date}</td>
+                <td>${type}</td>
+                <td>${h.score} / ${h.total}</td>
+                <td class="${cls}">${pct}%</td>
+            </tr>`;
+        }).join('');
+
+        historyContainer.innerHTML = `
+            <table class="history-table">
+                <thead><tr>
+                    <th>Data</th>
+                    <th>Tipus</th>
+                    <th>Resultat</th>
+                    <th>Puntuaci&oacute;</th>
+                </tr></thead>
+                <tbody>${tableRows}</tbody>
+            </table>`;
+    }
+
+    // Weakest topics
+    const weakContainer = document.getElementById('weakTopics');
+    const allTemes = [];
+    for (const [key, ambit] of Object.entries(TEMES)) {
+        ambit.temes.forEach(t => {
+            const best = getBestScore(t.id);
+            const status = getTemaStatus(t.id);
+            allTemes.push({ ...t, best, status, ambit: key });
+        });
+    }
+
+    // Sort: not-studied first, then by lowest score
+    const weakTemes = allTemes
+        .filter(t => t.status !== 'mastered')
+        .sort((a, b) => {
+            if (a.best === null && b.best === null) return 0;
+            if (a.best === null) return -1;
+            if (b.best === null) return 1;
+            return a.best - b.best;
+        })
+        .slice(0, 6);
+
+    if (weakTemes.length === 0) {
+        weakContainer.innerHTML = '<div class="empty-msg">Felicitats! Has dominat tots els temes!</div>';
+    } else {
+        weakContainer.innerHTML = '<div class="weak-list">' + weakTemes.map((t, i) => {
+            const scoreText = t.best !== null ? t.best + '% millor nota' : 'Sense intents';
+            return `
+                <a href="tema.html?id=${t.id}" class="weak-card">
+                    <span class="weak-rank">${i + 1}</span>
+                    <div class="weak-info">
+                        <div class="weak-title">${t.number} - ${t.title}</div>
+                        <div class="weak-detail">${scoreText}</div>
+                    </div>
+                </a>`;
+        }).join('') + '</div>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', renderStats);
+</script>
+
+</body>
+</html>

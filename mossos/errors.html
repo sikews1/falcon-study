@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Els meus errors - Mossos d'Esquadra</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        /* === Mossos Navigation === */
+        .mossos-nav {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-raised);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 8px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+        .mossos-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all var(--t-fast);
+        }
+        .mossos-nav a:hover { background: var(--bg-hover); color: var(--text-primary); }
+        .mossos-nav a.active { background: linear-gradient(135deg, #1e3a5f, #2563eb); color: #fff; }
+        .mossos-nav a.home { margin-right: auto; color: var(--text-muted); }
+        .mossos-nav a.home:hover { color: var(--text-primary); }
+
+        /* === Page === */
+        .errors-page { max-width: 900px; margin: 0 auto; padding: 28px 20px 60px; }
+
+        /* === Header === */
+        .errors-header {
+            background: linear-gradient(135deg, #1e3a5f, #2563eb);
+            border-radius: var(--radius-xl);
+            padding: 40px 28px 36px;
+            margin-bottom: 28px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .errors-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        .errors-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 0 0 8px;
+            letter-spacing: -0.03em;
+        }
+        .errors-header .subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 1.05rem;
+            margin: 0 0 16px;
+        }
+        .errors-header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: #fff;
+            padding: 6px 18px;
+            border-radius: var(--radius-full);
+            font-size: 0.9rem;
+            font-weight: 700;
+            backdrop-filter: blur(4px);
+        }
+
+        /* === Action buttons === */
+        .error-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+        .error-actions a,
+        .error-actions button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-size: 0.92rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all var(--t-fast);
+            font-family: var(--font-sans);
+            border: none;
+        }
+        .btn-exam {
+            background: linear-gradient(135deg, #1e3a5f, #2563eb);
+            color: #fff !important;
+        }
+        .btn-exam:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-clear {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-default) !important;
+            color: var(--text-secondary);
+        }
+        .btn-clear:hover { background: var(--bg-hover); color: #ef4444; border-color: #ef4444 !important; }
+
+        /* === Empty state === */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+        }
+        .empty-state .empty-icon { font-size: 3rem; margin-bottom: 16px; }
+        .empty-state h3 {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin: 0 0 8px;
+        }
+        .empty-state p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            margin: 0 0 20px;
+        }
+        .empty-state a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 22px;
+            background: linear-gradient(135deg, #1e3a5f, #2563eb);
+            color: #fff;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all var(--t-fast);
+        }
+        .empty-state a:hover { opacity: 0.9; }
+
+        /* === Error groups === */
+        .error-group {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .error-group-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 20px;
+            background: var(--bg-overlay);
+            border-bottom: 1px solid var(--border-subtle);
+            cursor: pointer;
+        }
+        .error-group-header .group-bar {
+            width: 4px;
+            height: 24px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        .error-group-header .group-bar.a { background: #2563eb; }
+        .error-group-header .group-bar.b { background: #8b5cf6; }
+        .error-group-header .group-bar.c { background: #f97316; }
+        .error-group-header h3 {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            flex: 1;
+        }
+        .error-group-header .group-count {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+        }
+
+        .error-item {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .error-item:last-child { border-bottom: none; }
+        .error-item .error-count-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .error-item .error-question {
+            flex: 1;
+            font-size: 0.88rem;
+            color: var(--text-primary);
+            line-height: 1.45;
+        }
+        .error-item .error-id {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* === Responsive === */
+        @media (max-width: 640px) {
+            .errors-header h1 { font-size: 1.7rem; }
+            .error-actions { flex-direction: column; }
+            .error-actions a, .error-actions button { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="mossos-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="examen.html">Simulador</a>
+    <a href="examens-reals.html">Ex&agrave;mens reals</a>
+    <a href="estadistiques.html">Estad&iacute;stiques</a>
+</div>
+
+<div class="errors-page">
+
+    <!-- Header -->
+    <div class="errors-header">
+        <h1>Els meus errors</h1>
+        <p class="subtitle">Repassa les preguntes que has fallat</p>
+        <span class="badge" id="errorBadge">0 errors</span>
+    </div>
+
+    <!-- Content -->
+    <div id="errorsContent"></div>
+
+</div>
+
+<script src="progress.js"></script>
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+// === Tema catalog ===
+const TEMES_MAP = {
+    'a1': { number: 'A.1', title: "Hist\u00f2ria de Catalunya (part I)", ambit: 'A', ambitTitle: "\u00c0mbit A", color: 'a' },
+    'a2': { number: 'A.2', title: "Hist\u00f2ria de Catalunya (part II)", ambit: 'A', ambitTitle: "\u00c0mbit A", color: 'a' },
+    'a3': { number: 'A.3', title: "Marc geogr\u00e0fic de Catalunya", ambit: 'A', ambitTitle: "\u00c0mbit A", color: 'a' },
+    'a4': { number: 'A.4', title: "Cultura i patrimoni de Catalunya", ambit: 'A', ambitTitle: "\u00c0mbit A", color: 'a' },
+    'a5': { number: 'A.5', title: "Institucions pol\u00edtiques de Catalunya", ambit: 'A', ambitTitle: "\u00c0mbit A", color: 'a' },
+    'a6': { number: 'A.6', title: "La Uni\u00f3 Europea", ambit: 'A', ambitTitle: "\u00c0mbit A", color: 'a' },
+    'a7': { number: 'A.7', title: "Actualitat pol\u00edtica i social", ambit: 'A', ambitTitle: "\u00c0mbit A", color: 'a' },
+    'b1': { number: 'B.1', title: "La Constituci\u00f3 espanyola de 1978", ambit: 'B', ambitTitle: "\u00c0mbit B", color: 'b' },
+    'b2': { number: 'B.2', title: "L'Estatut d'autonomia de Catalunya", ambit: 'B', ambitTitle: "\u00c0mbit B", color: 'b' },
+    'b3': { number: 'B.3', title: "El Govern i l'Administraci\u00f3 de la Generalitat", ambit: 'B', ambitTitle: "\u00c0mbit B", color: 'b' },
+    'b4': { number: 'B.4', title: "El Departament d'Interior", ambit: 'B', ambitTitle: "\u00c0mbit B", color: 'b' },
+    'b5': { number: 'B.5', title: "La policia a Catalunya", ambit: 'B', ambitTitle: "\u00c0mbit B", color: 'b' },
+    'b6': { number: 'B.6', title: "Drets i deures de la ciutadania", ambit: 'B', ambitTitle: "\u00c0mbit B", color: 'b' },
+    'b7': { number: 'B.7', title: "Dret penal i processal", ambit: 'B', ambitTitle: "\u00c0mbit B", color: 'b' },
+    'b8': { number: 'B.8', title: "Seguretat vi\u00e0ria i prevenci\u00f3", ambit: 'B', ambitTitle: "\u00c0mbit B", color: 'b' },
+    'c1': { number: 'C.1', title: "Models policials comparats", ambit: 'C', ambitTitle: "\u00c0mbit C", color: 'c' },
+    'c2': { number: 'C.2', title: "\u00c8tica i deontologia policial", ambit: 'C', ambitTitle: "\u00c0mbit C", color: 'c' },
+    'c3': { number: 'C.3', title: "Habilitats socials i comunicaci\u00f3", ambit: 'C', ambitTitle: "\u00c0mbit C", color: 'c' },
+    'c4': { number: 'C.4', title: "Diversitat i igualtat", ambit: 'C', ambitTitle: "\u00c0mbit C", color: 'c' },
+    'c5': { number: 'C.5', title: "Seguretat ciutadana i prevenci\u00f3", ambit: 'C', ambitTitle: "\u00c0mbit C", color: 'c' },
+};
+
+function clearAllMistakes() {
+    if (confirm('Segur que vols esborrar tots els errors? Aquesta acci\u00f3 no es pot desfer.')) {
+        localStorage.removeItem('mossos_mistakes');
+        renderErrors();
+    }
+}
+
+function getTemaFromQuestionId(qId) {
+    // Question IDs expected format: "a1_q3", "b2_q10", etc.
+    const match = qId.match(/^([a-c]\d+)/i);
+    if (match) return match[1].toLowerCase();
+    return null;
+}
+
+function renderErrors() {
+    const mistakes = getMistakes();
+    const mistakeKeys = Object.keys(mistakes);
+    const totalErrors = mistakeKeys.length;
+    const container = document.getElementById('errorsContent');
+
+    // Update badge
+    document.getElementById('errorBadge').textContent = totalErrors + (totalErrors === 1 ? ' error' : ' errors');
+
+    if (totalErrors === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">&#127881;</div>
+                <h3>No tens errors! Continua estudiant!</h3>
+                <p>Quan fallis preguntes als qu&uuml;estionaris, apareixeran aqu&iacute; per repassar-les.</p>
+                <a href="examen.html">&#128221; Anar al simulador</a>
+            </div>`;
+        return;
+    }
+
+    // Group by tema
+    const grouped = {};
+    mistakeKeys.forEach(qId => {
+        const tema = getTemaFromQuestionId(qId) || 'other';
+        if (!grouped[tema]) grouped[tema] = [];
+        grouped[tema].push({ id: qId, count: mistakes[qId] });
+    });
+
+    // Sort groups by ambit order
+    const orderedTemas = Object.keys(grouped).sort((a, b) => {
+        if (a === 'other') return 1;
+        if (b === 'other') return -1;
+        return a.localeCompare(b);
+    });
+
+    let html = `
+        <div class="error-actions">
+            <a href="examen.html?mode=errors" class="btn-exam">&#128221; Examen amb errors</a>
+            <button class="btn-clear" onclick="clearAllMistakes()">&#128465; Netejar errors</button>
+        </div>`;
+
+    orderedTemas.forEach(temaId => {
+        const items = grouped[temaId];
+        const temaInfo = TEMES_MAP[temaId];
+        const groupTitle = temaInfo
+            ? temaInfo.number + ' - ' + temaInfo.title
+            : 'Altres preguntes';
+        const colorClass = temaInfo ? temaInfo.color : 'a';
+
+        html += `
+            <div class="error-group">
+                <div class="error-group-header">
+                    <div class="group-bar ${colorClass}"></div>
+                    <h3>${groupTitle}</h3>
+                    <span class="group-count">${items.length} ${items.length === 1 ? 'error' : 'errors'}</span>
+                </div>`;
+
+        items.sort((a, b) => b.count - a.count);
+        items.forEach(item => {
+            html += `
+                <div class="error-item">
+                    <span class="error-count-badge" title="Fallada ${item.count} ${item.count === 1 ? 'vegada' : 'vegades'}">${item.count}</span>
+                    <div>
+                        <div class="error-question">Pregunta: <strong>${item.id}</strong></div>
+                        <div class="error-id">Fallada ${item.count} ${item.count === 1 ? 'vegada' : 'vegades'}</div>
+                    </div>
+                </div>`;
+        });
+
+        html += '</div>';
+    });
+
+    container.innerHTML = html;
+}
+
+document.addEventListener('DOMContentLoaded', renderErrors);
+</script>
+
+</body>
+</html>

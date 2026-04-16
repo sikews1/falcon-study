@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matemàtiques - Exercicis Interactius</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .math-nav {
+            background: rgba(240,240,243, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+        [data-theme="dark"] .math-nav {
+            background: rgba(9, 9, 11, 0.75);
+        }
+        .math-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            border: none;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.25s;
+            background: transparent;
+        }
+        .math-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .math-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .math-nav a.home { color: #059669; font-weight: 600; }
+        .math-nav a.home:hover { background: rgba(5, 150, 105, 0.1); }
+
+        .hero {
+            text-align: center;
+            padding: 48px 24px 40px;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 50% 80% at 30% 0%, rgba(5, 150, 105, 0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 60% at 70% 20%, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg, #059669, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            position: relative;
+        }
+        .hero .badge-math {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            background: rgba(5, 150, 105, 0.1);
+            color: #059669;
+            font-size: 0.8rem;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            margin-bottom: 20px;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            margin-top: 24px;
+        }
+
+        .course-card {
+            background: var(--bg-raised);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.25s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+        .course-card:hover {
+            border-color: var(--border-default);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .course-card .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+        .course-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        .course-card p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .course-card .card-level {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* Color variants */
+        .card-green::before { background: linear-gradient(90deg, #059669, #10b981); }
+        .card-green .card-icon { background: linear-gradient(135deg, #059669, #10b981); }
+        .card-green:hover { border-color: #059669; }
+        .card-green .card-level { background: rgba(5, 150, 105, 0.1); color: #059669; }
+
+        .card-blue::before { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+        .card-blue .card-icon { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+        .card-blue:hover { border-color: #3b82f6; }
+        .card-blue .card-level { background: var(--blue-soft); color: var(--blue); }
+
+        .card-orange::before { background: linear-gradient(90deg, #ea580c, #f97316); }
+        .card-orange .card-icon { background: linear-gradient(135deg, #ea580c, #f97316); }
+        .card-orange:hover { border-color: #f97316; }
+        .card-orange .card-level { background: rgba(249, 115, 22, 0.1); color: #f97316; }
+
+        .card-purple::before { background: linear-gradient(90deg, #7c3aed, #8b5cf6); }
+        .card-purple .card-icon { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
+        .card-purple:hover { border-color: #8b5cf6; }
+        .card-purple .card-level { background: var(--purple-soft); color: var(--purple); }
+
+        .card-red::before { background: linear-gradient(90deg, #dc2626, #ef4444); }
+        .card-red .card-icon { background: linear-gradient(135deg, #dc2626, #ef4444); }
+        .card-red:hover { border-color: #ef4444; }
+        .card-red .card-level { background: var(--red-soft); color: var(--red); }
+
+        .card-yellow::before { background: linear-gradient(90deg, #ca8a04, #eab308); }
+        .card-yellow .card-icon { background: linear-gradient(135deg, #ca8a04, #eab308); }
+        .card-yellow:hover { border-color: #eab308; }
+        .card-yellow .card-level { background: var(--yellow-soft); color: #ca8a04; }
+
+        .card-teal::before { background: linear-gradient(90deg, #0d9488, #14b8a6); }
+        .card-teal .card-icon { background: linear-gradient(135deg, #0d9488, #14b8a6); }
+        .card-teal:hover { border-color: #14b8a6; }
+        .card-teal .card-level { background: var(--teal-soft); color: var(--teal); }
+
+        .coming-soon {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: var(--yellow-soft);
+            color: var(--yellow);
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 640px) {
+            .courses-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="math-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html" class="active">Inici</a>
+</div>
+
+<div class="hero">
+    <h1><span>Matemàtiques</span></h1>
+    <p>Exercicis interactius de matemàtiques - De primària a ESO</p>
+    <div class="badge-math">&#x1F4CA; Practica i millora</div>
+</div>
+
+<div class="container">
+
+    <h2 class="section-title">Tots els cursos</h2>
+    <p class="section-desc">Tria un tema i comença a practicar amb exercicis generats aleatòriament</p>
+
+    <div class="courses-grid">
+
+        <a href="ops.html" class="course-card card-green">
+            <div class="card-icon">&#x1F4CA;</div>
+            <h3>Operacions bàsiques</h3>
+            <p>Sumes, restes, multiplicacions, divisions</p>
+            <span class="card-level">Primària</span>
+        </a>
+
+        <a href="fraccions.html" class="course-card card-blue">
+            <div class="card-icon">&#x1F522;</div>
+            <h3>Fraccions</h3>
+            <p>Operacions, simplificació, equivalents</p>
+            <span class="card-level">Primària - ESO</span>
+        </a>
+
+        <a href="eq1.html" class="course-card card-blue">
+            <div class="card-icon">&#x1F4D0;</div>
+            <h3>Equacions de 1r grau</h3>
+            <p>Resolució pas a pas d'equacions lineals</p>
+            <span class="card-level">ESO</span>
+        </a>
+
+        <a href="eq2.html" class="course-card card-orange">
+            <div class="card-icon">&#x1F4C8;</div>
+            <h3>Equacions de 2n grau</h3>
+            <p>Fórmula general, factorització, discriminant</p>
+            <span class="card-level">ESO</span>
+        </a>
+
+        <a href="sist.html" class="course-card card-purple">
+            <div class="card-icon">&#x1F517;</div>
+            <h3>Sistemes d'equacions</h3>
+            <p>Substitució, igualació, reducció</p>
+            <span class="card-level">ESO</span>
+        </a>
+
+        <a href="prob.html" class="course-card card-green">
+            <div class="card-icon">&#x1F9E9;</div>
+            <h3>Problemes d'enunciat</h3>
+            <p>Plantejament i resolució de problemes reals</p>
+            <span class="card-level">ESO</span>
+        </a>
+
+        <a href="geometria.html" class="course-card card-red">
+            <div class="card-icon">&#x1F4CF;</div>
+            <h3>Geometria <span class="coming-soon">Pròximament</span></h3>
+            <p>Àrees, perímetres, volums</p>
+            <span class="card-level">Primària - ESO</span>
+        </a>
+
+        <a href="proporcionalitat.html" class="course-card card-yellow">
+            <div class="card-icon">&#x2696;&#xFE0F;</div>
+            <h3>Proporcionalitat <span class="coming-soon">Pròximament</span></h3>
+            <p>Regla de tres, percentatges</p>
+            <span class="card-level">ESO</span>
+        </a>
+
+        <a href="estadistica.html" class="course-card card-teal">
+            <div class="card-icon">&#x1F4CA;</div>
+            <h3>Estadística <span class="coming-soon">Pròximament</span></h3>
+            <p>Mitjana, mediana, moda, gràfics</p>
+            <span class="card-level">ESO</span>
+        </a>
+
+        <a href="trigonometria.html" class="course-card card-purple">
+            <div class="card-icon">&#x1F4D0;</div>
+            <h3>Trigonometria <span class="coming-soon">Pròximament</span></h3>
+            <p>Sinus, cosinus, tangent</p>
+            <span class="card-level">ESO - Batxillerat</span>
+        </a>
+
+        <a href="potencies.html" class="course-card card-orange">
+            <div class="card-icon">&#x26A1;</div>
+            <h3>Potències i arrels <span class="coming-soon">Pròximament</span></h3>
+            <p>Propietats de potències, arrels quadrades i cúbiques</p>
+            <span class="card-level">ESO</span>
+        </a>
+
+        <a href="nombres.html" class="course-card card-blue">
+            <div class="card-icon">&#x1F522;</div>
+            <h3>Nombres enters i decimals <span class="coming-soon">Pròximament</span></h3>
+            <p>Operacions amb enters, decimals, ordre i representació</p>
+            <span class="card-level">Primària - ESO</span>
+        </a>
+
+    </div>
+</div>
+
+<div class="footer">Matemàtiques - Exercicis interactius</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+</body>
+</html>

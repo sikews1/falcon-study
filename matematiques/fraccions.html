@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraccions - Matematiques</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .math-nav {
+            background: rgba(240,240,243, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+        [data-theme="dark"] .math-nav { background: rgba(15,23,41, 0.85); }
+        .math-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            border: none;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.25s;
+            background: transparent;
+        }
+        .math-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .math-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .math-nav a.home { color: #059669; font-weight: 600; }
+        .math-nav a.home:hover { background: rgba(5,150,105,0.1); }
+
+        .hero {
+            text-align: center;
+            padding: 48px 24px 40px;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 50% 80% at 30% 0%, rgba(5,150,105,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 60% at 70% 20%, rgba(16,185,129,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; position: relative; }
+        .hero h1 span {
+            background: linear-gradient(135deg, #059669, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; position: relative; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+
+        .theory-card {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .theory-card:hover { box-shadow: var(--shadow-sm); }
+        .theory-card h3 {
+            font-size: 1.1rem; font-weight: 700; color: var(--text-primary);
+            margin: 0 0 12px; display: flex; align-items: center; gap: 10px;
+        }
+        .theory-card h3 .icon {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #fff; display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; font-weight: 700; flex-shrink: 0;
+        }
+        .theory-card p, .theory-card li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+        .formula {
+            background: var(--bg-overlay); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm); padding: 12px 16px;
+            font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 600;
+            color: var(--text-primary); margin: 10px 0; text-align: center;
+        }
+        .example {
+            background: rgba(5,150,105,0.06); border-left: 3px solid #059669;
+            padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 10px 0; font-size: 0.88rem; color: var(--text-secondary);
+        }
+
+        .fraction { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 4px; }
+        .fraction .num, .fraction .den { font-size: 1rem; font-weight: 700; line-height: 1.2; }
+        .fraction .bar { width: 100%; height: 2px; background: var(--text-primary); margin: 2px 0; }
+
+        .practice-section {
+            background: var(--bg-raised);
+            border: 2px solid rgba(5,150,105,0.2);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            margin-top: 32px;
+        }
+        .practice-section h2 {
+            font-size: 1.3rem; font-weight: 800; margin: 0 0 20px; color: var(--text-primary);
+        }
+        .practice-section h2 span {
+            background: linear-gradient(135deg, #059669, #10b981);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .difficulty-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .difficulty-selector button {
+            padding: 8px 18px; border-radius: var(--radius-full);
+            border: 2px solid var(--border-subtle); background: transparent;
+            color: var(--text-secondary); cursor: pointer; font-size: 0.82rem;
+            font-weight: 600; transition: all 0.25s; font-family: var(--font-sans);
+        }
+        .difficulty-selector button:hover { border-color: #059669; color: #059669; }
+        .difficulty-selector button.active {
+            background: linear-gradient(135deg, #059669, #10b981); color: #fff; border-color: transparent;
+        }
+
+        .exercise-display {
+            background: var(--bg-overlay); border-radius: var(--radius-lg);
+            padding: 32px; text-align: center; margin-bottom: 20px;
+        }
+        .exercise-display .problem { font-size: 1.8rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+        .exercise-display .hint { font-size: 0.85rem; color: var(--text-muted); }
+
+        .answer-group {
+            display: flex; gap: 10px; margin-bottom: 16px; align-items: center; justify-content: center;
+        }
+        .answer-group label { font-weight: 600; color: var(--text-secondary); font-size: 0.9rem; }
+        .answer-group input {
+            width: 80px; padding: 14px; border-radius: var(--radius-md);
+            border: 2px solid var(--border-subtle); background: var(--bg-base);
+            color: var(--text-primary); font-size: 1.1rem; font-weight: 600;
+            font-family: var(--font-sans); outline: none; text-align: center;
+        }
+        .answer-group input:focus { border-color: #059669; }
+        .answer-group .sep { font-size: 1.5rem; font-weight: 800; color: var(--text-primary); }
+
+        .btn-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .btn {
+            padding: 12px 24px; border-radius: var(--radius-full); border: none;
+            font-size: 0.88rem; font-weight: 600; cursor: pointer;
+            font-family: var(--font-sans); transition: all 0.25s;
+        }
+        .btn-check { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+        .btn-check:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(5,150,105,0.3); }
+        .btn-new { background: var(--bg-overlay); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { background: var(--bg-hover); }
+        .btn-solution { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+        .btn-solution:hover { background: var(--bg-overlay); }
+
+        .feedback {
+            margin-top: 16px; padding: 14px 18px; border-radius: var(--radius-md);
+            font-size: 0.92rem; font-weight: 600; display: none;
+        }
+        .feedback.correct { display: block; background: var(--green-soft); color: #059669; border: 1px solid rgba(5,150,105,0.2); }
+        .feedback.incorrect { display: block; background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+        .feedback.solution { display: block; background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+
+        .score-bar {
+            display: flex; justify-content: center; gap: 24px; margin-top: 20px;
+            padding: 14px; background: var(--bg-overlay); border-radius: var(--radius-md);
+            font-size: 0.9rem; font-weight: 600;
+        }
+        .score-bar .correct-count { color: #059669; }
+        .score-bar .incorrect-count { color: var(--red); }
+        .score-bar .total-count { color: var(--text-secondary); }
+    </style>
+</head>
+<body>
+    <div class="math-nav">
+        <a href="../index.html" class="home">&#8592; Cursos</a>
+        <a href="index.html">Inici</a>
+    </div>
+
+    <div class="hero">
+        <h1><span>Fraccions</span></h1>
+        <p>Operacions amb fraccions, simplificacio i fraccions equivalents</p>
+    </div>
+
+    <div class="container">
+        <div class="theory-card">
+            <h3><span class="icon">1</span> Que es una fraccio?</h3>
+            <p>Una <strong>fraccio</strong> representa una part d'un tot. S'escriu com a/b, on <strong>a</strong> es el numerador (parts que agafem) i <strong>b</strong> es el denominador (parts iguals en que dividim).</p>
+            <div class="formula">a/b &rarr; numerador / denominador</div>
+            <div class="example">Exemple: 3/4 vol dir 3 parts de 4 parts iguals.</div>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">2</span> Fraccions equivalents i simplificacio</h3>
+            <p>Dues fraccions son <strong>equivalents</strong> si representen el mateix valor. Per simplificar una fraccio, dividim numerador i denominador pel seu MCD (maxim comu divisor).</p>
+            <div class="formula">a/b = (a&times;k) / (b&times;k)</div>
+            <div class="example">Exemple: 6/8 = 3/4 (dividim per 2)</div>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">3</span> Operacions amb fraccions</h3>
+            <p><strong>Suma/Resta:</strong> Igualem denominadors (mcm), sumem/restem numeradors.</p>
+            <div class="formula">a/b + c/d = (a&times;d + c&times;b) / (b&times;d)</div>
+            <p><strong>Multiplicacio:</strong> Multipliquem numeradors entre si i denominadors entre si.</p>
+            <div class="formula">a/b &times; c/d = (a&times;c) / (b&times;d)</div>
+            <p><strong>Divisio:</strong> Multipliquem per la fraccio inversa.</p>
+            <div class="formula">a/b &divide; c/d = (a&times;d) / (b&times;c)</div>
+            <div class="example">Exemple: 2/3 + 1/4 = 8/12 + 3/12 = 11/12</div>
+        </div>
+
+        <div class="practice-section">
+            <h2><span>Practica</span></h2>
+
+            <div class="difficulty-selector">
+                <button class="active" onclick="setType(0)">Suma</button>
+                <button onclick="setType(1)">Resta</button>
+                <button onclick="setType(2)">Multiplicacio</button>
+                <button onclick="setType(3)">Divisio</button>
+            </div>
+
+            <div class="exercise-display">
+                <div class="problem" id="problem">--</div>
+                <div class="hint" id="hint">Dona la resposta simplificada</div>
+            </div>
+
+            <div class="answer-group">
+                <label>Numerador:</label>
+                <input type="number" id="ansNum" onkeydown="if(event.key==='Enter') document.getElementById('ansDen').focus()">
+                <span class="sep">/</span>
+                <label>Denominador:</label>
+                <input type="number" id="ansDen" onkeydown="if(event.key==='Enter') checkAnswer()">
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-check" onclick="checkAnswer()">Comprovar</button>
+                <button class="btn btn-new" onclick="newExercise()">Nou exercici</button>
+                <button class="btn btn-solution" onclick="showSolution()">Mostrar solucio</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="score-bar">
+                <div class="correct-count">Encerts: <span id="correct">0</span></div>
+                <div class="incorrect-count">Errors: <span id="incorrect">0</span></div>
+                <div class="total-count">Total: <span id="total">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../theme.js"></script>
+    <script src="../auth.js"></script>
+    <script>
+        let opType = 0;
+        let solNum = null, solDen = null;
+        let correctCount = 0, incorrectCount = 0;
+        let answered = false;
+
+        function setType(t) {
+            opType = t;
+            document.querySelectorAll('.difficulty-selector button').forEach((btn, i) => {
+                btn.classList.toggle('active', i === t);
+            });
+            newExercise();
+        }
+
+        function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a; }
+
+        function simplify(n, d) {
+            if (d < 0) { n = -n; d = -d; }
+            const g = gcd(Math.abs(n), Math.abs(d));
+            return [n / g, d / g];
+        }
+
+        function newExercise() {
+            answered = false;
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('ansNum').value = '';
+            document.getElementById('ansDen').value = '';
+
+            let a = randInt(1, 9), b = randInt(2, 9), c = randInt(1, 9), d = randInt(2, 9);
+            // Ensure different denominators for sum/subtraction
+            while (b === d && opType < 2) d = randInt(2, 9);
+            // For division, ensure c != 0
+            if (c === 0) c = 1;
+
+            const ops = ['+', '\u2212', '\u00d7', '\u00f7'];
+            let rNum, rDen;
+
+            switch (opType) {
+                case 0: // Sum
+                    rNum = a * d + c * b;
+                    rDen = b * d;
+                    break;
+                case 1: // Subtraction
+                    rNum = a * d - c * b;
+                    rDen = b * d;
+                    break;
+                case 2: // Multiplication
+                    rNum = a * c;
+                    rDen = b * d;
+                    break;
+                case 3: // Division
+                    rNum = a * d;
+                    rDen = b * c;
+                    break;
+            }
+
+            [solNum, solDen] = simplify(rNum, rDen);
+            document.getElementById('problem').textContent = `${a}/${b} ${ops[opType]} ${c}/${d} = ?`;
+            document.getElementById('hint').textContent = 'Dona la resposta com a fraccio simplificada';
+            document.getElementById('ansNum').focus();
+        }
+
+        function checkAnswer() {
+            if (solNum === null || answered) return;
+            const uNum = parseInt(document.getElementById('ansNum').value);
+            const uDen = parseInt(document.getElementById('ansDen').value);
+            if (isNaN(uNum) || isNaN(uDen) || uDen === 0) return;
+
+            answered = true;
+            const [sn, sd] = simplify(uNum, uDen);
+            const fb = document.getElementById('feedback');
+
+            if (sn === solNum && sd === solDen) {
+                fb.className = 'feedback correct';
+                fb.textContent = 'Correcte! Ben fet!';
+                correctCount++;
+            } else {
+                fb.className = 'feedback incorrect';
+                fb.textContent = `Incorrecte. La resposta correcta es ${solNum}/${solDen}.`;
+                incorrectCount++;
+            }
+
+            document.getElementById('correct').textContent = correctCount;
+            document.getElementById('incorrect').textContent = incorrectCount;
+            document.getElementById('total').textContent = correctCount + incorrectCount;
+        }
+
+        function showSolution() {
+            if (solNum === null) return;
+            const fb = document.getElementById('feedback');
+            fb.className = 'feedback solution';
+            fb.textContent = `Solucio: ${solNum}/${solDen}`;
+            if (!answered) {
+                answered = true;
+                incorrectCount++;
+                document.getElementById('incorrect').textContent = incorrectCount;
+                document.getElementById('total').textContent = correctCount + incorrectCount;
+            }
+        }
+
+        newExercise();
+    </script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proporcionalitat - Matematiques</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .math-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .math-nav { background: rgba(15,23,41, 0.85); }
+        .math-nav a { padding: 8px 16px; border-radius: var(--radius-full); border: none; color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: all 0.25s; background: transparent; }
+        .math-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .math-nav a.home { color: #059669; font-weight: 600; }
+        .math-nav a.home:hover { background: rgba(5,150,105,0.1); }
+
+        .hero { text-align: center; padding: 48px 24px 40px; border-bottom: 1px solid var(--border-subtle); position: relative; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 80% at 30% 0%, rgba(5,150,105,0.08) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 70% 20%, rgba(16,185,129,0.06) 0%, transparent 60%); pointer-events: none; }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; position: relative; }
+        .hero h1 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; position: relative; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+
+        .theory-card { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+        .theory-card:hover { box-shadow: var(--shadow-sm); }
+        .theory-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+        .theory-card h3 .icon { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+        .theory-card p, .theory-card li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+        .formula { background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px 16px; font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 600; color: var(--text-primary); margin: 10px 0; text-align: center; }
+        .example { background: rgba(5,150,105,0.06); border-left: 3px solid #059669; padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 10px 0; font-size: 0.88rem; color: var(--text-secondary); }
+
+        .practice-section { background: var(--bg-raised); border: 2px solid rgba(5,150,105,0.2); border-radius: var(--radius-xl); padding: 32px; margin-top: 32px; }
+        .practice-section h2 { font-size: 1.3rem; font-weight: 800; margin: 0 0 20px; color: var(--text-primary); }
+        .practice-section h2 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .difficulty-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .difficulty-selector button { padding: 8px 18px; border-radius: var(--radius-full); border: 2px solid var(--border-subtle); background: transparent; color: var(--text-secondary); cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: all 0.25s; font-family: var(--font-sans); }
+        .difficulty-selector button:hover { border-color: #059669; color: #059669; }
+        .difficulty-selector button.active { background: linear-gradient(135deg, #059669, #10b981); color: #fff; border-color: transparent; }
+
+        .exercise-display { background: var(--bg-overlay); border-radius: var(--radius-lg); padding: 32px; text-align: center; margin-bottom: 20px; }
+        .exercise-display .problem { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; line-height: 1.6; }
+        .exercise-display .hint { font-size: 0.85rem; color: var(--text-muted); }
+
+        .answer-row { display: flex; gap: 10px; margin-bottom: 16px; justify-content: center; }
+        .answer-row input { width: 160px; padding: 14px 18px; border-radius: var(--radius-md); border: 2px solid var(--border-subtle); background: var(--bg-base); color: var(--text-primary); font-size: 1.1rem; font-weight: 600; font-family: var(--font-sans); outline: none; text-align: center; }
+        .answer-row input:focus { border-color: #059669; }
+
+        .btn-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .btn { padding: 12px 24px; border-radius: var(--radius-full); border: none; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: var(--font-sans); transition: all 0.25s; }
+        .btn-check { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+        .btn-check:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(5,150,105,0.3); }
+        .btn-new { background: var(--bg-overlay); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { background: var(--bg-hover); }
+        .btn-solution { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+        .btn-solution:hover { background: var(--bg-overlay); }
+
+        .feedback { margin-top: 16px; padding: 14px 18px; border-radius: var(--radius-md); font-size: 0.92rem; font-weight: 600; display: none; }
+        .feedback.correct { display: block; background: var(--green-soft); color: #059669; border: 1px solid rgba(5,150,105,0.2); }
+        .feedback.incorrect { display: block; background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+        .feedback.solution { display: block; background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+
+        .score-bar { display: flex; justify-content: center; gap: 24px; margin-top: 20px; padding: 14px; background: var(--bg-overlay); border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600; }
+        .score-bar .correct-count { color: #059669; }
+        .score-bar .incorrect-count { color: var(--red); }
+        .score-bar .total-count { color: var(--text-secondary); }
+    </style>
+</head>
+<body>
+    <div class="math-nav">
+        <a href="../index.html" class="home">&#8592; Cursos</a>
+        <a href="index.html">Inici</a>
+    </div>
+
+    <div class="hero">
+        <h1><span>Proporcionalitat</span></h1>
+        <p>Raons, proporcions, regla de tres i percentatges</p>
+    </div>
+
+    <div class="container">
+        <div class="theory-card">
+            <h3><span class="icon">1</span> Rao i proporcio</h3>
+            <p>Una <strong>rao</strong> es la comparacio entre dues quantitats. Una <strong>proporcio</strong> es la igualtat de dues raons.</p>
+            <div class="formula">a/b = c/d &rarr; a &times; d = b &times; c (producte de extrems = producte de mitjos)</div>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">2</span> Regla de tres directa</h3>
+            <p>Quan dues magnituds son <strong>directament proporcionals</strong>: si una augmenta, l'altra tambe augmenta.</p>
+            <div class="formula">a &rarr; b | c &rarr; x | x = (c &times; b) / a</div>
+            <div class="example">Exemple: Si 3 kg costen 12 EUR, quant costen 5 kg? x = (5 &times; 12) / 3 = 20 EUR</div>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">3</span> Regla de tres inversa</h3>
+            <p>Quan dues magnituds son <strong>inversament proporcionals</strong>: si una augmenta, l'altra disminueix.</p>
+            <div class="formula">a &rarr; b | c &rarr; x | x = (a &times; b) / c</div>
+            <div class="example">Exemple: 4 obrers triguen 6 dies. Quant triguen 8 obrers? x = (4 &times; 6) / 8 = 3 dies</div>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">4</span> Percentatges</h3>
+            <p>El <strong>percentatge</strong> es una fraccio amb denominador 100. Indica quantes parts de cada 100.</p>
+            <div class="formula">x% de N = (x &times; N) / 100</div>
+            <div class="example">Exemple: 25% de 80 = (25 &times; 80) / 100 = 20</div>
+            <p><strong>Descompte:</strong> Preu final = Preu &minus; (Percentatge &times; Preu / 100)</p>
+        </div>
+
+        <div class="practice-section">
+            <h2><span>Practica</span></h2>
+
+            <div class="difficulty-selector">
+                <button class="active" onclick="setType(0)">Regla de tres directa</button>
+                <button onclick="setType(1)">Regla de tres inversa</button>
+                <button onclick="setType(2)">Percentatge</button>
+                <button onclick="setType(3)">Descompte</button>
+            </div>
+
+            <div class="exercise-display">
+                <div class="problem" id="problem">--</div>
+                <div class="hint" id="hint"></div>
+            </div>
+
+            <div class="answer-row">
+                <input type="number" id="answer" step="0.01" placeholder="Resposta..." onkeydown="if(event.key==='Enter') checkAnswer()">
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-check" onclick="checkAnswer()">Comprovar</button>
+                <button class="btn btn-new" onclick="newExercise()">Nou exercici</button>
+                <button class="btn btn-solution" onclick="showSolution()">Mostrar solucio</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="score-bar">
+                <div class="correct-count">Encerts: <span id="correct">0</span></div>
+                <div class="incorrect-count">Errors: <span id="incorrect">0</span></div>
+                <div class="total-count">Total: <span id="total">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../theme.js"></script>
+    <script src="../auth.js"></script>
+    <script>
+        let exerciseType = 0;
+        let currentAnswer = null;
+        let correctCount = 0, incorrectCount = 0;
+        let answered = false;
+
+        function setType(t) {
+            exerciseType = t;
+            document.querySelectorAll('.difficulty-selector button').forEach((btn, i) => btn.classList.toggle('active', i === t));
+            newExercise();
+        }
+
+        function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        function newExercise() {
+            answered = false;
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('answer').value = '';
+
+            let problem, hint = '';
+            switch (exerciseType) {
+                case 0: { // Direct rule of three
+                    const a = randInt(2, 10);
+                    const b = a * randInt(2, 8);
+                    const c = randInt(2, 15);
+                    currentAnswer = Math.round((c * b / a) * 100) / 100;
+                    const items = [
+                        ['quilograms', 'EUR'],
+                        ['litres', 'EUR'],
+                        ['metres de tela', 'EUR'],
+                        ['hores', 'peces']
+                    ];
+                    const item = items[randInt(0, items.length - 1)];
+                    problem = `Si ${a} ${item[0]} costen ${b} ${item[1]}, quant costen ${c} ${item[0]}?`;
+                    hint = 'Regla de tres directa: x = (c \u00d7 b) / a';
+                    break;
+                }
+                case 1: { // Inverse rule of three
+                    const a = randInt(2, 8);
+                    const b = randInt(3, 12);
+                    const c = randInt(2, 15);
+                    while (c === a) c = randInt(2, 15);
+                    currentAnswer = Math.round((a * b / c) * 100) / 100;
+                    problem = `Si ${a} obrers triguen ${b} dies a fer una feina, quants dies trigaran ${c} obrers?`;
+                    hint = 'Regla de tres inversa: x = (a \u00d7 b) / c';
+                    break;
+                }
+                case 2: { // Percentage
+                    const pct = randInt(1, 9) * 5; // 5, 10, 15... 45
+                    const total = randInt(2, 20) * 10;
+                    currentAnswer = Math.round(pct * total / 100 * 100) / 100;
+                    problem = `Quant es el ${pct}% de ${total}?`;
+                    hint = 'x = (percentatge \u00d7 total) / 100';
+                    break;
+                }
+                case 3: { // Discount
+                    const price = randInt(5, 50) * 10;
+                    const discount = randInt(1, 7) * 5;
+                    currentAnswer = Math.round(price * (1 - discount / 100) * 100) / 100;
+                    problem = `Un producte costa ${price} EUR i te un descompte del ${discount}%. Quin es el preu final?`;
+                    hint = 'Preu final = Preu \u2212 (Descompte \u00d7 Preu / 100)';
+                    break;
+                }
+            }
+
+            document.getElementById('problem').textContent = problem;
+            document.getElementById('hint').textContent = hint;
+            document.getElementById('answer').focus();
+        }
+
+        function checkAnswer() {
+            if (currentAnswer === null || answered) return;
+            const userAnswer = parseFloat(document.getElementById('answer').value);
+            if (isNaN(userAnswer)) return;
+
+            answered = true;
+            const fb = document.getElementById('feedback');
+            const tolerance = Math.abs(currentAnswer * 0.01) + 0.01;
+
+            if (Math.abs(userAnswer - currentAnswer) <= tolerance) {
+                fb.className = 'feedback correct';
+                fb.textContent = 'Correcte! Ben fet!';
+                correctCount++;
+            } else {
+                fb.className = 'feedback incorrect';
+                fb.textContent = `Incorrecte. La resposta correcta es ${currentAnswer}.`;
+                incorrectCount++;
+            }
+            document.getElementById('correct').textContent = correctCount;
+            document.getElementById('incorrect').textContent = incorrectCount;
+            document.getElementById('total').textContent = correctCount + incorrectCount;
+        }
+
+        function showSolution() {
+            if (currentAnswer === null) return;
+            const fb = document.getElementById('feedback');
+            fb.className = 'feedback solution';
+            fb.textContent = `Solucio: ${currentAnswer}`;
+            if (!answered) { answered = true; incorrectCount++; document.getElementById('incorrect').textContent = incorrectCount; document.getElementById('total').textContent = correctCount + incorrectCount; }
+        }
+
+        newExercise();
+    </script>
+</body>
+</html>

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problemes d'enunciat - Matemàtiques</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .math-nav {
+            background: rgba(240,240,243, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+        [data-theme="dark"] .math-nav { background: rgba(9, 9, 11, 0.75); }
+        .math-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.25s;
+            background: transparent;
+        }
+        .math-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .math-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .math-nav a.home { color: #059669; font-weight: 600; }
+        .math-nav a.home:hover { background: rgba(5, 150, 105, 0.1); }
+
+        .hero-mini {
+            text-align: center;
+            padding: 32px 24px 28px;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+        .hero-mini::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 50% 80% at 50% 0%, rgba(5, 150, 105, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .hero-mini h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            position: relative;
+        }
+        .hero-mini h1 span {
+            background: linear-gradient(135deg, #059669, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-mini p {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            position: relative;
+            margin-top: 4px;
+        }
+
+        .container { max-width: 750px; margin: 0 auto; padding: 32px 20px; }
+
+        .exercise-card {
+            background: var(--bg-raised);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+        }
+
+        .score-bar {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .score-item { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; }
+        .score-item .num { font-weight: 700; font-size: 1.1rem; }
+        .score-ok .num { color: var(--green); }
+        .score-fail .num { color: var(--red); }
+        .score-total .num { color: var(--blue); }
+
+        .difficulty-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .diff-btn {
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-default);
+            background: var(--bg-overlay);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .diff-btn:hover { border-color: var(--border-strong); color: var(--text-primary); }
+        .diff-btn.active {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .problem-box {
+            background: var(--bg-overlay);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-subtle);
+            line-height: 1.7;
+        }
+        .problem-box .problem-type {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: rgba(5, 150, 105, 0.1);
+            color: #059669;
+            margin-bottom: 12px;
+        }
+        .problem-box .problem-text {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .answer-section {
+            margin-bottom: 16px;
+        }
+        .answer-section label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+        }
+        .answer-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .answer-row input {
+            width: 140px;
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-default);
+            background: var(--bg-raised);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            text-align: center;
+            outline: none;
+            transition: border-color 0.25s;
+        }
+        .answer-row input:focus { border-color: #059669; box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15); }
+        .answer-row .unit {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-check {
+            padding: 10px 24px;
+            border-radius: var(--radius-full);
+            border: none;
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #fff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .btn-check:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-check:active { transform: scale(0.97); }
+
+        .btn-show {
+            padding: 10px 24px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-default);
+            background: var(--bg-overlay);
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .btn-show:hover { border-color: var(--border-strong); color: var(--text-primary); }
+
+        .btn-new {
+            padding: 10px 24px;
+            border-radius: var(--radius-full);
+            border: none;
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #fff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .btn-new:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+        .feedback {
+            text-align: center;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            margin-top: 16px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .feedback.correct { background: var(--green-soft); color: var(--green); display: block; }
+        .feedback.wrong { background: var(--red-soft); color: var(--red); display: block; }
+
+        .solution-box {
+            background: var(--bg-overlay);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-top: 16px;
+            border-left: 3px solid #059669;
+            display: none;
+        }
+        .solution-box.show { display: block; }
+        .solution-box h4 { font-size: 0.9rem; font-weight: 700; color: #059669; margin-bottom: 10px; }
+        .step {
+            padding: 6px 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border-subtle);
+            line-height: 1.6;
+        }
+        .step:last-child { border-bottom: none; }
+        .step .step-label {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-family: var(--font-sans);
+            display: block;
+            margin-bottom: 2px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+            .hero-mini h1 { font-size: 1.3rem; }
+            .container { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="math-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="eq1.html">Eq. 1r grau</a>
+    <a href="eq2.html">Eq. 2n grau</a>
+    <a href="sist.html">Sistemes</a>
+    <a href="prob.html" class="active">Problemes</a>
+</div>
+
+<div class="hero-mini">
+    <h1><span>Problemes d'enunciat</span></h1>
+    <p>Llegeix, planteja l'equació i resol. 10 tipus de problemes diferents.</p>
+</div>
+
+<div class="container">
+
+    <div class="score-bar">
+        <div class="score-item score-ok">Encerts: <span class="num" id="ok">0</span></div>
+        <div class="score-item score-fail">Errors: <span class="num" id="fail">0</span></div>
+        <div class="score-item score-total">Total: <span class="num" id="total">0</span></div>
+    </div>
+
+    <div class="difficulty-bar">
+        <button class="diff-btn active" onclick="setDiff(1)">Fàcil</button>
+        <button class="diff-btn" onclick="setDiff(2)">Mitjà</button>
+        <button class="diff-btn" onclick="setDiff(3)">Difícil</button>
+    </div>
+
+    <div class="exercise-card">
+        <div class="problem-box">
+            <div class="problem-type" id="pType">Edat</div>
+            <div class="problem-text" id="pText"></div>
+        </div>
+
+        <div class="answer-section" id="answerSection">
+            <!-- dynamically filled -->
+        </div>
+
+        <div class="btn-row">
+            <button class="btn-check" onclick="check()">Comprovar</button>
+            <button class="btn-show" onclick="showSol()">Veure solució</button>
+            <button class="btn-new" onclick="generate()">Nou problema</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="solution-box" id="solBox">
+            <h4>Resolució</h4>
+            <div id="steps"></div>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">Matemàtiques - Problemes d'enunciat</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+(function(){
+    let okC=0, failC=0, totalC=0;
+    let diff=1;
+    let currentAnswers=[]; // [{label, value, unit}]
+    let currentSteps='';
+    let currentType='';
+
+    function rnd(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+    function parseNum(s){
+        s=s.trim().replace(',','.');
+        if(s==='') return NaN;
+        if(s.includes('/')){ let p=s.split('/'); return parseFloat(p[0])/parseFloat(p[1]); }
+        return parseFloat(s);
+    }
+    function approx(a,b){ return Math.abs(a-b)<0.05; }
+    function round2(v){ return Math.round(v*100)/100; }
+
+    // ========== 10 PROBLEM TEMPLATES ==========
+
+    function genAge(){
+        let age = rnd(8,30);
+        let diff2 = rnd(2,10);
+        let years = rnd(2,8);
+        let futAge = age + years;
+        let futOther = (age+diff2) + years;
+        currentType='Edat';
+        return {
+            text: 'En Pere té '+age+' anys i la seva germana té '+(age+diff2)+' anys. D\'aquí a quants anys la suma de les seves edats serà '+(futAge+futOther)+'?',
+            answers: [{label:'Anys', value: years, unit:'anys'}],
+            steps: '<div class="step"><span class="step-label">Plantejament</span>Edats actuals: '+age+' i '+(age+diff2)+'<br>D\'aquí a x anys: ('+age+'+x) + ('+(age+diff2)+'+x) = '+(futAge+futOther)+'</div>'
+                + '<div class="step"><span class="step-label">Resolució</span>'+(2*age+diff2)+' + 2x = '+(futAge+futOther)+'<br>2x = '+(futAge+futOther-(2*age+diff2))+'<br>x = '+years+'</div>'
+        };
+    }
+
+    function genMoney(){
+        let price = rnd(3,15);
+        let qty = rnd(2,8);
+        let total = price*qty;
+        let extra = rnd(5,20);
+        let change = extra + total - total;
+        currentType='Diners';
+        return {
+            text: 'Una llibreta costa '+price+' euros. Si en compro '+qty+' i pago amb un bitllet de '+(total+extra)+' euros, quant em tornaran de canvi?',
+            answers: [{label:'Canvi', value: extra, unit:'\u20AC'}],
+            steps: '<div class="step"><span class="step-label">Cost total</span>'+qty+' \u00D7 '+price+' = '+total+' \u20AC</div>'
+                + '<div class="step"><span class="step-label">Canvi</span>'+(total+extra)+' - '+total+' = '+extra+' \u20AC</div>'
+        };
+    }
+
+    function genSpeed(){
+        let speed = rnd(40,120);
+        let time = rnd(2,6);
+        let dist = speed*time;
+        currentType='Velocitat';
+        return {
+            text: 'Un cotxe viatja a '+speed+' km/h durant '+time+' hores. Quina distància recorre?',
+            answers: [{label:'Distància', value: dist, unit:'km'}],
+            steps: '<div class="step"><span class="step-label">Fórmula</span>d = v \u00D7 t</div>'
+                + '<div class="step"><span class="step-label">Càlcul</span>d = '+speed+' \u00D7 '+time+' = '+dist+' km</div>'
+        };
+    }
+
+    function genPerimeter(){
+        let l = rnd(3,15);
+        let w = rnd(2,12);
+        let per = 2*(l+w);
+        currentType='Geometria';
+        return {
+            text: 'Un rectangle té '+l+' cm de llargada i '+w+' cm d\'amplada. Quin és el seu perímetre?',
+            answers: [{label:'Perímetre', value: per, unit:'cm'}],
+            steps: '<div class="step"><span class="step-label">Fórmula</span>P = 2 \u00D7 (l + a)</div>'
+                + '<div class="step"><span class="step-label">Càlcul</span>P = 2 \u00D7 ('+l+' + '+w+') = 2 \u00D7 '+(l+w)+' = '+per+' cm</div>'
+        };
+    }
+
+    function genConsecutive(){
+        let n = rnd(5,30);
+        let sum = n + (n+1) + (n+2);
+        currentType='Nombres consecutius';
+        return {
+            text: 'Tres nombres enters consecutius sumen '+sum+'. Quins són?',
+            answers: [
+                {label:'Primer', value: n, unit:''},
+                {label:'Segon', value: n+1, unit:''},
+                {label:'Tercer', value: n+2, unit:''}
+            ],
+            steps: '<div class="step"><span class="step-label">Plantejament</span>x + (x+1) + (x+2) = '+sum+'</div>'
+                + '<div class="step"><span class="step-label">Resolució</span>3x + 3 = '+sum+'<br>3x = '+(sum-3)+'<br>x = '+n+'</div>'
+                + '<div class="step"><span class="step-label">Nombres</span>'+n+', '+(n+1)+', '+(n+2)+'</div>'
+        };
+    }
+
+    function genMixture(){
+        let pA=rnd(2,6), pB=rnd(1,4);
+        let kgA=rnd(2,8), kgB=rnd(2,8);
+        let totalCost=pA*kgA + pB*kgB;
+        let totalKg=kgA+kgB;
+        let priceMix=round2(totalCost/totalKg);
+        currentType='Mescles';
+        return {
+            text: 'Barregem '+kgA+' kg de cafè a '+pA+' \u20AC/kg amb '+kgB+' kg de cafè a '+pB+' \u20AC/kg. A quin preu surt el kg de la mescla?',
+            answers: [{label:'Preu/kg', value: priceMix, unit:'\u20AC/kg'}],
+            steps: '<div class="step"><span class="step-label">Cost total</span>'+kgA+' \u00D7 '+pA+' + '+kgB+' \u00D7 '+pB+' = '+(pA*kgA)+' + '+(pB*kgB)+' = '+totalCost+' \u20AC</div>'
+                + '<div class="step"><span class="step-label">Pes total</span>'+kgA+' + '+kgB+' = '+totalKg+' kg</div>'
+                + '<div class="step"><span class="step-label">Preu mescla</span>'+totalCost+' / '+totalKg+' = '+priceMix+' \u20AC/kg</div>'
+        };
+    }
+
+    function genWork(){
+        let rateA=rnd(2,6);
+        let rateB=rnd(2,6);
+        let together=round2(1/(1/rateA+1/rateB));
+        currentType='Treball';
+        return {
+            text: 'L\'Anna pot pintar una habitació en '+rateA+' hores i en Marc en '+rateB+' hores. Quantes hores trigaran si treballen junts? (arrodoneix a 2 decimals)',
+            answers: [{label:'Hores', value: together, unit:'h'}],
+            steps: '<div class="step"><span class="step-label">Ritme Anna</span>1/'+rateA+' habitació/hora</div>'
+                + '<div class="step"><span class="step-label">Ritme Marc</span>1/'+rateB+' habitació/hora</div>'
+                + '<div class="step"><span class="step-label">Junts</span>1/'+rateA+' + 1/'+rateB+' = '+round2(1/rateA+1/rateB)+' hab/h</div>'
+                + '<div class="step"><span class="step-label">Temps</span>1 / '+round2(1/rateA+1/rateB)+' = '+together+' hores</div>'
+        };
+    }
+
+    function genPercentage(){
+        let original=rnd(40,200);
+        let pct=rnd(10,50);
+        let discount=round2(original*pct/100);
+        let final_=round2(original-discount);
+        currentType='Percentatge';
+        return {
+            text: 'Una jaqueta costa '+original+' \u20AC i te la fan amb un '+pct+'% de descompte. Quin és el preu final?',
+            answers: [{label:'Preu final', value: final_, unit:'\u20AC'}],
+            steps: '<div class="step"><span class="step-label">Descompte</span>'+original+' \u00D7 '+pct+'/100 = '+discount+' \u20AC</div>'
+                + '<div class="step"><span class="step-label">Preu final</span>'+original+' - '+discount+' = '+final_+' \u20AC</div>'
+        };
+    }
+
+    function genProportionality(){
+        let qty1=rnd(2,8);
+        let price1=rnd(3,12);
+        let qty2=rnd(3,10);
+        while(qty2===qty1) qty2=rnd(3,10);
+        let price2=round2(price1*qty2/qty1);
+        currentType='Proporcionalitat';
+        return {
+            text: 'Si '+qty1+' quilos de pomes costen '+price1+' \u20AC, quant costaran '+qty2+' quilos?',
+            answers: [{label:'Preu', value: price2, unit:'\u20AC'}],
+            steps: '<div class="step"><span class="step-label">Regla de tres</span>'+qty1+' kg \u2192 '+price1+' \u20AC<br>'+qty2+' kg \u2192 x \u20AC</div>'
+                + '<div class="step"><span class="step-label">Càlcul</span>x = '+price1+' \u00D7 '+qty2+' / '+qty1+' = '+price2+' \u20AC</div>'
+        };
+    }
+
+    function genArea(){
+        let base=rnd(3,15);
+        let height=rnd(3,12);
+        let area=round2(base*height/2);
+        currentType='Àrea';
+        return {
+            text: 'Un triangle té una base de '+base+' cm i una altura de '+height+' cm. Quina és la seva àrea?',
+            answers: [{label:'Àrea', value: area, unit:'cm\u00B2'}],
+            steps: '<div class="step"><span class="step-label">Fórmula</span>A = base \u00D7 altura / 2</div>'
+                + '<div class="step"><span class="step-label">Càlcul</span>A = '+base+' \u00D7 '+height+' / 2 = '+area+' cm\u00B2</div>'
+        };
+    }
+
+    const easyTemplates = [genAge, genMoney, genSpeed, genPerimeter, genPercentage];
+    const medTemplates  = [genAge, genMoney, genSpeed, genConsecutive, genPercentage, genProportionality, genArea, genMixture];
+    const hardTemplates = [genAge, genConsecutive, genMixture, genWork, genProportionality, genPercentage, genArea, genSpeed, genPerimeter, genMoney];
+
+    window.setDiff=function(d){
+        diff=d;
+        document.querySelectorAll('.diff-btn').forEach((b,i)=> b.classList.toggle('active',i===d-1));
+        generate();
+    };
+
+    function renderAnswerFields(){
+        let sec=document.getElementById('answerSection');
+        let html='';
+        currentAnswers.forEach(function(a,i){
+            html+='<div class="answer-row" style="margin-bottom:10px;">';
+            html+='<label style="min-width:80px;">'+a.label+':</label>';
+            html+='<input type="text" id="ans'+i+'" autocomplete="off" placeholder="?">';
+            if(a.unit) html+='<span class="unit">'+a.unit+'</span>';
+            html+='</div>';
+        });
+        sec.innerHTML=html;
+
+        // Enter key navigation
+        currentAnswers.forEach(function(a,i){
+            document.getElementById('ans'+i).addEventListener('keydown',function(e){
+                if(e.key==='Enter'){
+                    if(i<currentAnswers.length-1) document.getElementById('ans'+(i+1)).focus();
+                    else check();
+                }
+            });
+        });
+    }
+
+    window.generate=function(){
+        document.getElementById('feedback').className='feedback';
+        document.getElementById('feedback').textContent='';
+        document.getElementById('solBox').classList.remove('show');
+
+        let templates;
+        if(diff===1) templates=easyTemplates;
+        else if(diff===2) templates=medTemplates;
+        else templates=hardTemplates;
+
+        let tpl = templates[rnd(0, templates.length-1)];
+        let prob = tpl();
+
+        currentAnswers=prob.answers;
+        currentSteps=prob.steps;
+
+        document.getElementById('pType').textContent=currentType;
+        document.getElementById('pText').textContent=prob.text;
+        document.getElementById('steps').innerHTML=currentSteps;
+
+        renderAnswerFields();
+    };
+
+    window.check=function(){
+        let allCorrect=true;
+        for(let i=0;i<currentAnswers.length;i++){
+            let v=parseNum(document.getElementById('ans'+i).value);
+            if(isNaN(v)){ alert('Introdueix un valor numèric per a "'+currentAnswers[i].label+'"'); return; }
+            if(!approx(v, currentAnswers[i].value)) allCorrect=false;
+        }
+        totalC++;
+
+        let fb=document.getElementById('feedback');
+        if(allCorrect){
+            okC++;
+            fb.className='feedback correct';
+            let resp = currentAnswers.map(function(a){ return a.label+' = '+round2(a.value)+(a.unit?' '+a.unit:''); }).join(', ');
+            fb.textContent='Correcte! '+resp;
+        } else {
+            failC++;
+            fb.className='feedback wrong';
+            let resp = currentAnswers.map(function(a){ return a.label+' = '+round2(a.value)+(a.unit?' '+a.unit:''); }).join(', ');
+            fb.textContent='Incorrecte. '+resp;
+        }
+        document.getElementById('ok').textContent=okC;
+        document.getElementById('fail').textContent=failC;
+        document.getElementById('total').textContent=totalC;
+    };
+
+    window.showSol=function(){
+        document.getElementById('solBox').classList.toggle('show');
+    };
+
+    generate();
+})();
+</script>
+</body>
+</html>

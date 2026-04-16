@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equacions de 1r grau - Matemàtiques</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .math-nav {
+            background: rgba(240,240,243, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+        [data-theme="dark"] .math-nav { background: rgba(9, 9, 11, 0.75); }
+        .math-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.25s;
+            background: transparent;
+        }
+        .math-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .math-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .math-nav a.home { color: #059669; font-weight: 600; }
+        .math-nav a.home:hover { background: rgba(5, 150, 105, 0.1); }
+
+        .hero-mini {
+            text-align: center;
+            padding: 32px 24px 28px;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+        .hero-mini::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 50% 80% at 50% 0%, rgba(37, 99, 235, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .hero-mini h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            position: relative;
+        }
+        .hero-mini h1 span {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-mini p {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            position: relative;
+            margin-top: 4px;
+        }
+
+        .container { max-width: 700px; margin: 0 auto; padding: 32px 20px; }
+
+        .exercise-card {
+            background: var(--bg-raised);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+        }
+
+        .score-bar {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .score-item {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .score-item .num { font-weight: 700; font-size: 1.1rem; }
+        .score-ok .num { color: var(--green); }
+        .score-fail .num { color: var(--red); }
+        .score-total .num { color: var(--blue); }
+
+        .difficulty-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .diff-btn {
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-default);
+            background: var(--bg-overlay);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .diff-btn:hover { border-color: var(--border-strong); color: var(--text-primary); }
+        .diff-btn.active {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .math-box {
+            background: var(--bg-overlay);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-subtle);
+        }
+        .math-box .equation {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.02em;
+        }
+
+        .answer-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .answer-row label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .answer-row input {
+            width: 120px;
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-default);
+            background: var(--bg-raised);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            text-align: center;
+            outline: none;
+            transition: border-color 0.25s;
+        }
+        .answer-row input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-check {
+            padding: 10px 24px;
+            border-radius: var(--radius-full);
+            border: none;
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #fff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .btn-check:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-check:active { transform: scale(0.97); }
+
+        .btn-show {
+            padding: 10px 24px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-default);
+            background: var(--bg-overlay);
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .btn-show:hover { border-color: var(--border-strong); color: var(--text-primary); }
+
+        .btn-new {
+            padding: 10px 24px;
+            border-radius: var(--radius-full);
+            border: none;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #fff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .btn-new:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+        .feedback {
+            text-align: center;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            margin-top: 16px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .feedback.correct {
+            background: var(--green-soft);
+            color: var(--green);
+            display: block;
+        }
+        .feedback.wrong {
+            background: var(--red-soft);
+            color: var(--red);
+            display: block;
+        }
+
+        .solution-box {
+            background: var(--bg-overlay);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-top: 16px;
+            border-left: 3px solid #3b82f6;
+            display: none;
+        }
+        .solution-box.show { display: block; }
+        .solution-box h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--blue);
+            margin-bottom: 10px;
+        }
+        .step {
+            padding: 6px 0;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            font-family: 'Courier New', monospace;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .step:last-child { border-bottom: none; }
+        .step .step-label {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-family: var(--font-sans);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        @media (max-width: 640px) {
+            .hero-mini h1 { font-size: 1.3rem; }
+            .math-box .equation { font-size: 1.2rem; }
+            .container { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="math-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="eq1.html" class="active">Eq. 1r grau</a>
+    <a href="eq2.html">Eq. 2n grau</a>
+    <a href="sist.html">Sistemes</a>
+    <a href="prob.html">Problemes</a>
+</div>
+
+<div class="hero-mini">
+    <h1><span>Equacions de 1r grau</span></h1>
+    <p>Practica resolent equacions lineals amb coeficients aleatoris</p>
+</div>
+
+<div class="container">
+
+    <div class="score-bar">
+        <div class="score-item score-ok">Encerts: <span class="num" id="ok">0</span></div>
+        <div class="score-item score-fail">Errors: <span class="num" id="fail">0</span></div>
+        <div class="score-item score-total">Total: <span class="num" id="total">0</span></div>
+    </div>
+
+    <div class="difficulty-bar">
+        <button class="diff-btn active" onclick="setDiff(1)">Fàcil</button>
+        <button class="diff-btn" onclick="setDiff(2)">Mitjà</button>
+        <button class="diff-btn" onclick="setDiff(3)">Difícil</button>
+    </div>
+
+    <div class="exercise-card">
+        <div class="math-box">
+            <div class="equation" id="eqDisplay"></div>
+        </div>
+
+        <div class="answer-row">
+            <label for="ans">x =</label>
+            <input type="text" id="ans" autocomplete="off" placeholder="Resposta">
+        </div>
+
+        <div class="btn-row">
+            <button class="btn-check" onclick="check()">Comprovar</button>
+            <button class="btn-show" onclick="showSol()">Veure solució</button>
+            <button class="btn-new" onclick="generate()">Nova equació</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="solution-box" id="solBox">
+            <h4>Resolució pas a pas</h4>
+            <div id="steps"></div>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">Matemàtiques - Equacions de 1r grau</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+(function(){
+    let ok=0, fail=0, total=0;
+    let diff=1;
+    let sol=0;
+    let eqStr='';
+    // equation: a*x + b = c*x + d
+    let A,B,C,D;
+
+    function rnd(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+    function parseNum(s){
+        s=s.trim().replace(',','.');
+        let v=parseFloat(s);
+        // accept fractions like 3/2
+        if(s.includes('/')){
+            let p=s.split('/');
+            v=parseFloat(p[0])/parseFloat(p[1]);
+        }
+        return v;
+    }
+
+    function frac(num,den){
+        if(den===0) return 'indefinit';
+        if(num%den===0) return ''+(num/den);
+        let sign = (num<0)!==(den<0) ? '-' : '';
+        let n=Math.abs(num), d=Math.abs(den);
+        let g=gcd(n,d); n/=g; d/=g;
+        return sign+n+'/'+d;
+    }
+    function gcd(a,b){ return b?gcd(b,a%b):a; }
+
+    function term(coef, varName, first){
+        if(coef===0) return '';
+        let s='';
+        if(first){
+            if(coef===-1 && varName) s='-';
+            else if(coef===1 && varName) s='';
+            else s=''+coef;
+        } else {
+            if(coef>0){
+                s=' + ';
+                if(coef===1 && varName) s+='';
+                else s+=coef;
+            } else {
+                s=' - ';
+                let ac=Math.abs(coef);
+                if(ac===1 && varName) s+='';
+                else s+=ac;
+            }
+        }
+        if(varName) s+=varName;
+        return s;
+    }
+
+    function buildSide(xCoef, constant){
+        let s='';
+        if(xCoef!==0){
+            s+=term(xCoef,'x',true);
+            if(constant!==0) s+=term(constant,'',false);
+        } else {
+            s+=''+constant;
+        }
+        return s;
+    }
+
+    window.setDiff=function(d){
+        diff=d;
+        document.querySelectorAll('.diff-btn').forEach((b,i)=>{
+            b.classList.toggle('active', i===d-1);
+        });
+        generate();
+    };
+
+    window.generate=function(){
+        document.getElementById('feedback').className='feedback';
+        document.getElementById('feedback').textContent='';
+        document.getElementById('solBox').classList.remove('show');
+        document.getElementById('ans').value='';
+
+        if(diff===1){
+            // ax + b = c  (a!=0)
+            A=rnd(1,5)*(Math.random()<0.3?-1:1);
+            B=rnd(-10,10);
+            C=0; D=rnd(-15,15);
+        } else if(diff===2){
+            // ax + b = cx + d (a!=c)
+            A=rnd(1,8)*(Math.random()<0.4?-1:1);
+            B=rnd(-12,12);
+            do{ C=rnd(-6,6); }while(C===A);
+            D=rnd(-15,15);
+        } else {
+            // larger coefs, possible fractions
+            A=rnd(2,15)*(Math.random()<0.4?-1:1);
+            B=rnd(-20,20);
+            do{ C=rnd(-10,10); }while(C===A);
+            D=rnd(-25,25);
+        }
+
+        // sol = (D-B)/(A-C)
+        let num=D-B, den=A-C;
+        sol = num/den;
+        eqStr = buildSide(A,B) + ' = ' + buildSide(C,D);
+        document.getElementById('eqDisplay').textContent = eqStr;
+
+        // build steps
+        let stepsHTML='';
+        stepsHTML+='<div class="step"><span class="step-label">Equació original</span>'+eqStr+'</div>';
+
+        if(C!==0){
+            stepsHTML+='<div class="step"><span class="step-label">Passem les x a l\'esquerra</span>'
+                +buildSide(A-C,0)+term(B,'',false)+' = '+D+'</div>';
+        }
+        if(B!==0){
+            let leftX=A-C;
+            stepsHTML+='<div class="step"><span class="step-label">Passem els nombres a la dreta</span>'
+                +buildSide(leftX,0)+' = '+(D-B)+'</div>';
+        }
+        let leftX=A-C;
+        let rightVal=D-B;
+        if(leftX!==1 && leftX!==-1){
+            stepsHTML+='<div class="step"><span class="step-label">Dividim per '+leftX+'</span>'
+                +'x = '+frac(rightVal,leftX)+'</div>';
+        } else if(leftX===-1){
+            stepsHTML+='<div class="step"><span class="step-label">Canviem signe</span>'
+                +'x = '+(-rightVal)+'</div>';
+        } else {
+            stepsHTML+='<div class="step"><span class="step-label">Resultat</span>'
+                +'x = '+rightVal+'</div>';
+        }
+
+        document.getElementById('steps').innerHTML=stepsHTML;
+    };
+
+    window.check=function(){
+        let v=parseNum(document.getElementById('ans').value);
+        if(isNaN(v)){ alert('Introdueix un nombre vàlid'); return; }
+        total++;
+        let fb=document.getElementById('feedback');
+        if(Math.abs(v-sol)<0.001){
+            ok++;
+            fb.className='feedback correct';
+            fb.textContent='Correcte! x = '+frac(D-B, A-C);
+        } else {
+            fail++;
+            fb.className='feedback wrong';
+            fb.textContent='Incorrecte. La resposta correcta és x = '+frac(D-B, A-C);
+        }
+        document.getElementById('ok').textContent=ok;
+        document.getElementById('fail').textContent=fail;
+        document.getElementById('total').textContent=total;
+    };
+
+    window.showSol=function(){
+        document.getElementById('solBox').classList.toggle('show');
+    };
+
+    // Enter key
+    document.getElementById('ans').addEventListener('keydown',function(e){
+        if(e.key==='Enter') check();
+    });
+
+    generate();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadistica - Matematiques</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .math-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .math-nav { background: rgba(15,23,41, 0.85); }
+        .math-nav a { padding: 8px 16px; border-radius: var(--radius-full); border: none; color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: all 0.25s; background: transparent; }
+        .math-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .math-nav a.home { color: #059669; font-weight: 600; }
+        .math-nav a.home:hover { background: rgba(5,150,105,0.1); }
+
+        .hero { text-align: center; padding: 48px 24px 40px; border-bottom: 1px solid var(--border-subtle); position: relative; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 80% at 30% 0%, rgba(5,150,105,0.08) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 70% 20%, rgba(16,185,129,0.06) 0%, transparent 60%); pointer-events: none; }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; position: relative; }
+        .hero h1 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; position: relative; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+
+        .theory-card { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+        .theory-card:hover { box-shadow: var(--shadow-sm); }
+        .theory-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+        .theory-card h3 .icon { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+        .theory-card p, .theory-card li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+        .formula { background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px 16px; font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 600; color: var(--text-primary); margin: 10px 0; text-align: center; }
+        .example { background: rgba(5,150,105,0.06); border-left: 3px solid #059669; padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 10px 0; font-size: 0.88rem; color: var(--text-secondary); }
+
+        .practice-section { background: var(--bg-raised); border: 2px solid rgba(5,150,105,0.2); border-radius: var(--radius-xl); padding: 32px; margin-top: 32px; }
+        .practice-section h2 { font-size: 1.3rem; font-weight: 800; margin: 0 0 20px; color: var(--text-primary); }
+        .practice-section h2 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .difficulty-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .difficulty-selector button { padding: 8px 18px; border-radius: var(--radius-full); border: 2px solid var(--border-subtle); background: transparent; color: var(--text-secondary); cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: all 0.25s; font-family: var(--font-sans); }
+        .difficulty-selector button:hover { border-color: #059669; color: #059669; }
+        .difficulty-selector button.active { background: linear-gradient(135deg, #059669, #10b981); color: #fff; border-color: transparent; }
+
+        .exercise-display { background: var(--bg-overlay); border-radius: var(--radius-lg); padding: 32px; text-align: center; margin-bottom: 20px; }
+        .exercise-display .problem { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; line-height: 1.6; }
+        .exercise-display .data-set { font-size: 1.1rem; font-weight: 800; color: #059669; margin-bottom: 8px; letter-spacing: 1px; }
+        .exercise-display .hint { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* Bar chart */
+        .bar-chart {
+            display: flex; align-items: flex-end; justify-content: center;
+            gap: 6px; height: 150px; margin: 20px auto;
+            padding: 0 20px;
+        }
+        .bar-col { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .bar {
+            width: 32px; border-radius: 4px 4px 0 0;
+            background: linear-gradient(180deg, #10b981, #059669);
+            transition: height 0.5s ease;
+            min-height: 4px;
+        }
+        .bar-label { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); }
+        .bar-value { font-size: 0.7rem; font-weight: 700; color: #059669; }
+
+        .answer-row { display: flex; gap: 10px; margin-bottom: 16px; justify-content: center; }
+        .answer-row input { width: 160px; padding: 14px 18px; border-radius: var(--radius-md); border: 2px solid var(--border-subtle); background: var(--bg-base); color: var(--text-primary); font-size: 1.1rem; font-weight: 600; font-family: var(--font-sans); outline: none; text-align: center; }
+        .answer-row input:focus { border-color: #059669; }
+
+        .btn-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .btn { padding: 12px 24px; border-radius: var(--radius-full); border: none; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: var(--font-sans); transition: all 0.25s; }
+        .btn-check { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+        .btn-check:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(5,150,105,0.3); }
+        .btn-new { background: var(--bg-overlay); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { background: var(--bg-hover); }
+        .btn-solution { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+        .btn-solution:hover { background: var(--bg-overlay); }
+
+        .feedback { margin-top: 16px; padding: 14px 18px; border-radius: var(--radius-md); font-size: 0.92rem; font-weight: 600; display: none; }
+        .feedback.correct { display: block; background: var(--green-soft); color: #059669; border: 1px solid rgba(5,150,105,0.2); }
+        .feedback.incorrect { display: block; background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+        .feedback.solution { display: block; background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+
+        .score-bar { display: flex; justify-content: center; gap: 24px; margin-top: 20px; padding: 14px; background: var(--bg-overlay); border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600; }
+        .score-bar .correct-count { color: #059669; }
+        .score-bar .incorrect-count { color: var(--red); }
+        .score-bar .total-count { color: var(--text-secondary); }
+    </style>
+</head>
+<body>
+    <div class="math-nav">
+        <a href="../index.html" class="home">&#8592; Cursos</a>
+        <a href="index.html">Inici</a>
+    </div>
+
+    <div class="hero">
+        <h1><span>Estadistica</span></h1>
+        <p>Mitjana, mediana, moda i representacio de dades</p>
+    </div>
+
+    <div class="container">
+        <div class="theory-card">
+            <h3><span class="icon">1</span> Conceptes basics</h3>
+            <p><strong>Poblacio:</strong> Conjunt total d'elements que volem estudiar.</p>
+            <p><strong>Mostra:</strong> Subconjunt representatiu de la poblacio.</p>
+            <p><strong>Variable:</strong> Caracteristica que mesurem (quantitativa o qualitativa).</p>
+            <p><strong>Frequencia absoluta:</strong> Nombre de vegades que apareix un valor.</p>
+            <p><strong>Frequencia relativa:</strong> Frequencia absoluta dividida pel total.</p>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">2</span> Mesures de tendencia central</h3>
+            <p><strong>Mitjana aritmetica:</strong> Suma de tots els valors dividida pel nombre total.</p>
+            <div class="formula">Mitjana = (x1 + x2 + ... + xn) / n</div>
+            <p><strong>Mediana:</strong> Valor central quan les dades estan ordenades. Si n es parell, es la mitjana dels dos valors centrals.</p>
+            <p><strong>Moda:</strong> Valor que mes es repeteix.</p>
+            <div class="example">Exemple: Dades = {2, 3, 3, 5, 7} &rarr; Mitjana = 4, Mediana = 3, Moda = 3</div>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">3</span> Mesures de dispersio</h3>
+            <p><strong>Rang:</strong> Diferencia entre el valor maxim i el minim.</p>
+            <div class="formula">Rang = Valor maxim &minus; Valor minim</div>
+            <div class="example">Exemple: Dades = {2, 3, 3, 5, 7} &rarr; Rang = 7 &minus; 2 = 5</div>
+        </div>
+
+        <div class="practice-section">
+            <h2><span>Practica</span></h2>
+
+            <div class="difficulty-selector">
+                <button class="active" onclick="setType(0)">Mitjana</button>
+                <button onclick="setType(1)">Mediana</button>
+                <button onclick="setType(2)">Moda</button>
+                <button onclick="setType(3)">Rang</button>
+            </div>
+
+            <div class="exercise-display">
+                <div class="data-set" id="dataSet">--</div>
+                <div id="barChart" class="bar-chart"></div>
+                <div class="problem" id="problem">--</div>
+                <div class="hint" id="hint"></div>
+            </div>
+
+            <div class="answer-row">
+                <input type="number" id="answer" step="0.01" placeholder="Resposta..." onkeydown="if(event.key==='Enter') checkAnswer()">
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-check" onclick="checkAnswer()">Comprovar</button>
+                <button class="btn btn-new" onclick="newExercise()">Nou exercici</button>
+                <button class="btn btn-solution" onclick="showSolution()">Mostrar solucio</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="score-bar">
+                <div class="correct-count">Encerts: <span id="correct">0</span></div>
+                <div class="incorrect-count">Errors: <span id="incorrect">0</span></div>
+                <div class="total-count">Total: <span id="total">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../theme.js"></script>
+    <script src="../auth.js"></script>
+    <script>
+        let statType = 0;
+        let currentAnswer = null;
+        let correctCount = 0, incorrectCount = 0;
+        let answered = false;
+
+        function setType(t) {
+            statType = t;
+            document.querySelectorAll('.difficulty-selector button').forEach((btn, i) => btn.classList.toggle('active', i === t));
+            newExercise();
+        }
+
+        function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        function drawBarChart(data) {
+            const chart = document.getElementById('barChart');
+            chart.innerHTML = '';
+            const maxVal = Math.max(...data);
+            data.forEach((val, i) => {
+                const col = document.createElement('div');
+                col.className = 'bar-col';
+                const valLabel = document.createElement('span');
+                valLabel.className = 'bar-value';
+                valLabel.textContent = val;
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = (val / maxVal * 120) + 'px';
+                const label = document.createElement('span');
+                label.className = 'bar-label';
+                label.textContent = 'x' + (i + 1);
+                col.appendChild(valLabel);
+                col.appendChild(bar);
+                col.appendChild(label);
+                chart.appendChild(col);
+            });
+        }
+
+        function newExercise() {
+            answered = false;
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('answer').value = '';
+
+            // Generate random data set
+            const n = randInt(5, 9);
+            const data = [];
+            // For mode, ensure at least one repeated value
+            if (statType === 2) {
+                const repeatedVal = randInt(1, 15);
+                const repeatCount = randInt(2, 3);
+                for (let i = 0; i < repeatCount; i++) data.push(repeatedVal);
+                while (data.length < n) {
+                    let v = randInt(1, 20);
+                    // avoid creating a tie for mode
+                    const freq = data.filter(x => x === v).length;
+                    if (freq < repeatCount - 1) data.push(v);
+                    else {
+                        v = randInt(1, 20);
+                        if (data.filter(x => x === v).length < repeatCount - 1) data.push(v);
+                        else data.push(randInt(21, 30));
+                    }
+                }
+                // Shuffle
+                for (let i = data.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [data[i], data[j]] = [data[j], data[i]];
+                }
+            } else {
+                for (let i = 0; i < n; i++) data.push(randInt(1, 20));
+            }
+
+            const sorted = [...data].sort((a, b) => a - b);
+            document.getElementById('dataSet').textContent = data.join(', ');
+            drawBarChart(data);
+
+            let problem;
+            switch (statType) {
+                case 0: // Mean
+                    const sum = data.reduce((a, b) => a + b, 0);
+                    currentAnswer = Math.round(sum / n * 100) / 100;
+                    problem = `Calcula la mitjana aritmetica de les dades.`;
+                    break;
+                case 1: // Median
+                    if (n % 2 === 1) {
+                        currentAnswer = sorted[Math.floor(n / 2)];
+                    } else {
+                        currentAnswer = Math.round((sorted[n / 2 - 1] + sorted[n / 2]) / 2 * 100) / 100;
+                    }
+                    problem = `Calcula la mediana de les dades.`;
+                    break;
+                case 2: // Mode
+                    const freq = {};
+                    data.forEach(v => freq[v] = (freq[v] || 0) + 1);
+                    const maxFreq = Math.max(...Object.values(freq));
+                    const modes = Object.keys(freq).filter(k => freq[k] === maxFreq).map(Number);
+                    currentAnswer = Math.min(...modes); // take smallest mode if tie
+                    problem = `Calcula la moda de les dades.` + (modes.length > 1 ? ' (si hi ha empat, dona el valor mes petit)' : '');
+                    break;
+                case 3: // Range
+                    currentAnswer = sorted[sorted.length - 1] - sorted[0];
+                    problem = `Calcula el rang de les dades.`;
+                    break;
+            }
+
+            document.getElementById('problem').textContent = problem;
+            document.getElementById('hint').textContent = ['Suma / n', 'Valor central ordenat', 'Valor mes repetit', 'Max \u2212 Min'][statType];
+            document.getElementById('answer').focus();
+        }
+
+        function checkAnswer() {
+            if (currentAnswer === null || answered) return;
+            const userAnswer = parseFloat(document.getElementById('answer').value);
+            if (isNaN(userAnswer)) return;
+
+            answered = true;
+            const fb = document.getElementById('feedback');
+
+            if (Math.abs(userAnswer - currentAnswer) <= 0.02) {
+                fb.className = 'feedback correct';
+                fb.textContent = 'Correcte! Ben fet!';
+                correctCount++;
+            } else {
+                fb.className = 'feedback incorrect';
+                fb.textContent = `Incorrecte. La resposta correcta es ${currentAnswer}.`;
+                incorrectCount++;
+            }
+            document.getElementById('correct').textContent = correctCount;
+            document.getElementById('incorrect').textContent = incorrectCount;
+            document.getElementById('total').textContent = correctCount + incorrectCount;
+        }
+
+        function showSolution() {
+            if (currentAnswer === null) return;
+            const fb = document.getElementById('feedback');
+            fb.className = 'feedback solution';
+            fb.textContent = `Solucio: ${currentAnswer}`;
+            if (!answered) { answered = true; incorrectCount++; document.getElementById('incorrect').textContent = incorrectCount; document.getElementById('total').textContent = correctCount + incorrectCount; }
+        }
+
+        newExercise();
+    </script>
+</body>
+</html>

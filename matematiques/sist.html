@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistemes d'equacions - Matemàtiques</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .math-nav {
+            background: rgba(240,240,243, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+        [data-theme="dark"] .math-nav { background: rgba(9, 9, 11, 0.75); }
+        .math-nav a {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.25s;
+            background: transparent;
+        }
+        .math-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .math-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .math-nav a.home { color: #059669; font-weight: 600; }
+        .math-nav a.home:hover { background: rgba(5, 150, 105, 0.1); }
+
+        .hero-mini {
+            text-align: center;
+            padding: 32px 24px 28px;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative;
+        }
+        .hero-mini::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 50% 80% at 50% 0%, rgba(124, 58, 237, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .hero-mini h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            position: relative;
+        }
+        .hero-mini h1 span {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-mini p {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            position: relative;
+            margin-top: 4px;
+        }
+
+        .container { max-width: 700px; margin: 0 auto; padding: 32px 20px; }
+
+        .exercise-card {
+            background: var(--bg-raised);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+        }
+
+        .score-bar {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .score-item { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; }
+        .score-item .num { font-weight: 700; font-size: 1.1rem; }
+        .score-ok .num { color: var(--green); }
+        .score-fail .num { color: var(--red); }
+        .score-total .num { color: var(--blue); }
+
+        .difficulty-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .diff-btn {
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-default);
+            background: var(--bg-overlay);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .diff-btn:hover { border-color: var(--border-strong); color: var(--text-primary); }
+        .diff-btn.active {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        .method-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .method-btn {
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-default);
+            background: var(--bg-overlay);
+            color: var(--text-secondary);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .method-btn:hover { border-color: var(--border-strong); color: var(--text-primary); }
+        .method-btn.active {
+            background: var(--purple-soft);
+            color: var(--purple);
+            border-color: var(--purple);
+        }
+
+        .math-box {
+            background: var(--bg-overlay);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-subtle);
+        }
+        .math-box .equation {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            line-height: 2;
+        }
+        .math-box .sys-brace {
+            display: inline-block;
+            border-left: 3px solid var(--purple);
+            padding-left: 16px;
+            text-align: left;
+        }
+
+        .answer-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .answer-row label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .answer-row input {
+            width: 100px;
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-default);
+            background: var(--bg-raised);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            text-align: center;
+            outline: none;
+            transition: border-color 0.25s;
+        }
+        .answer-row input:focus { border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15); }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-check {
+            padding: 10px 24px;
+            border-radius: var(--radius-full);
+            border: none;
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #fff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .btn-check:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-check:active { transform: scale(0.97); }
+
+        .btn-show {
+            padding: 10px 24px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-default);
+            background: var(--bg-overlay);
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .btn-show:hover { border-color: var(--border-strong); color: var(--text-primary); }
+
+        .btn-new {
+            padding: 10px 24px;
+            border-radius: var(--radius-full);
+            border: none;
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            color: #fff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: var(--font-sans);
+        }
+        .btn-new:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+        .feedback {
+            text-align: center;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            margin-top: 16px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .feedback.correct { background: var(--green-soft); color: var(--green); display: block; }
+        .feedback.wrong { background: var(--red-soft); color: var(--red); display: block; }
+
+        .solution-box {
+            background: var(--bg-overlay);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-top: 16px;
+            border-left: 3px solid var(--purple);
+            display: none;
+        }
+        .solution-box.show { display: block; }
+        .solution-box h4 { font-size: 0.9rem; font-weight: 700; color: var(--purple); margin-bottom: 10px; }
+        .step {
+            padding: 6px 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .step:last-child { border-bottom: none; }
+        .step .step-label {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-family: var(--font-sans);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        @media (max-width: 640px) {
+            .hero-mini h1 { font-size: 1.3rem; }
+            .math-box .equation { font-size: 1.1rem; }
+            .container { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="math-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="eq1.html">Eq. 1r grau</a>
+    <a href="eq2.html">Eq. 2n grau</a>
+    <a href="sist.html" class="active">Sistemes</a>
+    <a href="prob.html">Problemes</a>
+</div>
+
+<div class="hero-mini">
+    <h1><span>Sistemes d'equacions</span></h1>
+    <p>Resol sistemes de dues equacions amb dues incògnites</p>
+</div>
+
+<div class="container">
+
+    <div class="score-bar">
+        <div class="score-item score-ok">Encerts: <span class="num" id="ok">0</span></div>
+        <div class="score-item score-fail">Errors: <span class="num" id="fail">0</span></div>
+        <div class="score-item score-total">Total: <span class="num" id="total">0</span></div>
+    </div>
+
+    <div class="difficulty-bar">
+        <button class="diff-btn active" onclick="setDiff(1)">Fàcil</button>
+        <button class="diff-btn" onclick="setDiff(2)">Mitjà</button>
+        <button class="diff-btn" onclick="setDiff(3)">Difícil</button>
+    </div>
+
+    <div class="method-bar">
+        <button class="method-btn active" id="mSub" onclick="setMethod('sub')">Substitució</button>
+        <button class="method-btn" id="mIg" onclick="setMethod('ig')">Igualació</button>
+        <button class="method-btn" id="mRed" onclick="setMethod('red')">Reducció</button>
+    </div>
+
+    <div class="exercise-card">
+        <div class="math-box">
+            <div class="sys-brace">
+                <div class="equation" id="eq1Display"></div>
+                <div class="equation" id="eq2Display"></div>
+            </div>
+        </div>
+
+        <div class="answer-row">
+            <label>x =</label>
+            <input type="text" id="ansX" autocomplete="off" placeholder="x">
+            <label>y =</label>
+            <input type="text" id="ansY" autocomplete="off" placeholder="y">
+        </div>
+
+        <div class="btn-row">
+            <button class="btn-check" onclick="check()">Comprovar</button>
+            <button class="btn-show" onclick="showSol()">Veure solució</button>
+            <button class="btn-new" onclick="generate()">Nou sistema</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="solution-box" id="solBox">
+            <h4 id="solTitle">Resolució per substitució</h4>
+            <div id="steps"></div>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">Matemàtiques - Sistemes d'equacions</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+(function(){
+    let okC=0, failC=0, totalC=0;
+    let diff=1, method='sub';
+    let solX=0, solY=0;
+    // system: a1*x + b1*y = c1 ; a2*x + b2*y = c2
+    let a1,b1,c1,a2,b2,c2;
+
+    function rnd(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+    function parseNum(s){
+        s=s.trim().replace(',','.');
+        if(s==='') return NaN;
+        if(s.includes('/')){ let p=s.split('/'); return parseFloat(p[0])/parseFloat(p[1]); }
+        return parseFloat(s);
+    }
+    function approx(a,b){ return Math.abs(a-b)<0.01; }
+    function round2(v){ return Math.round(v*100)/100; }
+
+    function formatTerm(coef, v, first){
+        if(coef===0) return '';
+        let s='';
+        if(first){
+            if(coef===-1 && v) s='-';
+            else if(coef===1 && v) s='';
+            else s=''+coef;
+        } else {
+            if(coef>0) s=' + '+(coef===1&&v?'':''+coef);
+            else { let ac=Math.abs(coef); s=' - '+(ac===1&&v?'':''+ac); }
+        }
+        return s+v;
+    }
+
+    function buildLine(ax, bx, cx){
+        let s='';
+        if(ax!==0){
+            s+=formatTerm(ax,'x',true);
+            if(bx!==0) s+=formatTerm(bx,'y',false);
+        } else {
+            s+=formatTerm(bx,'y',true);
+        }
+        s+=' = '+cx;
+        return s;
+    }
+
+    window.setDiff=function(d){
+        diff=d;
+        document.querySelectorAll('.diff-btn').forEach((b,i)=> b.classList.toggle('active',i===d-1));
+        generate();
+    };
+
+    window.setMethod=function(m){
+        method=m;
+        document.getElementById('mSub').classList.toggle('active',m==='sub');
+        document.getElementById('mIg').classList.toggle('active',m==='ig');
+        document.getElementById('mRed').classList.toggle('active',m==='red');
+        buildSteps();
+    };
+
+    function buildSteps(){
+        let titles = {sub:'Resolució per substitució', ig:'Resolució per igualació', red:'Resolució per reducció'};
+        document.getElementById('solTitle').textContent = titles[method];
+
+        let h='';
+        h+='<div class="step"><span class="step-label">Sistema</span>'+buildLine(a1,b1,c1)+' ... (I)<br>'+buildLine(a2,b2,c2)+' ... (II)</div>';
+
+        if(method==='sub'){
+            // Aïllem x de (I): x = (c1 - b1*y) / a1
+            if(a1!==0){
+                h+='<div class="step"><span class="step-label">Aïllem x de (I)</span>x = ('+c1+(b1!==0?' - '+(b1>0?'':'(')+b1+(b1<0?')':'')+'\u00B7y':'')+') / '+a1+'</div>';
+                h+='<div class="step"><span class="step-label">Substituïm a (II)</span>'+a2+'\u00B7[('+c1+(b1!==0?'-'+b1+'y':'')+') / '+a1+'] + '+b2+'y = '+c2+'</div>';
+            } else {
+                h+='<div class="step"><span class="step-label">Aïllem y de (I)</span>y = '+c1+' / '+b1+'</div>';
+            }
+            h+='<div class="step"><span class="step-label">Resultat</span>x = '+round2(solX)+', y = '+round2(solY)+'</div>';
+        } else if(method==='ig'){
+            h+='<div class="step"><span class="step-label">Aïllem x de (I)</span>x = ('+c1+' - '+b1+'y) / '+a1+'</div>';
+            h+='<div class="step"><span class="step-label">Aïllem x de (II)</span>x = ('+c2+' - '+b2+'y) / '+a2+'</div>';
+            h+='<div class="step"><span class="step-label">Igualem</span>('+c1+' - '+b1+'y) / '+a1+' = ('+c2+' - '+b2+'y) / '+a2+'</div>';
+            h+='<div class="step"><span class="step-label">Resultat</span>x = '+round2(solX)+', y = '+round2(solY)+'</div>';
+        } else {
+            // reduction
+            h+='<div class="step"><span class="step-label">Multipliquem (I) per '+a2+' i (II) per '+(-a1)+'</span></div>';
+            h+='<div class="step"><span class="step-label">(I)\u00B7'+a2+'</span>'+buildLine(a1*a2, b1*a2, c1*a2)+'</div>';
+            h+='<div class="step"><span class="step-label">(II)\u00B7'+(-a1)+'</span>'+buildLine(a2*(-a1), b2*(-a1), c2*(-a1))+'</div>';
+            let newB = b1*a2 + b2*(-a1);
+            let newC = c1*a2 + c2*(-a1);
+            h+='<div class="step"><span class="step-label">Sumem</span>'+formatTerm(newB,'y',true)+' = '+newC+' \u2192 y = '+round2(newC/newB)+'</div>';
+            h+='<div class="step"><span class="step-label">Resultat</span>x = '+round2(solX)+', y = '+round2(solY)+'</div>';
+        }
+
+        document.getElementById('steps').innerHTML=h;
+    }
+
+    window.generate=function(){
+        document.getElementById('feedback').className='feedback';
+        document.getElementById('feedback').textContent='';
+        document.getElementById('solBox').classList.remove('show');
+        document.getElementById('ansX').value='';
+        document.getElementById('ansY').value='';
+
+        // Generate system with integer solutions
+        let range = diff===1?5:diff===2?10:15;
+        solX=rnd(-range, range);
+        solY=rnd(-range, range);
+
+        let cRange = diff===1?4:diff===2?7:12;
+        do {
+            a1=rnd(-cRange, cRange);
+        } while(a1===0);
+        do {
+            b1=rnd(-cRange, cRange);
+        } while(b1===0);
+        c1 = a1*solX + b1*solY;
+
+        do {
+            a2=rnd(-cRange, cRange);
+            b2=rnd(-cRange, cRange);
+        } while(a2===0 || b2===0 || (a1*b2 - a2*b1)===0); // ensure non-parallel
+        c2 = a2*solX + b2*solY;
+
+        document.getElementById('eq1Display').textContent = buildLine(a1,b1,c1);
+        document.getElementById('eq2Display').textContent = buildLine(a2,b2,c2);
+
+        buildSteps();
+    };
+
+    window.check=function(){
+        let vx=parseNum(document.getElementById('ansX').value);
+        let vy=parseNum(document.getElementById('ansY').value);
+        if(isNaN(vx)||isNaN(vy)){ alert('Introdueix valors numèrics per x i y'); return; }
+        totalC++;
+
+        let fb=document.getElementById('feedback');
+        if(approx(vx,solX)&&approx(vy,solY)){
+            okC++;
+            fb.className='feedback correct';
+            fb.textContent='Correcte! x = '+round2(solX)+', y = '+round2(solY);
+        } else {
+            failC++;
+            fb.className='feedback wrong';
+            fb.textContent='Incorrecte. x = '+round2(solX)+', y = '+round2(solY);
+        }
+        document.getElementById('ok').textContent=okC;
+        document.getElementById('fail').textContent=failC;
+        document.getElementById('total').textContent=totalC;
+    };
+
+    window.showSol=function(){
+        document.getElementById('solBox').classList.toggle('show');
+    };
+
+    document.getElementById('ansX').addEventListener('keydown',function(e){
+        if(e.key==='Enter') document.getElementById('ansY').focus();
+    });
+    document.getElementById('ansY').addEventListener('keydown',function(e){
+        if(e.key==='Enter') check();
+    });
+
+    generate();
+})();
+</script>
+</body>
+</html>

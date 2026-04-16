@@ -600,8 +600,8 @@ function renderFlashcards(data) {
             <p class="flashcard-hint">Fes clic a la targeta per girar-la</p>
             <div class="flashcard" id="currentCard" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
-                    <div class="flashcard-front">${cards[idx].front}</div>
-                    <div class="flashcard-back">${cards[idx].back}</div>
+                    <div class="flashcard-front">${cards[idx].front || cards[idx].q || cards[idx].pregunta}</div>
+                    <div class="flashcard-back">${cards[idx].back || cards[idx].a || cards[idx].resposta}</div>
                 </div>
             </div>
             <div class="flashcard-actions">
@@ -621,7 +621,13 @@ function renderFlashcards(data) {
 
 // === Quiz ===
 function renderQuiz(data) {
-    const questions = data.quiz;
+    // Normalize field names across different data files
+    const questions = data.quiz.map(q => ({
+        q: q.q || q.question || q.pregunta || '',
+        options: q.options || q.opcions || [],
+        correct: q.correct !== undefined ? q.correct : (q.correcta !== undefined ? q.correcta : (q.resposta !== undefined ? q.resposta : (q.answer !== undefined ? q.answer : 0))),
+        explanation: q.explanation || q.explicacio || q.explicació || ''
+    }));
     const answers = new Array(questions.length).fill(-1);
     let submitted = false;
 

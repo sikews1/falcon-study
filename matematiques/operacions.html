@@ -299,34 +299,147 @@
         <!-- Theory -->
         <div class="theory-card">
             <h3><span class="icon">+</span> Suma</h3>
-            <p>La <strong>suma</strong> (o addicio) es l'operacio que combina dos o mes nombres per obtenir un total.</p>
-            <div class="formula">a + b = c</div>
-            <div class="example">Exemple: 25 + 17 = 42</div>
-            <p>Propietats: commutativa (a+b = b+a), associativa ((a+b)+c = a+(b+c)), element neutre (a+0 = a).</p>
+            <p>La <strong>suma</strong> (o addicio) combina quantitats. Imagina que tens 25 caramels i te'n regalen 17 mes: quants en tens ara?</p>
+            <div class="formula">25 + 17 = 42 caramels</div>
+
+            <!-- Visual: carrying explained -->
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 14px 0;">
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;"><strong style="color: var(--text-primary);">Com sumar amb "portant-ne" (carrying):</strong></div>
+                <div style="font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 600; line-height: 1.8; text-align: center; color: var(--text-primary);">
+                    <div style="font-size: 0.75rem; color: #059669; font-weight: 700;">&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&larr; me'n porto 1</div>
+                    <div>&nbsp;&nbsp;2 5</div>
+                    <div>+ 1 7</div>
+                    <div style="border-top: 2px solid var(--text-muted); display: inline-block; padding-top: 4px;">&nbsp;&nbsp;4 2</div>
+                </div>
+                <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; text-align: center;">
+                    5+7=12 &rarr; escrivim 2 i ens en portem 1 a la columna seguent
+                </div>
+            </div>
+
+            <p><strong>Propietats:</strong></p>
+            <ul style="padding-left: 18px; margin: 6px 0;">
+                <li><strong>Commutativa:</strong> 3+5 = 5+3 (l'ordre no importa)</li>
+                <li><strong>Associativa:</strong> (2+3)+4 = 2+(3+4) (podem agrupar com vulguem)</li>
+                <li><strong>Element neutre:</strong> 7+0 = 7 (sumar zero no canvia res)</li>
+            </ul>
         </div>
 
         <div class="theory-card">
             <h3><span class="icon">&minus;</span> Resta</h3>
-            <p>La <strong>resta</strong> (o substraccio) es l'operacio inversa de la suma.</p>
-            <div class="formula">a &minus; b = c (on a es el minuend, b el subtrahend, c la diferencia)</div>
-            <div class="example">Exemple: 83 &minus; 45 = 38</div>
-            <p>La resta NO es commutativa: a &minus; b &ne; b &minus; a.</p>
+            <p>La <strong>resta</strong> treu una quantitat d'una altra. Tens 83 EUR i compres algo per 45 EUR: quant et queda?</p>
+            <div class="formula">83 &minus; 45 = 38 EUR</div>
+
+            <!-- Visual: borrowing explained -->
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 14px 0;">
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;"><strong style="color: var(--text-primary);">Com restar "manllevant" (borrowing):</strong></div>
+                <div style="font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 600; line-height: 1.8; text-align: center; color: var(--text-primary);">
+                    <div style="font-size: 0.75rem; color: #ef4444; font-weight: 700;">&nbsp;<span style="text-decoration: line-through;">8</span>7 13 &larr; manllevem 1 desena</div>
+                    <div>&nbsp;&nbsp;8 3</div>
+                    <div>&minus; 4 5</div>
+                    <div style="border-top: 2px solid var(--text-muted); display: inline-block; padding-top: 4px;">&nbsp;&nbsp;3 8</div>
+                </div>
+                <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 8px; text-align: center;">
+                    3&minus;5 no es pot! &rarr; Manllevem 1 desena (10) &rarr; 13&minus;5=8, 7&minus;4=3
+                </div>
+            </div>
+
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Recorda:</strong> La resta <strong>NO</strong> es commutativa! 8&minus;3=5, pero 3&minus;8=&minus;5 (son resultats diferents).
+            </div>
         </div>
 
         <div class="theory-card">
             <h3><span class="icon">&times;</span> Multiplicacio</h3>
-            <p>La <strong>multiplicacio</strong> es una suma repetida d'un nombre tantes vegades com indica l'altre.</p>
-            <div class="formula">a &times; b = c</div>
-            <div class="example">Exemple: 12 &times; 7 = 84</div>
-            <p>Propietats: commutativa (a&times;b = b&times;a), associativa, distributiva respecte la suma, element neutre (a&times;1 = a), element absorbent (a&times;0 = 0).</p>
+            <p>La <strong>multiplicacio</strong> es una <strong>suma repetida</strong>: 4 &times; 3 = 3+3+3+3 = 12. Imagina 4 bosses amb 3 pomes cadascuna.</p>
+            <div class="formula">4 &times; 3 = 3 + 3 + 3 + 3 = 12 pomes</div>
+
+            <!-- Visual: step by step multiplication -->
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 14px 0;">
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;"><strong style="color: var(--text-primary);">Multiplicacio pas a pas (exemple: 23 &times; 15):</strong></div>
+                <div style="font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 600; line-height: 1.8; text-align: center; color: var(--text-primary);">
+                    <div>&nbsp;&nbsp;&nbsp;2 3</div>
+                    <div>&times; 1 5</div>
+                    <div style="border-top: 2px solid var(--text-muted); display: inline-block; padding-top: 4px;">
+                        <div style="color: #059669;">1 1 5 &nbsp;&larr; 23&times;5</div>
+                        <div style="color: #f59e0b;">2 3 0 &nbsp;&larr; 23&times;10</div>
+                    </div>
+                    <div style="border-top: 2px solid var(--text-muted); display: inline-block; padding-top: 4px;"><strong>3 4 5</strong></div>
+                </div>
+            </div>
+
+            <p><strong>Propietats:</strong></p>
+            <ul style="padding-left: 18px; margin: 6px 0;">
+                <li><strong>Commutativa:</strong> 3&times;5 = 5&times;3 = 15</li>
+                <li><strong>Element neutre:</strong> 7&times;1 = 7 (multiplicar per 1 no canvia res)</li>
+                <li><strong>Element absorbent:</strong> 7&times;0 = 0 (multiplicar per 0 sempre dona 0)</li>
+                <li><strong>Distributiva:</strong> 3&times;(4+2) = 3&times;4 + 3&times;2 = 12+6 = 18</li>
+            </ul>
         </div>
 
         <div class="theory-card">
             <h3><span class="icon">&divide;</span> Divisio</h3>
-            <p>La <strong>divisio</strong> es l'operacio inversa de la multiplicacio. Reparteix un nombre en parts iguals.</p>
-            <div class="formula">a &divide; b = c (on a es el dividend, b el divisor, c el quocient)</div>
-            <div class="example">Exemple: 96 &divide; 8 = 12</div>
-            <p>Divisio entera: D = d &times; q + r (dividend = divisor &times; quocient + residu). No es pot dividir per 0.</p>
+            <p>La <strong>divisio</strong> reparteix en parts iguals. Si tens 96 cromos i els reparteixes entre 8 amics: quants toca a cadascú?</p>
+            <div class="formula">96 &divide; 8 = 12 cromos cadascú</div>
+
+            <!-- Visual: long division -->
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 14px 0;">
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;"><strong style="color: var(--text-primary);">Divisio llarga pas a pas (156 &divide; 12):</strong></div>
+                <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 2;">
+                    <span style="color: #059669;">Pas 1:</span> 15 &divide; 12 = <strong>1</strong>, resta 15&minus;12 = 3<br>
+                    <span style="color: #059669;">Pas 2:</span> Baixem el 6 &rarr; 36<br>
+                    <span style="color: #059669;">Pas 3:</span> 36 &divide; 12 = <strong>3</strong>, resta 36&minus;36 = 0<br>
+                    <span style="color: #059669;">Resultat:</span> 156 &divide; 12 = <strong>13</strong> exacte
+                </div>
+            </div>
+
+            <p><strong>Divisio entera:</strong> Quan no es exacta, queda un <strong>residu</strong>.</p>
+            <div class="formula">Dividend = Divisor &times; Quocient + Residu</div>
+            <div class="example">
+                <strong>Exemple:</strong> 17 &divide; 5 = 3 (residu 2)<br>
+                Comprovacio: 5 &times; 3 + 2 = 15 + 2 = 17
+            </div>
+
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Recorda:</strong> <strong>Mai</strong> es pot dividir per zero! No existeix cap nombre que multiplicat per 0 doni un resultat diferent de 0.
+            </div>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">!</span> Ordre de les operacions (PEMDAS)</h3>
+            <p>Quan hi ha varies operacions en una expressio, cal seguir un <strong>ordre estricte</strong>:</p>
+
+            <div style="display: flex; flex-direction: column; gap: 8px; margin: 14px 0;">
+                <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-overlay); padding: 10px 14px; border-radius: 8px;">
+                    <span style="background: #059669; color: #fff; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0;">1</span>
+                    <span style="font-size: 0.88rem; color: var(--text-secondary);"><strong style="color: var(--text-primary);">Parentesis</strong> &rarr; Primer el que hi ha dins ( )</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-overlay); padding: 10px 14px; border-radius: 8px;">
+                    <span style="background: #059669; color: #fff; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0;">2</span>
+                    <span style="font-size: 0.88rem; color: var(--text-secondary);"><strong style="color: var(--text-primary);">Potencies i arrels</strong></span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-overlay); padding: 10px 14px; border-radius: 8px;">
+                    <span style="background: #059669; color: #fff; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0;">3</span>
+                    <span style="font-size: 0.88rem; color: var(--text-secondary);"><strong style="color: var(--text-primary);">Multiplicacions i divisions</strong> &rarr; D'esquerra a dreta</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-overlay); padding: 10px 14px; border-radius: 8px;">
+                    <span style="background: #059669; color: #fff; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0;">4</span>
+                    <span style="font-size: 0.88rem; color: var(--text-secondary);"><strong style="color: var(--text-primary);">Sumes i restes</strong> &rarr; D'esquerra a dreta</span>
+                </div>
+            </div>
+
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 14px 0;">
+                <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 2;">
+                    <strong style="color: var(--text-primary);">Exemple:</strong> 3 + 2 &times; (4 + 1)&sup2; &minus; 6 = ?<br>
+                    <span style="color: #059669;">1. Parentesis:</span> (4+1) = 5 &rarr; 3 + 2 &times; 5&sup2; &minus; 6<br>
+                    <span style="color: #059669;">2. Potencies:</span> 5&sup2; = 25 &rarr; 3 + 2 &times; 25 &minus; 6<br>
+                    <span style="color: #059669;">3. Multiplicacions:</span> 2&times;25 = 50 &rarr; 3 + 50 &minus; 6<br>
+                    <span style="color: #059669;">4. Sumes/restes:</span> 3 + 50 &minus; 6 = <strong>47</strong>
+                </div>
+            </div>
+
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Recorda:</strong> Error classic! 2 + 3 &times; 4 = 14 (NO 20!). Primer multipliquem 3&times;4=12, despres sumem 2+12=14.
+            </div>
         </div>
 
         <!-- Practice -->

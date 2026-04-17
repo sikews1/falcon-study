@@ -95,33 +95,185 @@
 
     <div class="container">
         <div class="theory-card">
-            <h3><span class="icon">1</span> Nombres enters</h3>
-            <p>Els <strong>nombres enters</strong> inclouen els positius, els negatius i el zero: ..., -3, -2, -1, 0, 1, 2, 3, ...</p>
+            <h3><span class="icon">1</span> Nombres enters i la recta numerica</h3>
+            <p>Els <strong>nombres enters</strong> inclouen els positius, els negatius i el zero. Imagina un <strong>termometre</strong>: per sobre de zero fa calor (positius), per sota fa fred (negatius).</p>
             <div class="formula">Z = { ..., -3, -2, -1, 0, +1, +2, +3, ... }</div>
-            <p>Regles d'operacions amb enters:</p>
-            <ul>
-                <li><strong>Suma de signes iguals:</strong> Es sumen els valors absoluts i es manté el signe. (+3) + (+5) = +8</li>
-                <li><strong>Suma de signes diferents:</strong> Es resten els valors absoluts i es posa el signe del major. (+7) + (-3) = +4</li>
-                <li><strong>Multiplicacio/Divisio:</strong> Mateixos signes = positiu, signes diferents = negatiu.</li>
-            </ul>
-            <div class="example">Exemples: (-4) + (-6) = -10 | (-3) &times; (-5) = +15 | (-12) &divide; (+4) = -3</div>
+
+            <!-- Visual: Number line -->
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 20px 16px; margin: 14px 0; overflow-x: auto;">
+                <div style="display: flex; align-items: center; justify-content: center; min-width: 500px; position: relative;">
+                    <div style="display: flex; align-items: center; gap: 0; width: 100%; max-width: 500px;">
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">&larr;</span>
+                        <div style="flex: 1; height: 3px; background: linear-gradient(90deg, #ef4444, #ef4444 45%, #059669 55%, #059669); position: relative; border-radius: 2px;">
+                            <!-- Ticks and labels -->
+                            <div style="position: absolute; left: 0%; top: -8px; width: 2px; height: 18px; background: var(--text-muted);"></div>
+                            <div style="position: absolute; left: 0%; top: 16px; font-size: 0.72rem; font-weight: 700; color: #ef4444; transform: translateX(-50%);">-5</div>
+                            <div style="position: absolute; left: 10%; top: -6px; width: 2px; height: 14px; background: var(--text-muted);"></div>
+                            <div style="position: absolute; left: 10%; top: 14px; font-size: 0.7rem; color: #ef4444; transform: translateX(-50%);">-4</div>
+                            <div style="position: absolute; left: 20%; top: -6px; width: 2px; height: 14px; background: var(--text-muted);"></div>
+                            <div style="position: absolute; left: 20%; top: 14px; font-size: 0.7rem; color: #ef4444; transform: translateX(-50%);">-3</div>
+                            <div style="position: absolute; left: 30%; top: -6px; width: 2px; height: 14px; background: var(--text-muted);"></div>
+                            <div style="position: absolute; left: 30%; top: 14px; font-size: 0.7rem; color: #ef4444; transform: translateX(-50%);">-2</div>
+                            <div style="position: absolute; left: 40%; top: -6px; width: 2px; height: 14px; background: var(--text-muted);"></div>
+                            <div style="position: absolute; left: 40%; top: 14px; font-size: 0.7rem; color: #ef4444; transform: translateX(-50%);">-1</div>
+                            <div style="position: absolute; left: 50%; top: -10px; width: 3px; height: 22px; background: var(--text-primary);"></div>
+                            <div style="position: absolute; left: 50%; top: 18px; font-size: 0.78rem; font-weight: 800; color: var(--text-primary); transform: translateX(-50%);">0</div>
+                            <div style="position: absolute; left: 60%; top: -6px; width: 2px; height: 14px; background: var(--text-muted);"></div>
+                            <div style="position: absolute; left: 60%; top: 14px; font-size: 0.7rem; color: #059669; transform: translateX(-50%);">+1</div>
+                            <div style="position: absolute; left: 70%; top: -6px; width: 2px; height: 14px; background: var(--text-muted);"></div>
+                            <div style="position: absolute; left: 70%; top: 14px; font-size: 0.7rem; color: #059669; transform: translateX(-50%);">+2</div>
+                            <div style="position: absolute; left: 80%; top: -6px; width: 2px; height: 14px; background: var(--text-muted);"></div>
+                            <div style="position: absolute; left: 80%; top: 14px; font-size: 0.7rem; color: #059669; transform: translateX(-50%);">+3</div>
+                            <div style="position: absolute; left: 90%; top: -6px; width: 2px; height: 14px; background: var(--text-muted);"></div>
+                            <div style="position: absolute; left: 90%; top: 14px; font-size: 0.7rem; color: #059669; transform: translateX(-50%);">+4</div>
+                            <div style="position: absolute; left: 100%; top: -8px; width: 2px; height: 18px; background: var(--text-muted);"></div>
+                            <div style="position: absolute; left: 100%; top: 16px; font-size: 0.72rem; font-weight: 700; color: #059669; transform: translateX(-50%);">+5</div>
+                        </div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">&rarr;</span>
+                    </div>
+                </div>
+                <div style="text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-top: 28px;">
+                    <span style="color: #ef4444;">Negatius (esquerra)</span> &nbsp;&nbsp; | &nbsp;&nbsp; <span style="color: #059669;">Positius (dreta)</span>
+                </div>
+            </div>
         </div>
 
         <div class="theory-card">
-            <h3><span class="icon">2</span> Nombres decimals</h3>
-            <p>Els <strong>nombres decimals</strong> tenen una part entera i una part decimal separades per una coma (o punt).</p>
-            <div class="formula">3,75 = 3 + 7/10 + 5/100</div>
-            <p>Tipus: <strong>exactes</strong> (0,5), <strong>periodics purs</strong> (0,333...), <strong>periodics mixtos</strong> (0,1666...).</p>
+            <h3><span class="icon">2</span> Sumar i restar amb negatius</h3>
+            <p>Pensa en un <strong>termometre</strong>: pujar graus = sumar, baixar graus = restar.</p>
+
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 14px 0;">
+                <div style="font-size: 0.92rem; color: var(--text-secondary); line-height: 2;">
+                    <strong style="color: var(--text-primary);">Analogia del termometre:</strong><br>
+                    Si estem a <strong style="color: #ef4444;">&minus;3&deg;C</strong> i la temperatura puja <strong style="color: #059669;">5&deg;C</strong> &rarr; estem a <strong>+2&deg;C</strong><br>
+                    <span style="color: var(--text-muted);">(&minus;3) + (+5) = +2</span><br><br>
+                    Si estem a <strong style="color: #059669;">+2&deg;C</strong> i la temperatura baixa <strong style="color: #ef4444;">7&deg;C</strong> &rarr; estem a <strong style="color: #ef4444;">&minus;5&deg;C</strong><br>
+                    <span style="color: var(--text-muted);">(+2) + (&minus;7) = &minus;5</span>
+                </div>
+            </div>
+
+            <p><strong>Regles:</strong></p>
+            <ul style="padding-left: 18px; margin: 6px 0;">
+                <li><strong>Signes iguals &rarr; es sumen i es manté el signe:</strong><br>
+                    (+3) + (+5) = +8 &nbsp;&nbsp;|&nbsp;&nbsp; (&minus;4) + (&minus;6) = &minus;10</li>
+                <li style="margin-top: 6px;"><strong>Signes diferents &rarr; es resten i es posa el signe del mes gran:</strong><br>
+                    (+7) + (&minus;3) = +4 &nbsp;&nbsp;|&nbsp;&nbsp; (&minus;9) + (+4) = &minus;5</li>
+            </ul>
+
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Truc:</strong> Restar un negatiu = sumar! 5 &minus; (&minus;3) = 5 + 3 = 8. Dos negatius junts es converteixen en positiu.
+            </div>
         </div>
 
         <div class="theory-card">
-            <h3><span class="icon">3</span> Arrodoniment</h3>
-            <p>Per <strong>arrodonir</strong> un nombre decimal a n xifres decimals:</p>
-            <ul>
-                <li>Si la xifra seguent es 5 o mes: s'arrodoneix cap amunt.</li>
-                <li>Si la xifra seguent es menor que 5: es manté.</li>
+            <h3><span class="icon">3</span> Multiplicar i dividir amb signes</h3>
+
+            <!-- Visual: sign rules table -->
+            <div style="display: grid; grid-template-columns: repeat(3, auto); gap: 0; margin: 14px auto; max-width: 320px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); overflow: hidden; text-align: center; font-size: 0.9rem; font-weight: 600;">
+                <div style="background: var(--bg-overlay); padding: 10px; border-bottom: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle);">Signe 1</div>
+                <div style="background: var(--bg-overlay); padding: 10px; border-bottom: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle);">Signe 2</div>
+                <div style="background: var(--bg-overlay); padding: 10px; border-bottom: 1px solid var(--border-subtle);">Resultat</div>
+                <div style="padding: 10px; border-bottom: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); color: #059669;">+</div>
+                <div style="padding: 10px; border-bottom: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); color: #059669;">+</div>
+                <div style="padding: 10px; border-bottom: 1px solid var(--border-subtle); color: #059669; font-weight: 800;">+</div>
+                <div style="padding: 10px; border-bottom: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); color: #059669;">+</div>
+                <div style="padding: 10px; border-bottom: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); color: #ef4444;">&minus;</div>
+                <div style="padding: 10px; border-bottom: 1px solid var(--border-subtle); color: #ef4444; font-weight: 800;">&minus;</div>
+                <div style="padding: 10px; border-bottom: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); color: #ef4444;">&minus;</div>
+                <div style="padding: 10px; border-bottom: 1px solid var(--border-subtle); border-right: 1px solid var(--border-subtle); color: #059669;">+</div>
+                <div style="padding: 10px; border-bottom: 1px solid var(--border-subtle); color: #ef4444; font-weight: 800;">&minus;</div>
+                <div style="padding: 10px; border-right: 1px solid var(--border-subtle); color: #ef4444;">&minus;</div>
+                <div style="padding: 10px; border-right: 1px solid var(--border-subtle); color: #ef4444;">&minus;</div>
+                <div style="padding: 10px; color: #059669; font-weight: 800;">+</div>
+            </div>
+
+            <div class="example">
+                <strong>Exemples:</strong><br>
+                (+3) &times; (+5) = <strong>+15</strong> &nbsp;|&nbsp; (+3) &times; (&minus;5) = <strong>&minus;15</strong><br>
+                (&minus;3) &times; (+5) = <strong>&minus;15</strong> &nbsp;|&nbsp; (&minus;3) &times; (&minus;5) = <strong>+15</strong><br>
+                (&minus;12) &divide; (+4) = <strong>&minus;3</strong> &nbsp;|&nbsp; (&minus;12) &divide; (&minus;4) = <strong>+3</strong>
+            </div>
+
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Per que (&minus;) &times; (&minus;) = (+)?</strong> Pensem-ho aixi: si "no anar cap enrere" vol dir "anar cap endavant". Negar una cosa negativa la fa positiva!
+            </div>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">4</span> Nombres decimals</h3>
+            <p>Els decimals son nombres amb una <strong>part entera</strong> i una <strong>part decimal</strong>. Cada posicio te un valor:</p>
+
+            <!-- Visual: place value -->
+            <div style="display: flex; justify-content: center; gap: 0; margin: 14px 0; flex-wrap: wrap;">
+                <div style="text-align: center; padding: 8px 12px; border: 1px solid var(--border-subtle); background: rgba(59,130,246,0.06);">
+                    <div style="font-size: 0.65rem; color: var(--text-muted);">Centenes</div>
+                    <div style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary);">0</div>
+                    <div style="font-size: 0.65rem; color: var(--text-muted);">&times;100</div>
+                </div>
+                <div style="text-align: center; padding: 8px 12px; border: 1px solid var(--border-subtle); background: rgba(59,130,246,0.06);">
+                    <div style="font-size: 0.65rem; color: var(--text-muted);">Desenes</div>
+                    <div style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary);">0</div>
+                    <div style="font-size: 0.65rem; color: var(--text-muted);">&times;10</div>
+                </div>
+                <div style="text-align: center; padding: 8px 12px; border: 1px solid var(--border-subtle); background: rgba(59,130,246,0.06);">
+                    <div style="font-size: 0.65rem; color: var(--text-muted);">Unitats</div>
+                    <div style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary);">3</div>
+                    <div style="font-size: 0.65rem; color: var(--text-muted);">&times;1</div>
+                </div>
+                <div style="text-align: center; padding: 8px 4px; display: flex; align-items: center;">
+                    <span style="font-size: 1.5rem; font-weight: 800; color: #059669;">,</span>
+                </div>
+                <div style="text-align: center; padding: 8px 12px; border: 1px solid var(--border-subtle); background: rgba(5,150,105,0.06);">
+                    <div style="font-size: 0.65rem; color: var(--text-muted);">Decimes</div>
+                    <div style="font-size: 1.2rem; font-weight: 800; color: #059669;">7</div>
+                    <div style="font-size: 0.65rem; color: var(--text-muted);">/10</div>
+                </div>
+                <div style="text-align: center; padding: 8px 12px; border: 1px solid var(--border-subtle); background: rgba(5,150,105,0.06);">
+                    <div style="font-size: 0.65rem; color: var(--text-muted);">Centesimes</div>
+                    <div style="font-size: 1.2rem; font-weight: 800; color: #059669;">5</div>
+                    <div style="font-size: 0.65rem; color: var(--text-muted);">/100</div>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 10px;">
+                3,75 = 3 unitats + 7 decimes + 5 centesimes = 3 + 7/10 + 5/100
+            </div>
+
+            <p><strong>Tipus de decimals:</strong></p>
+            <ul style="padding-left: 18px; margin: 6px 0;">
+                <li><strong>Exactes:</strong> S'acaben. Ex: 0,5 &nbsp;|&nbsp; 2,75</li>
+                <li><strong>Periodics purs:</strong> Una xifra o grup es repeteix sempre. Ex: 0,333... = 0,<span style="text-decoration: overline;">3</span></li>
+                <li><strong>Periodics mixtos:</strong> Hi ha xifres que no es repeteixen i altres que si. Ex: 0,1666... = 0,1<span style="text-decoration: overline;">6</span></li>
             </ul>
-            <div class="example">Exemples: 3,746 arrodonit a 1 decimal = 3,7 | 3,746 arrodonit a 2 decimals = 3,75</div>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">5</span> Arrodoniment</h3>
+            <p>Arrodonir vol dir <strong>simplificar un decimal</strong> quedant-nos amb menys xifres. La regla es senzilla:</p>
+
+            <div style="display: flex; gap: 12px; margin: 14px 0; flex-wrap: wrap; justify-content: center;">
+                <div style="background: rgba(5,150,105,0.08); border: 1px solid rgba(5,150,105,0.2); border-radius: 8px; padding: 14px 20px; text-align: center; flex: 1; min-width: 180px;">
+                    <div style="font-size: 1.3rem; font-weight: 800; color: #059669;">0, 1, 2, 3, 4</div>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Xifra seguent &lt; 5<br><strong>Es manté</strong> (arrodoneix cap avall)</div>
+                </div>
+                <div style="background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; padding: 14px 20px; text-align: center; flex: 1; min-width: 180px;">
+                    <div style="font-size: 1.3rem; font-weight: 800; color: #ef4444;">5, 6, 7, 8, 9</div>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">Xifra seguent &ge; 5<br><strong>Puja 1</strong> (arrodoneix cap amunt)</div>
+                </div>
+            </div>
+
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 14px 0;">
+                <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 2;">
+                    <strong style="color: var(--text-primary);">Exemples d'arrodoniment:</strong><br>
+                    3,7<strong style="color: #059669;">4</strong>6 arrodonit a 1 decimal &rarr; 3,7 &nbsp;(el 4 &lt; 5, es manté)<br>
+                    3,74<strong style="color: #ef4444;">6</strong> arrodonit a 2 decimals &rarr; 3,75 &nbsp;(el 6 &ge; 5, puja)<br>
+                    8,<strong style="color: #ef4444;">9</strong>51 arrodonit a 0 decimals &rarr; 9 &nbsp;(el 9 &ge; 5, puja)<br>
+                    12,3<strong style="color: #059669;">2</strong>8 arrodonit a 2 decimals &rarr; 12,32 &nbsp;(el 2 &lt; 5, es manté)
+                </div>
+            </div>
+
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Recorda:</strong> Nomes mires <strong>una</strong> xifra: la que esta just a la dreta de la posicio on arrodoneixes. No miris les altres!
+            </div>
         </div>
 
         <div class="practice-section">

@@ -80,30 +80,147 @@
     <div class="container">
         <div class="theory-card">
             <h3><span class="icon">1</span> Rao i proporcio</h3>
-            <p>Una <strong>rao</strong> es la comparacio entre dues quantitats. Una <strong>proporcio</strong> es la igualtat de dues raons.</p>
-            <div class="formula">a/b = c/d &rarr; a &times; d = b &times; c (producte de extrems = producte de mitjos)</div>
+            <p>Una <strong>rao</strong> es la comparacio entre dues quantitats. Per exemple, si en una classe hi ha 12 nois i 8 noies, la rao nois/noies es 12/8 = 3/2.</p>
+            <p style="margin-top: 8px;">Una <strong>proporcio</strong> es la igualtat de dues raons. Es compleix la <strong>regla dels productes creuats</strong>:</p>
+            <div class="formula">a/b = c/d &rarr; a &times; d = b &times; c</div>
+
+            <!-- Visual: cross multiplication -->
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 12px 0; text-align: center;">
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;">Productes creuats:</div>
+                <div style="display: inline-grid; grid-template-columns: auto auto auto auto auto; gap: 4px 10px; align-items: center; font-size: 1.1rem; font-weight: 700;">
+                    <span style="color: #059669;">a</span>
+                    <span style="color: var(--text-muted); font-weight: 400;">/</span>
+                    <span style="color: #f59e0b;">b</span>
+                    <span style="color: var(--text-muted); font-weight: 400;">=</span>
+                    <span style="color: #f59e0b;">c</span>
+                </div>
+                <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-muted);">/</div>
+                <div style="display: inline-grid; grid-template-columns: auto; align-items: center; font-size: 1.1rem; font-weight: 700;">
+                    <span style="color: #059669;">d</span>
+                </div>
+                <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 8px;">
+                    <span style="color: #059669;">a &times; d</span> = <span style="color: #f59e0b;">b &times; c</span> &nbsp;(extrems = mitjos)
+                </div>
+            </div>
+
+            <div class="example">
+                <strong>Exemple:</strong> 2/3 = 4/6 &rarr; Comprovem: 2&times;6 = 12 i 3&times;4 = 12. Correcte!
+            </div>
         </div>
 
         <div class="theory-card">
             <h3><span class="icon">2</span> Regla de tres directa</h3>
-            <p>Quan dues magnituds son <strong>directament proporcionals</strong>: si una augmenta, l'altra tambe augmenta.</p>
-            <div class="formula">a &rarr; b | c &rarr; x | x = (c &times; b) / a</div>
-            <div class="example">Exemple: Si 3 kg costen 12 EUR, quant costen 5 kg? x = (5 &times; 12) / 3 = 20 EUR</div>
+            <p>S'utilitza quan dues coses van <strong>"juntes"</strong>: si una puja, l'altra tambe puja. Mes quilos &rarr; mes diners. Mes hores &rarr; mes feina feta.</p>
+
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 14px 0;">
+                <div style="font-size: 0.92rem; color: var(--text-secondary); line-height: 2;">
+                    <strong style="color: var(--text-primary); font-size: 1rem;">Exemple: Si 3 kg costen 6 EUR, quant costen 5 kg?</strong><br>
+                    <span style="color: #059669;">Pas 1:</span> Plantegem la proporcio:<br>
+                    <div style="display: flex; justify-content: center; gap: 30px; margin: 8px 0; font-weight: 700; font-size: 1rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 400;">kg</div>
+                            <div>3</div>
+                            <div>5</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 400;">&nbsp;</div>
+                            <div style="color: var(--text-muted);">&rarr;</div>
+                            <div style="color: var(--text-muted);">&rarr;</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 400;">EUR</div>
+                            <div>6</div>
+                            <div style="color: #059669;">x</div>
+                        </div>
+                    </div>
+                    <span style="color: #059669;">Pas 2:</span> Multipliquem en creu: x = (5 &times; 6) / 3<br>
+                    <span style="color: #059669;">Pas 3:</span> x = 30 / 3 = <strong>10 EUR</strong>
+                </div>
+            </div>
+
+            <div class="formula">x = (c &times; b) / a</div>
+
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Truc per saber si es directa:</strong> Pregunta't: "Si augmento una cosa, l'altra tambe augmenta?" Si la resposta es SI &rarr; directa.
+            </div>
         </div>
 
         <div class="theory-card">
             <h3><span class="icon">3</span> Regla de tres inversa</h3>
-            <p>Quan dues magnituds son <strong>inversament proporcionals</strong>: si una augmenta, l'altra disminueix.</p>
-            <div class="formula">a &rarr; b | c &rarr; x | x = (a &times; b) / c</div>
-            <div class="example">Exemple: 4 obrers triguen 6 dies. Quant triguen 8 obrers? x = (4 &times; 6) / 8 = 3 dies</div>
+            <p>S'utilitza quan dues coses van <strong>"al reves"</strong>: si una puja, l'altra baixa. Mes treballadors &rarr; menys dies. Mes velocitat &rarr; menys temps.</p>
+
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 14px 0;">
+                <div style="font-size: 0.92rem; color: var(--text-secondary); line-height: 2;">
+                    <strong style="color: var(--text-primary); font-size: 1rem;">Exemple: Si 4 treballadors triguen 6 dies, quant triguen 6 treballadors?</strong><br>
+                    <div style="display: flex; justify-content: center; gap: 30px; margin: 8px 0; font-weight: 700; font-size: 1rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 400;">Treballadors</div>
+                            <div>4</div>
+                            <div>6</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 400;">&nbsp;</div>
+                            <div style="color: var(--text-muted);">&rarr;</div>
+                            <div style="color: var(--text-muted);">&rarr;</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 400;">Dies</div>
+                            <div>6</div>
+                            <div style="color: #059669;">x</div>
+                        </div>
+                    </div>
+                    <span style="color: #059669;">Per que es inversa?</span> MES treballadors = MENYS dies (van al reves!)<br>
+                    <span style="color: #059669;">Formula:</span> x = (4 &times; 6) / 6 = 24 / 6 = <strong>4 dies</strong>
+                </div>
+            </div>
+
+            <div class="formula">x = (a &times; b) / c &nbsp; (atenció: es diferent de la directa!)</div>
+
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Recorda:</strong> Directa = multiplico en creu. Inversa = multiplico els de la mateixa fila i divideixo per l'altre.
+            </div>
         </div>
 
         <div class="theory-card">
             <h3><span class="icon">4</span> Percentatges</h3>
-            <p>El <strong>percentatge</strong> es una fraccio amb denominador 100. Indica quantes parts de cada 100.</p>
-            <div class="formula">x% de N = (x &times; N) / 100</div>
-            <div class="example">Exemple: 25% de 80 = (25 &times; 80) / 100 = 20</div>
-            <p><strong>Descompte:</strong> Preu final = Preu &minus; (Percentatge &times; Preu / 100)</p>
+            <p>El <strong>percentatge</strong> vol dir literalment <strong>"de cada 100"</strong>. 20% significa "20 de cada 100".</p>
+            <div class="formula">x% de N = (x / 100) &times; N = (x &times; N) / 100</div>
+
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 14px 0;">
+                <div style="font-size: 0.92rem; color: var(--text-secondary); line-height: 2;">
+                    <strong style="color: var(--text-primary);">Exemple: 20% de 50 = ?</strong><br>
+                    20% vol dir 20/100 = 0,20<br>
+                    0,20 &times; 50 = <strong>10</strong><br>
+                    <span style="color: var(--text-muted);">(O be: 20 &times; 50 / 100 = 1000 / 100 = 10)</span>
+                </div>
+            </div>
+
+            <!-- Visual: percentage bar -->
+            <div style="margin: 12px 0;">
+                <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">20% de 50 = 10</div>
+                <div style="display: flex; height: 24px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-subtle); max-width: 300px;">
+                    <div style="width: 20%; background: #059669; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #fff; font-weight: 700;">20%</div>
+                    <div style="width: 80%; background: var(--bg-overlay);"></div>
+                </div>
+            </div>
+
+            <p style="margin-top: 16px;"><strong>Calcular un descompte:</strong></p>
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 10px 0;">
+                <div style="font-size: 0.92rem; color: var(--text-secondary); line-height: 2;">
+                    <strong style="color: var(--text-primary);">Un jersei costa 40 EUR amb 25% de descompte. Preu final?</strong><br>
+                    <span style="color: #059669;">Pas 1:</span> Calculem el descompte: 25% de 40 = (25&times;40)/100 = <strong>10 EUR</strong><br>
+                    <span style="color: #059669;">Pas 2:</span> Restem del preu: 40 &minus; 10 = <strong>30 EUR</strong>
+                </div>
+            </div>
+
+            <div class="example">
+                <strong>Percentatges rapids que val la pena recordar:</strong><br>
+                10% &rarr; Dividir per 10 &nbsp;|&nbsp; 25% &rarr; Dividir per 4 &nbsp;|&nbsp; 50% &rarr; Dividir per 2 &nbsp;|&nbsp; 75% &rarr; &times;3 i dividir per 4
+            </div>
+
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Truc:</strong> Per calcular el 15% &rarr; calcula primer el 10% i despres el 5% (que es la meitat del 10%) i suma'ls.
+            </div>
         </div>
 
         <div class="practice-section">

@@ -86,31 +86,163 @@
 
     <div class="container">
         <div class="theory-card">
-            <h3><span class="icon">1</span> Potencies</h3>
-            <p>Una <strong>potencia</strong> es el producte d'un nombre (base) multiplicat per ell mateix tantes vegades com indica l'exponent.</p>
+            <h3><span class="icon">1</span> Que es una potencia?</h3>
+            <p>Una <strong>potencia</strong> es una forma curta d'escriure una <strong>multiplicacio repetida</strong>. La <strong>base</strong> es el nombre que es repeteix i l'<strong>exponent</strong> indica quantes vegades.</p>
             <div class="formula">a<sup>n</sup> = a &times; a &times; ... &times; a (n vegades)</div>
-            <div class="example">Exemple: 2<sup>4</sup> = 2 &times; 2 &times; 2 &times; 2 = 16</div>
-        </div>
 
-        <div class="theory-card">
-            <h3><span class="icon">2</span> Propietats de les potencies</h3>
-            <div class="props-grid">
-                <div class="prop-item"><strong>Producte de potencies (mateixa base)</strong><code>a<sup>m</sup> &times; a<sup>n</sup> = a<sup>m+n</sup></code></div>
-                <div class="prop-item"><strong>Quocient de potencies</strong><code>a<sup>m</sup> &divide; a<sup>n</sup> = a<sup>m-n</sup></code></div>
-                <div class="prop-item"><strong>Potencia d'una potencia</strong><code>(a<sup>m</sup>)<sup>n</sup> = a<sup>m&times;n</sup></code></div>
-                <div class="prop-item"><strong>Exponent zero</strong><code>a<sup>0</sup> = 1 (a &ne; 0)</code></div>
-                <div class="prop-item"><strong>Exponent negatiu</strong><code>a<sup>-n</sup> = 1/a<sup>n</sup></code></div>
-                <div class="prop-item"><strong>Potencia d'un producte</strong><code>(a&times;b)<sup>n</sup> = a<sup>n</sup> &times; b<sup>n</sup></code></div>
+            <!-- Visual: 2^3 breakdown -->
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 14px 0; text-align: center;">
+                <div style="font-size: 1.3rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">
+                    2<sup style="font-size: 0.8em;">3</sup> = ?
+                </div>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.1rem; font-weight: 700; flex-wrap: wrap;">
+                    <span style="background: #059669; color: #fff; padding: 6px 14px; border-radius: 8px;">2</span>
+                    <span style="color: var(--text-muted);">&times;</span>
+                    <span style="background: #059669; color: #fff; padding: 6px 14px; border-radius: 8px;">2</span>
+                    <span style="color: var(--text-muted);">&times;</span>
+                    <span style="background: #059669; color: #fff; padding: 6px 14px; border-radius: 8px;">2</span>
+                    <span style="color: var(--text-muted);">=</span>
+                    <span style="background: var(--text-primary); color: var(--bg-base); padding: 6px 14px; border-radius: 8px;">8</span>
+                </div>
+                <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 8px;">
+                    &uarr; base (2) repetida 3 vegades (exponent)
+                </div>
+            </div>
+
+            <div class="example">
+                <strong>Mes exemples:</strong><br>
+                5<sup>2</sup> = 5 &times; 5 = <strong>25</strong> &nbsp;(cinc al quadrat)<br>
+                3<sup>4</sup> = 3 &times; 3 &times; 3 &times; 3 = <strong>81</strong> &nbsp;(tres a la quarta)<br>
+                10<sup>3</sup> = 10 &times; 10 &times; 10 = <strong>1000</strong> &nbsp;(deu al cub)
+            </div>
+
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Recorda:</strong> Una potencia <strong>NO</strong> es una multiplicacio per l'exponent! 2<sup>3</sup> &ne; 2&times;3=6. Es 2&times;2&times;2=8.
             </div>
         </div>
 
         <div class="theory-card">
-            <h3><span class="icon">3</span> Arrels</h3>
-            <p>L'<strong>arrel quadrada</strong> d'un nombre es el valor que multiplicat per ell mateix dona aquell nombre.</p>
-            <div class="formula">&radic;a = b &hArr; b&sup2; = a</div>
-            <p>L'<strong>arrel cubica</strong> d'un nombre es el valor que elevat al cub dona aquell nombre.</p>
-            <div class="formula">&sup3;&radic;a = b &hArr; b&sup3; = a</div>
-            <div class="example">Exemples: &radic;49 = 7 | &sup3;&radic;27 = 3</div>
+            <h3><span class="icon">2</span> Propietats de les potencies</h3>
+            <p>Les potencies tenen "trucs" que simplifiquen els calculs. Cada propietat te un <strong>exemple concret</strong>:</p>
+            <div class="props-grid">
+                <div class="prop-item">
+                    <strong>Producte (mateixa base)</strong>
+                    <code>a<sup>m</sup> &times; a<sup>n</sup> = a<sup>m+n</sup></code>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">2<sup>3</sup> &times; 2<sup>4</sup> = 2<sup>3+4</sup> = 2<sup>7</sup> = 128</div>
+                </div>
+                <div class="prop-item">
+                    <strong>Quocient (mateixa base)</strong>
+                    <code>a<sup>m</sup> &divide; a<sup>n</sup> = a<sup>m-n</sup></code>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">5<sup>6</sup> &divide; 5<sup>4</sup> = 5<sup>6-4</sup> = 5<sup>2</sup> = 25</div>
+                </div>
+                <div class="prop-item">
+                    <strong>Potencia d'una potencia</strong>
+                    <code>(a<sup>m</sup>)<sup>n</sup> = a<sup>m&times;n</sup></code>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">(3<sup>2</sup>)<sup>3</sup> = 3<sup>2&times;3</sup> = 3<sup>6</sup> = 729</div>
+                </div>
+                <div class="prop-item">
+                    <strong>Exponent zero</strong>
+                    <code>a<sup>0</sup> = 1 (a &ne; 0)</code>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">7<sup>0</sup> = 1, 100<sup>0</sup> = 1, 999<sup>0</sup> = 1</div>
+                </div>
+                <div class="prop-item">
+                    <strong>Exponent negatiu</strong>
+                    <code>a<sup>-n</sup> = 1/a<sup>n</sup></code>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">2<sup>-3</sup> = 1/2<sup>3</sup> = 1/8</div>
+                </div>
+                <div class="prop-item">
+                    <strong>Potencia d'un producte</strong>
+                    <code>(a&times;b)<sup>n</sup> = a<sup>n</sup> &times; b<sup>n</sup></code>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">(2&times;3)<sup>2</sup> = 2<sup>2</sup>&times;3<sup>2</sup> = 4&times;9 = 36</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Truc per recordar:</strong> Mateixa base? &rarr; Suma/resta exponents. Potencia de potencia? &rarr; Multiplica exponents.
+            </div>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">3</span> Arrel quadrada</h3>
+            <p>L'arrel quadrada es la pregunta: <strong>"Quin nombre multiplicat per ell mateix dona aquest resultat?"</strong></p>
+            <div class="formula">&radic;a = b &hArr; b &times; b = a</div>
+
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 14px 0; text-align: center;">
+                <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">
+                    &radic;9 = <strong style="color: #059669;">3</strong> &nbsp; perque &nbsp; 3 &times; 3 = 9
+                </div>
+                <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">
+                    Pensem: "Quin nombre multiplicat per ell mateix dona 9?" &rarr; 3!
+                </div>
+            </div>
+
+            <p style="margin-top: 14px;"><strong>Taula de quadrats perfectes</strong> (aprendre de memoria!):</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 6px; margin: 10px 0;">
+                <div style="background: var(--bg-overlay); border-radius: 6px; padding: 8px; text-align: center; font-size: 0.82rem;">
+                    <div style="font-weight: 700; color: #059669;">1<sup>2</sup> = 1</div>
+                    <div style="color: var(--text-muted);">&radic;1 = 1</div>
+                </div>
+                <div style="background: var(--bg-overlay); border-radius: 6px; padding: 8px; text-align: center; font-size: 0.82rem;">
+                    <div style="font-weight: 700; color: #059669;">2<sup>2</sup> = 4</div>
+                    <div style="color: var(--text-muted);">&radic;4 = 2</div>
+                </div>
+                <div style="background: var(--bg-overlay); border-radius: 6px; padding: 8px; text-align: center; font-size: 0.82rem;">
+                    <div style="font-weight: 700; color: #059669;">3<sup>2</sup> = 9</div>
+                    <div style="color: var(--text-muted);">&radic;9 = 3</div>
+                </div>
+                <div style="background: var(--bg-overlay); border-radius: 6px; padding: 8px; text-align: center; font-size: 0.82rem;">
+                    <div style="font-weight: 700; color: #059669;">4<sup>2</sup> = 16</div>
+                    <div style="color: var(--text-muted);">&radic;16 = 4</div>
+                </div>
+                <div style="background: var(--bg-overlay); border-radius: 6px; padding: 8px; text-align: center; font-size: 0.82rem;">
+                    <div style="font-weight: 700; color: #059669;">5<sup>2</sup> = 25</div>
+                    <div style="color: var(--text-muted);">&radic;25 = 5</div>
+                </div>
+                <div style="background: var(--bg-overlay); border-radius: 6px; padding: 8px; text-align: center; font-size: 0.82rem;">
+                    <div style="font-weight: 700; color: #059669;">6<sup>2</sup> = 36</div>
+                    <div style="color: var(--text-muted);">&radic;36 = 6</div>
+                </div>
+                <div style="background: var(--bg-overlay); border-radius: 6px; padding: 8px; text-align: center; font-size: 0.82rem;">
+                    <div style="font-weight: 700; color: #059669;">7<sup>2</sup> = 49</div>
+                    <div style="color: var(--text-muted);">&radic;49 = 7</div>
+                </div>
+                <div style="background: var(--bg-overlay); border-radius: 6px; padding: 8px; text-align: center; font-size: 0.82rem;">
+                    <div style="font-weight: 700; color: #059669;">8<sup>2</sup> = 64</div>
+                    <div style="color: var(--text-muted);">&radic;64 = 8</div>
+                </div>
+                <div style="background: var(--bg-overlay); border-radius: 6px; padding: 8px; text-align: center; font-size: 0.82rem;">
+                    <div style="font-weight: 700; color: #059669;">9<sup>2</sup> = 81</div>
+                    <div style="color: var(--text-muted);">&radic;81 = 9</div>
+                </div>
+                <div style="background: var(--bg-overlay); border-radius: 6px; padding: 8px; text-align: center; font-size: 0.82rem;">
+                    <div style="font-weight: 700; color: #059669;">10<sup>2</sup> = 100</div>
+                    <div style="color: var(--text-muted);">&radic;100 = 10</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="theory-card">
+            <h3><span class="icon">4</span> Arrel cubica</h3>
+            <p>L'arrel cubica es la pregunta: <strong>"Quin nombre multiplicat per ell mateix 3 vegades dona aquest resultat?"</strong></p>
+            <div class="formula">&sup3;&radic;a = b &hArr; b &times; b &times; b = a</div>
+
+            <div style="background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin: 14px 0; text-align: center;">
+                <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">
+                    &sup3;&radic;8 = <strong style="color: #059669;">2</strong> &nbsp; perque &nbsp; 2 &times; 2 &times; 2 = 8
+                </div>
+                <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">
+                    Pensem: "Quin nombre elevat al cub dona 8?" &rarr; 2!
+                </div>
+            </div>
+
+            <div class="example">
+                <strong>Cubs perfectes mes importants:</strong><br>
+                &sup3;&radic;1 = 1 &nbsp;|&nbsp; &sup3;&radic;8 = 2 &nbsp;|&nbsp; &sup3;&radic;27 = 3 &nbsp;|&nbsp; &sup3;&radic;64 = 4 &nbsp;|&nbsp; &sup3;&radic;125 = 5 &nbsp;|&nbsp; &sup3;&radic;216 = 6 &nbsp;|&nbsp; &sup3;&radic;343 = 7
+            </div>
+
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Recorda:</strong> L'arrel es l'operacio <strong>inversa</strong> de la potencia. Si 3<sup>2</sup> = 9, llavors &radic;9 = 3. Si 5<sup>3</sup> = 125, llavors &sup3;&radic;125 = 5.
+            </div>
         </div>
 
         <div class="practice-section">

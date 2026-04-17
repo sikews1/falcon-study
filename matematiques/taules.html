@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ca"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Taules de multiplicar</title><link rel="stylesheet" href="../styles.css">
+<style>
+.math-nav{background:rgba(240,240,243,.85);backdrop-filter:blur(20px);padding:12px 20px;display:flex;justify-content:center;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--border-subtle);position:sticky;top:0;z-index:200}
+.math-nav a{padding:8px 16px;border-radius:9999px;color:var(--text-secondary);text-decoration:none;font-size:.82rem;font-weight:500}.math-nav a:hover{color:var(--text-primary);background:var(--bg-hover)}.math-nav a.home{color:#059669;font-weight:600}
+.hero{text-align:center;padding:40px 24px;border-bottom:1px solid var(--border-subtle)}.hero h1{font-size:1.8rem;font-weight:800}.hero h1 span{background:linear-gradient(135deg,#059669,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero p{color:var(--text-secondary)}
+.container{max-width:800px;margin:0 auto;padding:24px 20px}
+.card{background:var(--bg-raised);border-radius:16px;padding:24px;margin-bottom:16px;border:1px solid var(--border-subtle);box-shadow:var(--shadow-sm)}.card h2{font-size:1.1rem;font-weight:700;margin-bottom:12px}
+.table-btns{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.table-btn{width:48px;height:48px;border-radius:12px;border:2px solid var(--border-default);background:var(--bg-base);color:var(--text-primary);font-size:1.1rem;font-weight:700;cursor:pointer;transition:all .2s}
+.table-btn:hover{border-color:#059669;color:#059669}.table-btn.active{background:#059669;color:#fff;border-color:#059669}
+.math-box{font-size:2rem;text-align:center;padding:20px;background:var(--bg-overlay);border-radius:12px;margin:12px 0;font-weight:700}
+.answer-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0;justify-content:center}
+.answer-row input{width:100px;padding:12px;border:2px solid var(--border-default);border-radius:8px;font-size:1.2rem;text-align:center;background:var(--bg-base);color:var(--text-primary)}
+.answer-row input:focus{outline:none;border-color:#059669}
+.btn{padding:10px 18px;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:600}
+.btn-check{background:linear-gradient(135deg,#059669,#10b981);color:#fff}.btn-new{background:var(--bg-overlay);color:var(--text-primary);border:1px solid var(--border-default)}
+.feedback{margin:8px 0;padding:10px;border-radius:8px;text-align:center;font-weight:600;font-size:1.1rem}
+.feedback.ok{background:rgba(34,197,94,.1);color:#16a34a}.feedback.ko{background:rgba(239,68,68,.1);color:#dc2626}
+.stats{display:flex;gap:20px;justify-content:center;font-size:15px;margin-top:12px;color:var(--text-secondary)}.stats strong{color:var(--text-primary)}
+.timer-bar{height:6px;background:var(--bg-overlay);border-radius:3px;margin:12px 0;overflow:hidden}.timer-fill{height:100%;background:linear-gradient(90deg,#059669,#10b981);transition:width .1s linear}
+.speed-score{text-align:center;font-size:2rem;font-weight:800;color:#059669;margin:12px 0}
+.mode-btns{display:flex;gap:8px;margin-bottom:16px;justify-content:center}
+.mode-btn{padding:8px 20px;border-radius:20px;border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);cursor:pointer;font-weight:500}
+.mode-btn.active{background:#059669;color:#fff;border-color:#059669}
+</style></head><body>
+<div class="math-nav"><a href="../index.html" class="home">&#8592; Cursos</a><a href="index.html">Inici</a></div>
+<div class="hero"><h1>Taules de <span>multiplicar</span></h1><p>Practica fins a dominar-les totes!</p></div>
+<div class="container">
+<div class="card"><h2>Tria el mode</h2>
+<div class="mode-btns"><button class="mode-btn active" onclick="setMode('normal')">Normal</button><button class="mode-btn" onclick="setMode('speed')">Velocitat 30s</button></div>
+<h2>Tria la taula</h2>
+<div class="table-btns" id="tableBtns"></div>
+</div>
+<div class="card" id="normalMode">
+<div class="math-box" id="question">—</div>
+<div class="answer-row"><input type="text" id="ans" placeholder="?" autocomplete="off"><button class="btn btn-check" onclick="check()">Comprovar</button></div>
+<div id="fb"></div>
+<div class="stats"><span>Encerts: <strong id="ok">0</strong></span><span>Errors: <strong id="ko">0</strong></span><span>Ratxa: <strong id="streak">0</strong></span></div>
+</div>
+<div class="card" id="speedMode" style="display:none">
+<p style="text-align:center;color:var(--text-secondary)">Respon tantes com puguis en 30 segons!</p>
+<div class="timer-bar"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>
+<div class="math-box" id="sq">—</div>
+<div class="answer-row"><input type="text" id="sans" placeholder="?" autocomplete="off"><button class="btn btn-check" onclick="scheck()">OK</button></div>
+<div id="sfb"></div>
+<div class="speed-score">Puntuació: <span id="sscore">0</span></div>
+<button class="btn btn-new" onclick="startSpeed()" id="startBtn">Començar!</button>
+</div>
+</div>
+<script>
+let table=2,ok=0,ko=0,streak=0,mode='normal',a,b,timer,timeLeft,sScore,running=false;
+const tbDiv=document.getElementById('tableBtns');
+for(let i=1;i<=12;i++){const btn=document.createElement('button');btn.className='table-btn'+(i===2?' active':'');btn.textContent=i;btn.onclick=()=>{document.querySelectorAll('.table-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');table=i;gen();};tbDiv.appendChild(btn);}
+const mixBtn=document.createElement('button');mixBtn.className='table-btn';mixBtn.textContent='🎲';mixBtn.title='Totes';mixBtn.onclick=()=>{document.querySelectorAll('.table-btn').forEach(b=>b.classList.remove('active'));mixBtn.classList.add('active');table=0;gen();};tbDiv.appendChild(mixBtn);
+
+function setMode(m){mode=m;document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));document.querySelector('.mode-btn[onclick*="'+m+'"]').classList.add('active');document.getElementById('normalMode').style.display=m==='normal'?'block':'none';document.getElementById('speedMode').style.display=m==='speed'?'block':'none';if(m==='normal')gen();}
+function gen(){a=table===0?Math.ceil(Math.random()*12):table;b=Math.ceil(Math.random()*12);document.getElementById('question').textContent=a+' × '+b+' = ?';document.getElementById('ans').value='';document.getElementById('fb').innerHTML='';document.getElementById('ans').focus();}
+function check(){const v=parseInt(document.getElementById('ans').value);if(isNaN(v))return;if(v===a*b){ok++;streak++;document.getElementById('ok').textContent=ok;document.getElementById('streak').textContent=streak;document.getElementById('fb').className='feedback ok';document.getElementById('fb').textContent='✓ Correcte! '+a+'×'+b+'='+a*b;setTimeout(gen,800);}else{ko++;streak=0;document.getElementById('ko').textContent=ko;document.getElementById('streak').textContent=streak;document.getElementById('fb').className='feedback ko';document.getElementById('fb').textContent='✗ La resposta és '+a*b;}}
+document.getElementById('ans').addEventListener('keydown',e=>{if(e.key==='Enter')check();});
+
+function startSpeed(){if(running)return;running=true;sScore=0;timeLeft=30;document.getElementById('sscore').textContent=0;document.getElementById('startBtn').textContent='En marxa...';sgen();const iv=setInterval(()=>{timeLeft-=0.1;document.getElementById('timerFill').style.width=(timeLeft/30*100)+'%';if(timeLeft<=0){clearInterval(iv);running=false;document.getElementById('startBtn').textContent='Tornar a jugar!';document.getElementById('sq').textContent='Temps! Puntuació: '+sScore;document.getElementById('sans').value='';}},100);}
+function sgen(){a=table===0?Math.ceil(Math.random()*12):table;b=Math.ceil(Math.random()*12);document.getElementById('sq').textContent=a+' × '+b+' = ?';document.getElementById('sans').value='';document.getElementById('sfb').innerHTML='';document.getElementById('sans').focus();}
+function scheck(){if(!running)return;const v=parseInt(document.getElementById('sans').value);if(isNaN(v))return;if(v===a*b){sScore++;document.getElementById('sscore').textContent=sScore;document.getElementById('sfb').className='feedback ok';document.getElementById('sfb').textContent='✓';sgen();}else{document.getElementById('sfb').className='feedback ko';document.getElementById('sfb').textContent='✗ '+a*b;setTimeout(sgen,500);}}
+document.getElementById('sans').addEventListener('keydown',e=>{if(e.key==='Enter')scheck();});
+gen();
+</script>
+<script src="../theme.js"></script><script src="../auth.js"></script>
+</body></html>

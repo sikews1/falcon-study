@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrals - Matematiques</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .math-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .math-nav { background: rgba(15,23,41, 0.85); }
+        .math-nav a { padding: 8px 16px; border-radius: var(--radius-full); border: none; color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; transition: all 0.25s; background: transparent; }
+        .math-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .math-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .math-nav a.home { color: #059669; font-weight: 600; }
+        .math-nav a.home:hover { background: rgba(5,150,105,0.1); }
+
+        .hero { text-align: center; padding: 48px 24px 40px; border-bottom: 1px solid var(--border-subtle); position: relative; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 80% at 30% 0%, rgba(5,150,105,0.08) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 70% 20%, rgba(16,185,129,0.06) 0%, transparent 60%); pointer-events: none; }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; position: relative; }
+        .hero h1 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; position: relative; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+
+        .theory-card { background: var(--bg-raised); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+        .theory-card:hover { box-shadow: var(--shadow-sm); }
+        .theory-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+        .theory-card h3 .icon { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #059669, #10b981); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+        .theory-card p, .theory-card li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+        .formula { background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px 16px; font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 600; color: var(--text-primary); margin: 10px 0; text-align: center; }
+        .example { background: rgba(5,150,105,0.06); border-left: 3px solid #059669; padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 10px 0; font-size: 0.88rem; color: var(--text-secondary); }
+
+        .identity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin: 14px 0; }
+        .identity-item { background: var(--bg-overlay); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px; text-align: center; }
+        .identity-item .name { font-size: 0.8rem; font-weight: 700; color: #059669; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .identity-item .expr { font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 700; color: var(--text-primary); }
+
+        .practice-section { background: var(--bg-raised); border: 2px solid rgba(5,150,105,0.2); border-radius: var(--radius-xl); padding: 32px; margin-top: 32px; }
+        .practice-section h2 { font-size: 1.3rem; font-weight: 800; margin: 0 0 20px; color: var(--text-primary); }
+        .practice-section h2 span { background: linear-gradient(135deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .difficulty-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .difficulty-selector button { padding: 8px 18px; border-radius: var(--radius-full); border: 2px solid var(--border-subtle); background: transparent; color: var(--text-secondary); cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: all 0.25s; font-family: var(--font-sans); }
+        .difficulty-selector button:hover { border-color: #059669; color: #059669; }
+        .difficulty-selector button.active { background: linear-gradient(135deg, #059669, #10b981); color: #fff; border-color: transparent; }
+
+        .exercise-display { background: var(--bg-overlay); border-radius: var(--radius-lg); padding: 32px; text-align: center; margin-bottom: 20px; }
+        .exercise-display .problem { font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+        .exercise-display .hint { font-size: 0.85rem; color: var(--text-muted); }
+
+        .answer-group { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; justify-content: center; align-items: center; }
+        .answer-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+        .answer-group input { width: 120px; padding: 12px 14px; border-radius: var(--radius-md); border: 2px solid var(--border-subtle); background: var(--bg-base); color: var(--text-primary); font-size: 1rem; font-weight: 600; font-family: var(--font-sans); outline: none; text-align: center; }
+        .answer-group input:focus { border-color: #059669; }
+
+        .btn-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .btn { padding: 12px 24px; border-radius: var(--radius-full); border: none; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: var(--font-sans); transition: all 0.25s; }
+        .btn-check { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+        .btn-check:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(5,150,105,0.3); }
+        .btn-new { background: var(--bg-overlay); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { background: var(--bg-hover); }
+        .btn-solution { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+        .btn-solution:hover { background: var(--bg-overlay); }
+
+        .feedback { margin-top: 16px; padding: 14px 18px; border-radius: var(--radius-md); font-size: 0.92rem; font-weight: 600; display: none; }
+        .feedback.correct { display: block; background: var(--green-soft); color: #059669; border: 1px solid rgba(5,150,105,0.2); }
+        .feedback.incorrect { display: block; background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+        .feedback.solution { display: block; background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+
+        .score-bar { display: flex; justify-content: center; gap: 24px; margin-top: 20px; padding: 14px; background: var(--bg-overlay); border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600; }
+        .score-bar .correct-count { color: #059669; }
+        .score-bar .incorrect-count { color: var(--red); }
+        .score-bar .total-count { color: var(--text-secondary); }
+
+        sup { font-size: 0.7em; vertical-align: super; }
+    </style>
+</head>
+<body>
+    <div class="math-nav">
+        <a href="../index.html" class="home">&#8592; Cursos</a>
+        <a href="index.html">Inici</a>
+    </div>
+
+    <div class="hero">
+        <h1><span>Integrals</span></h1>
+        <p>Antiderivades, integrals indefinides, regles d'integracio i integral definida</p>
+    </div>
+
+    <div class="container">
+
+        <!-- THEORY 1: Concepte -->
+        <div class="theory-card">
+            <h3><span class="icon">1</span> Concepte d'integral</h3>
+            <p>La <strong>integral indefinida</strong> es l'operacio inversa de la derivada. Integrar una funcio f(x) significa trobar una funcio F(x) tal que F'(x) = f(x).</p>
+            <div class="formula">&int; f(x) dx = F(x) + C</div>
+            <p style="margin-top: 10px;">La constant <strong>C</strong> (constant d'integracio) apareix perque la derivada d'una constant es 0, i per tant hi ha infinites antiderivades.</p>
+            <div class="example">
+                <strong>Exemple:</strong> &int; 2x dx = x<sup>2</sup> + C &nbsp; (perque (x<sup>2</sup>)' = 2x)
+            </div>
+        </div>
+
+        <!-- THEORY 2: Taula d'integrals -->
+        <div class="theory-card">
+            <h3><span class="icon">2</span> Taula d'integrals basiques</h3>
+            <div class="identity-grid">
+                <div class="identity-item">
+                    <div class="name">Potencia</div>
+                    <div class="expr">&int;x<sup>n</sup>dx = x<sup>n+1</sup>/(n+1) + C</div>
+                </div>
+                <div class="identity-item">
+                    <div class="name">Constant</div>
+                    <div class="expr">&int;k dx = kx + C</div>
+                </div>
+                <div class="identity-item">
+                    <div class="name">Exponencial</div>
+                    <div class="expr">&int;e<sup>x</sup>dx = e<sup>x</sup> + C</div>
+                </div>
+                <div class="identity-item">
+                    <div class="name">Inversa</div>
+                    <div class="expr">&int;(1/x) dx = ln|x| + C</div>
+                </div>
+                <div class="identity-item">
+                    <div class="name">Sinus</div>
+                    <div class="expr">&int;sin x dx = -cos x + C</div>
+                </div>
+                <div class="identity-item">
+                    <div class="name">Cosinus</div>
+                    <div class="expr">&int;cos x dx = sin x + C</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THEORY 3: Propietats -->
+        <div class="theory-card">
+            <h3><span class="icon">3</span> Propietats de la integral</h3>
+            <ul style="margin: 8px 0 0 20px;">
+                <li><strong>Linealitat:</strong> &int;[a&middot;f(x) + b&middot;g(x)] dx = a&middot;&int;f(x) dx + b&middot;&int;g(x) dx</li>
+                <li><strong>Constant multiplicativa:</strong> &int;k&middot;f(x) dx = k&middot;&int;f(x) dx</li>
+            </ul>
+            <div class="example">
+                <strong>Exemple:</strong> &int;(3x<sup>2</sup> + 4x - 5) dx = 3&middot;x<sup>3</sup>/3 + 4&middot;x<sup>2</sup>/2 - 5x + C = x<sup>3</sup> + 2x<sup>2</sup> - 5x + C
+            </div>
+        </div>
+
+        <!-- THEORY 4: Integral definida -->
+        <div class="theory-card">
+            <h3><span class="icon">4</span> Integral definida</h3>
+            <p>La <strong>integral definida</strong> calcula l'area sota la corba de f(x) entre dos punts a i b.</p>
+            <div class="formula">&int;<sub>a</sub><sup>b</sup> f(x) dx = F(b) - F(a)</div>
+            <div class="example">
+                <strong>Exemple:</strong> &int;<sub>1</sub><sup>3</sup> 2x dx = [x<sup>2</sup>]<sub>1</sub><sup>3</sup> = 3<sup>2</sup> - 1<sup>2</sup> = 9 - 1 = <strong>8</strong>
+            </div>
+            <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
+                <strong style="color: var(--blue);">Teorema fonamental del calcul:</strong> Si F es una antiderivada de f, llavors &int;<sub>a</sub><sup>b</sup> f(x) dx = F(b) - F(a). Aixo connecta la derivacio amb la integracio.
+            </div>
+        </div>
+
+        <!-- PRACTICE -->
+        <div class="practice-section">
+            <h2><span>Practica</span></h2>
+
+            <div class="difficulty-selector">
+                <button class="active" onclick="setType(0)">&int; ax<sup>n</sup></button>
+                <button onclick="setType(1)">&int; polinomi grau 2</button>
+                <button onclick="setType(2)">&int; polinomi grau 3</button>
+                <button onclick="setType(3)">Integral definida</button>
+            </div>
+
+            <div class="exercise-display">
+                <div class="problem" id="problem">--</div>
+                <div class="hint" id="hint"></div>
+            </div>
+
+            <div id="answer-area"></div>
+
+            <div class="btn-row">
+                <button class="btn btn-check" onclick="checkAnswer()">Comprovar</button>
+                <button class="btn btn-new" onclick="newExercise()">Nou exercici</button>
+                <button class="btn btn-solution" onclick="showSolution()">Mostrar solucio</button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="score-bar">
+                <div class="correct-count">Encerts: <span id="correct">0</span></div>
+                <div class="incorrect-count">Errors: <span id="incorrect">0</span></div>
+                <div class="total-count">Total: <span id="total">0</span></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../theme.js"></script>
+    <script src="../auth.js"></script>
+    <script>
+        let exerciseType = 0;
+        let currentAnswers = {};
+        let correctCount = 0, incorrectCount = 0;
+        let answered = false;
+        let solutionText = '';
+
+        function setType(t) {
+            exerciseType = t;
+            document.querySelectorAll('.difficulty-selector button').forEach((btn, i) => btn.classList.toggle('active', i === t));
+            newExercise();
+        }
+
+        function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        function renderAnswerInputs(fields) {
+            const area = document.getElementById('answer-area');
+            let html = '<div class="answer-group">';
+            fields.forEach((f, i) => {
+                html += `<label>${f.label}</label>`;
+                html += `<input type="number" step="any" id="ans${i}" placeholder="${f.placeholder || '?'}" onkeydown="if(event.key==='Enter') checkAnswer()">`;
+            });
+            html += '</div>';
+            area.innerHTML = html;
+            const first = document.getElementById('ans0');
+            if (first) first.focus();
+        }
+
+        function formatPoly(coeffs) {
+            // coeffs[i] = { num, den, exp } or we use simple approach
+            // coeffs array: index 0 = highest power
+            let parts = [];
+            for (let i = 0; i < coeffs.length; i++) {
+                const exp = coeffs.length - 1 - i;
+                const c = coeffs[i];
+                if (c === 0) continue;
+                let term = '';
+                if (exp === 0) {
+                    term = (c > 0 && parts.length > 0 ? '+ ' : '') + c;
+                } else if (exp === 1) {
+                    if (c === 1) term = (parts.length > 0 ? '+ ' : '') + 'x';
+                    else if (c === -1) term = '- x';
+                    else term = (c > 0 && parts.length > 0 ? '+ ' : '') + c + 'x';
+                } else {
+                    if (c === 1) term = (parts.length > 0 ? '+ ' : '') + 'x<sup>' + exp + '</sup>';
+                    else if (c === -1) term = '- x<sup>' + exp + '</sup>';
+                    else term = (c > 0 && parts.length > 0 ? '+ ' : '') + c + 'x<sup>' + exp + '</sup>';
+                }
+                parts.push(term);
+            }
+            return parts.length > 0 ? parts.join(' ') : '0';
+        }
+
+        function fracStr(num, den) {
+            if (den === 1) return '' + num;
+            if (num < 0 && den < 0) { num = -num; den = -den; }
+            if (den < 0) { num = -num; den = -den; }
+            // Simplify
+            const g = gcd(Math.abs(num), Math.abs(den));
+            num /= g; den /= g;
+            if (den === 1) return '' + num;
+            return num + '/' + den;
+        }
+
+        function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
+
+        function newExercise() {
+            answered = false;
+            document.getElementById('feedback').className = 'feedback';
+            const probEl = document.getElementById('problem');
+            let hint = '';
+
+            switch (exerciseType) {
+                case 0: { // Integral ax^n -> (a/(n+1)) x^(n+1) + C
+                    const a = randInt(-8, 8);
+                    if (a === 0) return newExercise();
+                    const n = randInt(1, 5);
+                    // Result: numerator = a, denominator = n+1, exponent = n+1
+                    const newExp = n + 1;
+                    const g = gcd(Math.abs(a), newExp);
+                    const resNum = a / g;
+                    const resDen = newExp / g;
+                    // We ask for numerator and denominator of coefficient, and new exponent
+                    currentAnswers = { ans0: resNum, ans1: resDen, ans2: newExp };
+
+                    let display = '';
+                    if (a === 1) display = 'x<sup>' + n + '</sup>';
+                    else if (a === -1) display = '-x<sup>' + n + '</sup>';
+                    else display = a + 'x<sup>' + n + '</sup>';
+                    probEl.innerHTML = `&int; ${display} dx = (p/q)x<sup>r</sup> + C`;
+                    hint = `Aplica &int;ax<sup>n</sup>dx = (a/(n+1))x<sup>n+1</sup>+C. Simplifica la fraccio p/q. Si es enter, q=1.`;
+                    solutionText = `(${fracStr(resNum, resDen)})x^${newExp} + C`;
+                    renderAnswerInputs([
+                        { label: 'p (numerador) =', placeholder: '?' },
+                        { label: 'q (denominador) =', placeholder: '?' },
+                        { label: 'r (exponent) =', placeholder: '?' }
+                    ]);
+                    break;
+                }
+                case 1: { // Integral polinomi grau 2: ax^2 + bx + c
+                    const a = randInt(-5, 5);
+                    if (a === 0) return newExercise();
+                    const b = randInt(-6, 6);
+                    const c = randInt(-9, 9);
+                    // integral: (a/3)x^3 + (b/2)x^2 + cx + C
+                    // Ask for the 3 numerators (simplified fractions)
+                    const g1 = gcd(Math.abs(a), 3);
+                    const g2 = gcd(Math.abs(b), 2);
+                    const n1 = a / g1, d1 = 3 / g1;
+                    const n2 = b / g2, d2 = 2 / g2;
+                    currentAnswers = { ans0: n1, ans1: d1, ans2: n2, ans3: d2, ans4: c };
+                    probEl.innerHTML = `&int; (${formatPoly([a, b, c])}) dx`;
+                    hint = 'Integra terme a terme. Dona els coeficients com a fraccions simplificades (p/q). Si es enter, q=1.';
+                    solutionText = `(${fracStr(n1,d1)})x^3 + (${fracStr(n2,d2)})x^2 + ${c}x + C`;
+                    renderAnswerInputs([
+                        { label: 'Coef x<sup>3</sup> num =', placeholder: 'p' },
+                        { label: 'den =', placeholder: 'q' },
+                        { label: 'Coef x<sup>2</sup> num =', placeholder: 'p' },
+                        { label: 'den =', placeholder: 'q' },
+                        { label: 'Coef x =', placeholder: '?' }
+                    ]);
+                    break;
+                }
+                case 2: { // Integral polinomi grau 3
+                    const a = randInt(-3, 3);
+                    if (a === 0) return newExercise();
+                    const b = randInt(-4, 4);
+                    const c = randInt(-5, 5);
+                    const d = randInt(-8, 8);
+                    // integral: (a/4)x^4 + (b/3)x^3 + (c/2)x^2 + dx + C
+                    const g1 = gcd(Math.abs(a), 4);
+                    const g2 = gcd(Math.abs(b), 3);
+                    const g3 = gcd(Math.abs(c), 2);
+                    const n1 = a/g1, d1 = 4/g1;
+                    const n2 = b/g2, d2_ = 3/g2;
+                    const n3 = c/g3, d3 = 2/g3;
+                    currentAnswers = { ans0: n1, ans1: d1, ans2: n2, ans3: d2_, ans4: n3, ans5: d3, ans6: d };
+                    probEl.innerHTML = `&int; (${formatPoly([a, b, c, d])}) dx`;
+                    hint = 'Integra terme a terme. Fraccions simplificades (p/q). Si es enter, q=1.';
+                    solutionText = `(${fracStr(n1,d1)})x^4 + (${fracStr(n2,d2_)})x^3 + (${fracStr(n3,d3)})x^2 + ${d}x + C`;
+                    renderAnswerInputs([
+                        { label: 'Coef x<sup>4</sup> num =', placeholder: 'p' },
+                        { label: 'den =', placeholder: 'q' },
+                        { label: 'Coef x<sup>3</sup> num =', placeholder: 'p' },
+                        { label: 'den =', placeholder: 'q' },
+                        { label: 'Coef x<sup>2</sup> num =', placeholder: 'p' },
+                        { label: 'den =', placeholder: 'q' },
+                        { label: 'Coef x =', placeholder: '?' }
+                    ]);
+                    break;
+                }
+                case 3: { // Integral definida de polinomi simple
+                    // integral from a to b of (cx + d) dx
+                    const lo = randInt(0, 3);
+                    const hi = lo + randInt(1, 4);
+                    const cCoef = randInt(1, 6);
+                    const dCoef = randInt(-5, 5);
+                    // F(x) = (c/2)x^2 + dx
+                    // F(hi) - F(lo)
+                    const Fhi = (cCoef * hi * hi) / 2 + dCoef * hi;
+                    const Flo = (cCoef * lo * lo) / 2 + dCoef * lo;
+                    const result = Fhi - Flo;
+                    currentAnswers = { ans0: result };
+
+                    let polyStr = '';
+                    if (cCoef === 1) polyStr = 'x';
+                    else polyStr = cCoef + 'x';
+                    if (dCoef > 0) polyStr += ' + ' + dCoef;
+                    else if (dCoef < 0) polyStr += ' - ' + Math.abs(dCoef);
+
+                    probEl.innerHTML = `&int;<sub>${lo}</sub><sup>${hi}</sup> (${polyStr}) dx`;
+                    hint = 'Calcula l\'antiderivada, avalua en els limits i resta: F(b) - F(a)';
+                    solutionText = `F(x) = (${fracStr(cCoef,2)})x^2 + ${dCoef}x. F(${hi}) - F(${lo}) = ${Fhi} - ${Flo} = ${result}`;
+                    renderAnswerInputs([{ label: 'Resultat =', placeholder: '?' }]);
+                    break;
+                }
+            }
+
+            document.getElementById('hint').innerHTML = hint;
+        }
+
+        function checkAnswer() {
+            if (answered) return;
+            const keys = Object.keys(currentAnswers);
+            const userAnswers = {};
+            let allFilled = true;
+
+            keys.forEach(k => {
+                const el = document.getElementById(k);
+                if (!el || el.value === '') { allFilled = false; return; }
+                userAnswers[k] = parseFloat(el.value);
+                if (isNaN(userAnswers[k])) allFilled = false;
+            });
+
+            if (!allFilled) return;
+
+            answered = true;
+            const fb = document.getElementById('feedback');
+            let allCorrect = true;
+
+            keys.forEach(k => {
+                if (Math.abs(userAnswers[k] - currentAnswers[k]) > 0.01) allCorrect = false;
+            });
+
+            if (allCorrect) {
+                fb.className = 'feedback correct';
+                fb.textContent = 'Correcte! Ben fet!';
+                correctCount++;
+            } else {
+                fb.className = 'feedback incorrect';
+                const vals = keys.map(k => currentAnswers[k]).join(', ');
+                fb.textContent = 'Incorrecte. Les respostes correctes son: ' + vals;
+                incorrectCount++;
+            }
+            document.getElementById('correct').textContent = correctCount;
+            document.getElementById('incorrect').textContent = incorrectCount;
+            document.getElementById('total').textContent = correctCount + incorrectCount;
+        }
+
+        function showSolution() {
+            const fb = document.getElementById('feedback');
+            fb.className = 'feedback solution';
+            fb.textContent = 'Solucio: ' + solutionText;
+
+            if (!answered) {
+                answered = true;
+                incorrectCount++;
+                document.getElementById('incorrect').textContent = incorrectCount;
+                document.getElementById('total').textContent = correctCount + incorrectCount;
+            }
+        }
+
+        newExercise();
+    </script>
+</body>
+</html>

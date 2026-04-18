@@ -13,7 +13,7 @@
     // Floating button - pencil icon with label
     const btn = document.createElement('button');
     btn.id = 'pissarra-btn';
-    btn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>';
+    btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="16" rx="2"/><line x1="2" y1="19" x2="22" y2="19"/><line x1="6" y1="21" x2="18" y2="21"/><path d="M7 8l3 6 3-4 4 5" stroke-width="2"/></svg>';
     btn.title = 'Pissarra';
     btn.style.cssText = 'position:fixed;bottom:24px;right:90px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;border:none;font-size:1rem;cursor:pointer;box-shadow:0 4px 20px rgba(59,130,246,0.3);z-index:9000;transition:all .3s;display:flex;align-items:center;justify-content:center;';
     btn.onmouseover = function() { this.style.transform = 'scale(1.1)'; };
@@ -120,23 +120,21 @@
         ctx.lineJoin = 'round';
 
         if (restore && savedData) {
-            // Restore previous drawing
             const img = new Image();
             img.onload = () => {
                 ctx.fillStyle = '#ffffff';
                 ctx.fillRect(0, 0, w, h);
-                if (showGrid) drawGrid(w, h);
                 ctx.drawImage(img, 0, 0, w, h);
             };
             img.src = savedData;
         } else if (!restore) {
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, w, h);
-            if (showGrid) drawGrid(w, h);
             history = [];
             historyIdx = -1;
             saveState();
         }
+        applyGrid();
 
         canvas.onmousedown = startDraw;
         canvas.onmousemove = draw;
@@ -212,39 +210,28 @@
         ctx.clearRect(0, 0, w, h);
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, w, h);
-        if (showGrid) drawGrid(w, h);
         history = [];
         historyIdx = -1;
         savedData = null;
         saveState();
+        applyGrid();
     }
 
-    function drawGrid(w, h) {
-        ctx.save();
-        ctx.strokeStyle = '#e8e8e8';
-        ctx.lineWidth = 0.5;
-        const step = 25;
-        for (let x = 0; x <= w; x += step) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
-        for (let y = 0; y <= h; y += step) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
-        ctx.restore();
+    // Grid via CSS background - doesn't interfere with drawing
+    function applyGrid() {
+        if (!canvas) return;
+        if (showGrid) {
+            canvas.style.backgroundImage = 'linear-gradient(rgba(180,200,220,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(180,200,220,0.3) 1px, transparent 1px), linear-gradient(rgba(140,160,180,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(140,160,180,0.4) 1px, transparent 1px)';
+            canvas.style.backgroundSize = '25px 25px, 25px 25px, 125px 125px, 125px 125px';
+        } else {
+            canvas.style.backgroundImage = 'none';
+        }
     }
 
     function toggleGrid() {
         showGrid = !showGrid;
-        const gb = popup.querySelector('#p-grid');
-        gb.classList.toggle('active', showGrid);
-        // Redraw with/without grid
-        if (canvas && ctx) {
-            const w = canvas.width / 2, h = canvas.height / 2;
-            const current = canvas.toDataURL();
-            ctx.clearRect(0, 0, w, h);
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, w, h);
-            if (showGrid) drawGrid(w, h);
-            const img = new Image();
-            img.onload = () => { ctx.drawImage(img, 0, 0, w, h); };
-            img.src = current;
-        }
+        popup.querySelector('#p-grid').classList.toggle('active', showGrid);
+        applyGrid();
     }
 
     function openPopup() {
@@ -264,6 +251,9 @@
 
     btn.onclick = () => { if (isOpen) closePopup(); else openPopup(); };
     overlay.onclick = closePopup;
+
+    // Don't show on calculadora.html
+    if (window.location.pathname.includes('calculadora.html')) return;
 
     document.body.appendChild(btn);
     document.body.appendChild(overlay);

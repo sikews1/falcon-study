@@ -32,7 +32,7 @@
     popup.appendChild(iframe);
 
     function openCalc() {
-        iframe.src = (window.location.pathname.includes('/matematiques/') ? '' : 'matematiques/') + 'calculadora.html';
+        iframe.src = (window.location.pathname.includes('/matematiques/') ? '' : 'matematiques/') + 'calculadora.html?embed=1';
         overlay.style.display = 'block';
         popup.style.display = 'block';
     }

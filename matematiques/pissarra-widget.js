@@ -252,8 +252,8 @@
     btn.onclick = () => { if (isOpen) closePopup(); else openPopup(); };
     overlay.onclick = closePopup;
 
-    // Don't show on calculadora.html
-    if (window.location.pathname.includes('calculadora.html')) return;
+    // Don't show on calculadora.html or inside iframes
+    if (window.location.pathname.includes('calculadora.html') || window !== window.top) return;
 
     document.body.appendChild(btn);
     document.body.appendChild(overlay);

@@ -1,488 +1,171 @@
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Cientifica - Matematiques</title>
-    <link rel="stylesheet" href="../styles.css">
-    <style>
-        .math-nav {
-            background: rgba(240,240,243, 0.85);
-            backdrop-filter: blur(20px);
-            padding: 12px 20px;
-            display: flex;
-            justify-content: center;
-            gap: 4px;
-            flex-wrap: wrap;
-            border-bottom: 1px solid var(--border-subtle);
-            position: sticky;
-            top: 0;
-            z-index: 200;
-        }
-        [data-theme="dark"] .math-nav { background: rgba(15,23,41, 0.85); }
-        .math-nav a {
-            padding: 8px 16px;
-            border-radius: var(--radius-full);
-            border: none;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.82rem;
-            font-weight: 500;
-            transition: all 0.25s;
-            background: transparent;
-        }
-        .math-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
-        .math-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
-        .math-nav a.home { color: #059669; font-weight: 600; }
-        .math-nav a.home:hover { background: rgba(5,150,105,0.1); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>Calculadora</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+.math-nav{background:rgba(240,240,243,.85);backdrop-filter:blur(20px);padding:8px 16px;display:flex;justify-content:center;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--border-subtle);position:sticky;top:0;z-index:200}
+[data-theme="dark"] .math-nav{background:rgba(15,23,41,.85)}
+.math-nav a{padding:6px 14px;border-radius:9999px;color:var(--text-secondary);text-decoration:none;font-size:.8rem;font-weight:500}.math-nav a:hover{color:var(--text-primary);background:var(--bg-hover)}.math-nav a.home{color:#059669;font-weight:600}
 
-        .hero {
-            text-align: center;
-            padding: 48px 24px 40px;
-            border-bottom: 1px solid var(--border-subtle);
-            position: relative;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 50% 80% at 30% 0%, rgba(5,150,105,0.08) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 60% at 70% 20%, rgba(16,185,129,0.06) 0%, transparent 60%);
-            pointer-events: none;
-        }
-        .hero h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            margin-bottom: 8px;
-            position: relative;
-        }
-        .hero h1 span {
-            background: linear-gradient(135deg, #059669, #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .hero p { color: var(--text-secondary); font-size: 0.95rem; position: relative; }
+.calc-page{display:flex;gap:16px;max-width:720px;margin:0 auto;padding:12px 16px;min-height:calc(100vh - 50px);align-items:flex-start}
+.calc-main{flex:1;min-width:0;max-width:380px}
+.calc-side{width:220px;flex-shrink:0}
 
-        .container {
-            max-width: 520px;
-            margin: 0 auto;
-            padding: 32px 20px 80px;
-        }
+/* Display */
+.display{background:var(--bg-raised);border:1px solid var(--border-subtle);border-radius:16px;padding:12px 16px;margin-bottom:10px;text-align:right;box-shadow:var(--shadow-sm)}
+.display-input{font-size:.85rem;color:var(--text-muted);min-height:18px;word-break:break-all;font-family:'Inter',monospace}
+.display-result{font-size:2.2rem;font-weight:800;color:var(--text-primary);word-break:break-all;font-family:'Inter',monospace;line-height:1.2}
 
-        /* Display */
-        .calc-display {
-            background: var(--bg-raised);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: 20px 24px;
-            margin-bottom: 16px;
-            text-align: right;
-            min-height: 90px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-        }
-        .calc-input {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            word-break: break-all;
-            min-height: 24px;
-            font-family: 'Inter', monospace;
-        }
-        .calc-result {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            word-break: break-all;
-            min-height: 40px;
-            font-family: 'Inter', monospace;
-        }
+/* Buttons */
+.btns{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.b{padding:0;border:1px solid var(--border-subtle);border-radius:12px;background:var(--bg-raised);color:var(--text-primary);font-size:.88rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;height:44px;user-select:none}
+.b:hover{background:var(--bg-hover);transform:translateY(-1px)}.b:active{transform:translateY(0)}
+.b.num{font-size:1.1rem}
+.b.op{background:linear-gradient(135deg,#059669,#10b981);color:#fff;border-color:transparent;font-size:1.1rem}.b.op:hover{filter:brightness(1.1)}
+.b.sci{background:var(--bg-overlay);font-size:.78rem;font-weight:500}.b.sci:hover{background:rgba(5,150,105,.12);color:#059669}
+.b.clr{background:rgba(239,68,68,.08);color:#ef4444;border-color:transparent;font-weight:700}.b.clr:hover{background:rgba(239,68,68,.15)}
+.b.eq{background:linear-gradient(135deg,#059669,#10b981);color:#fff;border-color:transparent;grid-column:span 2;font-size:1.3rem;font-weight:800}.b.eq:hover{filter:brightness(1.1)}
 
-        /* Buttons grid */
-        .calc-buttons {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-        .calc-btn {
-            padding: 14px 8px;
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            background: var(--bg-raised);
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: all var(--t-fast);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 48px;
-        }
-        .calc-btn:hover {
-            background: var(--bg-hover);
-            box-shadow: var(--shadow-sm);
-            transform: translateY(-1px);
-        }
-        .calc-btn:active {
-            transform: translateY(0);
-            box-shadow: none;
-        }
-        .calc-btn.num {
-            font-size: 1.1rem;
-        }
-        .calc-btn.op {
-            background: linear-gradient(135deg, #059669, #10b981);
-            color: #fff;
-            border-color: transparent;
-        }
-        .calc-btn.op:hover {
-            background: linear-gradient(135deg, #047857, #059669);
-        }
-        .calc-btn.sci {
-            background: var(--bg-overlay);
-            font-size: 0.82rem;
-            font-weight: 500;
-        }
-        .calc-btn.sci:hover {
-            background: rgba(5, 150, 105, 0.15);
-            color: #059669;
-        }
-        .calc-btn.clear {
-            background: var(--red-soft);
-            color: var(--red);
-            border-color: transparent;
-        }
-        .calc-btn.clear:hover {
-            background: rgba(239, 68, 68, 0.2);
-        }
-        .calc-btn.equals {
-            background: linear-gradient(135deg, #059669, #10b981);
-            color: #fff;
-            border-color: transparent;
-            grid-column: span 2;
-            font-size: 1.3rem;
-        }
-        .calc-btn.equals:hover {
-            background: linear-gradient(135deg, #047857, #059669);
-        }
+/* History */
+.hist{background:var(--bg-raised);border:1px solid var(--border-subtle);border-radius:16px;padding:12px;box-shadow:var(--shadow-sm)}
+.hist h3{font-size:.8rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin:0 0 8px}
+.hist-list{list-style:none;padding:0;margin:0;max-height:calc(100vh - 140px);overflow-y:auto}
+.hist-list li{padding:6px 8px;border-radius:8px;font-size:.78rem;color:var(--text-secondary);cursor:pointer;display:flex;justify-content:space-between;gap:8px;transition:background .15s;font-family:'Inter',monospace}
+.hist-list li:hover{background:var(--bg-hover)}
+.hist-expr{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hist-res{font-weight:700;color:#059669;white-space:nowrap}
+.hist-empty{color:var(--text-muted);font-size:.78rem;text-align:center;padding:20px 0}
+.hist-clear{display:block;margin:8px auto 0;padding:4px 12px;border:1px solid var(--border-subtle);border-radius:12px;background:transparent;color:var(--text-muted);font-size:.7rem;cursor:pointer;font-family:inherit}.hist-clear:hover{background:rgba(239,68,68,.08);color:#ef4444;border-color:transparent}
 
-        /* History panel */
-        .history-panel {
-            background: var(--bg-raised);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: 20px 24px;
-            box-shadow: var(--shadow-sm);
-        }
-        .history-panel h3 {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin: 0 0 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .history-panel h3 .icon {
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #059669, #10b981);
-            color: #fff;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.8rem;
-        }
-        .history-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .history-list li {
-            padding: 10px 12px;
-            border-radius: var(--radius-sm);
-            margin-bottom: 4px;
-            font-family: 'Inter', monospace;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background var(--t-fast);
-            cursor: pointer;
-        }
-        .history-list li:hover {
-            background: var(--bg-hover);
-        }
-        .history-expr {
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            margin-right: 12px;
-        }
-        .history-result {
-            font-weight: 700;
-            color: #059669;
-            white-space: nowrap;
-        }
-        .history-empty {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            text-align: center;
-            padding: 16px 0;
-        }
-        .history-clear-btn {
-            display: block;
-            margin: 12px auto 0;
-            padding: 6px 16px;
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-full);
-            background: transparent;
-            color: var(--text-muted);
-            font-size: 0.78rem;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: all var(--t-fast);
-        }
-        .history-clear-btn:hover {
-            background: var(--red-soft);
-            color: var(--red);
-            border-color: transparent;
-        }
-
-        @media (max-width: 480px) {
-            .calc-buttons { gap: 6px; }
-            .calc-btn { padding: 12px 4px; font-size: 0.85rem; min-height: 42px; }
-            .calc-btn.num { font-size: 1rem; }
-            .calc-result { font-size: 1.6rem; }
-        }
-    </style>
+@media(max-width:600px){
+    .calc-page{flex-direction:column;padding:8px 12px}
+    .calc-main{max-width:100%}
+    .calc-side{width:100%}
+    .btns{gap:4px}
+    .b{height:40px;border-radius:10px;font-size:.82rem}
+    .b.num{font-size:1rem}
+    .display-result{font-size:1.8rem}
+}
+</style>
 </head>
 <body>
-    <div class="math-nav">
-        <a href="../index.html" class="home">&#8592; Cursos</a>
-        <a href="index.html">Inici</a>
-    </div>
+<div class="math-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+</div>
 
-    <div class="hero">
-        <h1><span>Calculadora Cientifica</span></h1>
-        <p>Calculadora amb funcions cientifiques</p>
-    </div>
-
-    <div class="container">
-        <!-- Display -->
-        <div class="calc-display">
-            <div class="calc-input" id="calcInput"></div>
-            <div class="calc-result" id="calcResult">0</div>
+<div class="calc-page">
+    <div class="calc-main">
+        <div class="display">
+            <div class="display-input" id="di"></div>
+            <div class="display-result" id="dr">0</div>
         </div>
+        <div class="btns">
+            <button class="b sci" onclick="sci('sin(')">sin</button>
+            <button class="b sci" onclick="sci('cos(')">cos</button>
+            <button class="b sci" onclick="sci('tan(')">tan</button>
+            <button class="b sci" onclick="sci('sqrt(')">&#8730;</button>
+            <button class="b sci" onclick="sci('^2')">x&#178;</button>
 
-        <!-- Buttons -->
-        <div class="calc-buttons">
-            <!-- Row 1: Scientific -->
-            <button class="calc-btn sci" onclick="appendSci('sin(')">sin</button>
-            <button class="calc-btn sci" onclick="appendSci('cos(')">cos</button>
-            <button class="calc-btn sci" onclick="appendSci('tan(')">tan</button>
-            <button class="calc-btn sci" onclick="appendSci('sqrt(')">&#8730;</button>
-            <button class="calc-btn sci" onclick="appendSci('^2')">x&sup2;</button>
+            <button class="b sci" onclick="sci('log(')">log</button>
+            <button class="b sci" onclick="sci('ln(')">ln</button>
+            <button class="b sci" onclick="sci('pi')">&#960;</button>
+            <button class="b sci" onclick="sci('e')">e</button>
+            <button class="b sci" onclick="ap('%')">%</button>
 
-            <!-- Row 2: Scientific -->
-            <button class="calc-btn sci" onclick="appendSci('log(')">log</button>
-            <button class="calc-btn sci" onclick="appendSci('ln(')">ln</button>
-            <button class="calc-btn sci" onclick="appendSci('pi')">&#960;</button>
-            <button class="calc-btn sci" onclick="appendSci('e')">e</button>
-            <button class="calc-btn sci" onclick="append('%')">%</button>
+            <button class="b clr" onclick="clr()">C</button>
+            <button class="b clr" onclick="ce()">&#9003;</button>
+            <button class="b" onclick="ap('(')">(</button>
+            <button class="b" onclick="ap(')')">)</button>
+            <button class="b op" onclick="ap('&#247;')">&#247;</button>
 
-            <!-- Row 3: Clear, brackets, operators -->
-            <button class="calc-btn clear" onclick="clearAll()">C</button>
-            <button class="calc-btn clear" onclick="clearEntry()">CE</button>
-            <button class="calc-btn" onclick="append('(')">(</button>
-            <button class="calc-btn" onclick="append(')')">)</button>
-            <button class="calc-btn op" onclick="append('&divide;')">&#247;</button>
+            <button class="b num" onclick="ap('7')">7</button>
+            <button class="b num" onclick="ap('8')">8</button>
+            <button class="b num" onclick="ap('9')">9</button>
+            <button class="b op" onclick="ap('&#215;')">&#215;</button>
+            <button class="b" onclick="sgn()">&#177;</button>
 
-            <!-- Row 4 -->
-            <button class="calc-btn num" onclick="append('7')">7</button>
-            <button class="calc-btn num" onclick="append('8')">8</button>
-            <button class="calc-btn num" onclick="append('9')">9</button>
-            <button class="calc-btn op" onclick="append('&times;')">&#215;</button>
-            <button class="calc-btn" onclick="toggleSign()">&plusmn;</button>
+            <button class="b num" onclick="ap('4')">4</button>
+            <button class="b num" onclick="ap('5')">5</button>
+            <button class="b num" onclick="ap('6')">6</button>
+            <button class="b op" onclick="ap('&#8722;')">&#8722;</button>
+            <button class="b op" onclick="ap('+')">+</button>
 
-            <!-- Row 5 -->
-            <button class="calc-btn num" onclick="append('4')">4</button>
-            <button class="calc-btn num" onclick="append('5')">5</button>
-            <button class="calc-btn num" onclick="append('6')">6</button>
-            <button class="calc-btn op" onclick="append('-')">&#8722;</button>
-            <button class="calc-btn op" onclick="append('+')">+</button>
+            <button class="b num" onclick="ap('1')">1</button>
+            <button class="b num" onclick="ap('2')">2</button>
+            <button class="b num" onclick="ap('3')">3</button>
+            <button class="b eq" onclick="calc()">=</button>
 
-            <!-- Row 6 -->
-            <button class="calc-btn num" onclick="append('1')">1</button>
-            <button class="calc-btn num" onclick="append('2')">2</button>
-            <button class="calc-btn num" onclick="append('3')">3</button>
-            <button class="calc-btn equals" onclick="calculate()">=</button>
-
-            <!-- Row 7 -->
-            <button class="calc-btn num" onclick="append('0')" style="grid-column: span 2;">0</button>
-            <button class="calc-btn num" onclick="append('.')">.</button>
-        </div>
-
-        <!-- History -->
-        <div class="history-panel">
-            <h3><span class="icon">&#128339;</span> Historial</h3>
-            <ul class="history-list" id="historyList">
-                <li class="history-empty">Cap calcul encara</li>
-            </ul>
-            <button class="history-clear-btn" onclick="clearHistory()">Esborrar historial</button>
+            <button class="b num" onclick="ap('0')" style="grid-column:span 2">0</button>
+            <button class="b num" onclick="ap('.')">.</button>
         </div>
     </div>
+    <div class="calc-side">
+        <div class="hist">
+            <h3>Historial</h3>
+            <ul class="hist-list" id="hl"><li class="hist-empty">Cap càlcul</li></ul>
+            <button class="hist-clear" onclick="clrH()">Esborrar</button>
+        </div>
+    </div>
+</div>
 
-    <script src="../theme.js"></script>
-    <script src="../auth.js"></script>
-    <script>
-        let expression = '';
-        let history = [];
+<script>
+let expr='',hist=[];
+const di=document.getElementById('di'),dr=document.getElementById('dr'),hl=document.getElementById('hl');
 
-        const inputEl = document.getElementById('calcInput');
-        const resultEl = document.getElementById('calcResult');
-        const historyListEl = document.getElementById('historyList');
+function upd(){di.textContent=expr||'';if(!expr)dr.textContent='0';}
+function ap(v){expr+=v;upd();}
+function sci(v){expr+=v;upd();}
+function clr(){expr='';dr.textContent='0';upd();}
+function ce(){expr=expr.slice(0,-1);upd();}
+function sgn(){
+    const m=expr.match(/(.*?)(-?\d+\.?\d*)$/);
+    if(m){const p=m[1],n=m[2];expr=n.startsWith('-')?p+n.slice(1):p+'(-'+n+')';upd();}
+}
+function prep(e){
+    e=e.replace(/\u00d7/g,'*').replace(/\u00f7/g,'/').replace(/\u2212/g,'-');
+    e=e.replace(/sin\(/g,'Math.sin(').replace(/cos\(/g,'Math.cos(').replace(/tan\(/g,'Math.tan(');
+    e=e.replace(/sqrt\(/g,'Math.sqrt(').replace(/log\(/g,'Math.log10(').replace(/ln\(/g,'Math.log(');
+    e=e.replace(/\^2/g,'**2').replace(/pi/g,'Math.PI');
+    e=e.replace(/(?<!Math\.\w*)(?<![\w.])e(?![\w])/g,'Math.E').replace(/%/g,'/100');
+    return e;
+}
+function calc(){
+    if(!expr)return;
+    try{
+        const r=Function('"use strict";return('+prep(expr)+')')();
+        if(r===undefined||r===null||isNaN(r)){dr.textContent='Error';return;}
+        const d=Number.isInteger(r)?r.toString():parseFloat(r.toFixed(10)).toString();
+        dr.textContent=d;
+        hist.unshift({e:expr,r:d});if(hist.length>15)hist.pop();renderH();
+        expr=d;upd();
+    }catch(e){dr.textContent='Error';}
+}
+function renderH(){
+    if(!hist.length){hl.innerHTML='<li class="hist-empty">Cap càlcul</li>';return;}
+    hl.innerHTML=hist.map(h=>`<li onclick="expr='${h.r}';dr.textContent='${h.r}';upd()"><span class="hist-expr">${h.e}</span><span class="hist-res">= ${h.r}</span></li>`).join('');
+}
+function clrH(){hist=[];renderH();}
 
-        function updateDisplay() {
-            inputEl.textContent = expression || '';
-            if (!expression) resultEl.textContent = '0';
-        }
-
-        function append(val) {
-            expression += val;
-            updateDisplay();
-        }
-
-        function appendSci(val) {
-            expression += val;
-            updateDisplay();
-        }
-
-        function clearAll() {
-            expression = '';
-            resultEl.textContent = '0';
-            updateDisplay();
-        }
-
-        function clearEntry() {
-            expression = expression.slice(0, -1);
-            updateDisplay();
-        }
-
-        function toggleSign() {
-            if (!expression) return;
-            // Try to negate the last number
-            const match = expression.match(/(.*?)(-?\d+\.?\d*)$/);
-            if (match) {
-                const prefix = match[1];
-                const num = match[2];
-                if (num.startsWith('-')) {
-                    expression = prefix + num.slice(1);
-                } else {
-                    expression = prefix + '(-' + num + ')';
-                }
-                updateDisplay();
-            }
-        }
-
-        function prepareExpression(expr) {
-            let e = expr;
-            // Replace display symbols with JS operators
-            e = e.replace(/\u00d7/g, '*');   // ×
-            e = e.replace(/\u00f7/g, '/');   // ÷
-            e = e.replace(/\u2212/g, '-');    // −
-            // Scientific functions
-            e = e.replace(/sin\(/g, 'Math.sin(');
-            e = e.replace(/cos\(/g, 'Math.cos(');
-            e = e.replace(/tan\(/g, 'Math.tan(');
-            e = e.replace(/sqrt\(/g, 'Math.sqrt(');
-            e = e.replace(/log\(/g, 'Math.log10(');
-            e = e.replace(/ln\(/g, 'Math.log(');
-            e = e.replace(/\^2/g, '**2');
-            e = e.replace(/pi/g, 'Math.PI');
-            // Avoid replacing 'e' inside Math.* or numbers like 1e5
-            e = e.replace(/(?<!Math\.\w*)(?<![\w.])e(?![\w])/g, 'Math.E');
-            e = e.replace(/%/g, '/100');
-            return e;
-        }
-
-        function calculate() {
-            if (!expression) return;
-            try {
-                const prepared = prepareExpression(expression);
-                const result = Function('"use strict"; return (' + prepared + ')')();
-                if (result === undefined || result === null || isNaN(result)) {
-                    resultEl.textContent = 'Error';
-                    return;
-                }
-                const displayResult = Number.isInteger(result) ? result.toString() : parseFloat(result.toFixed(10)).toString();
-                resultEl.textContent = displayResult;
-
-                // Add to history
-                addToHistory(expression, displayResult);
-
-                // Set expression to result for chaining
-                expression = displayResult;
-                updateDisplay();
-            } catch (err) {
-                resultEl.textContent = 'Error';
-            }
-        }
-
-        function addToHistory(expr, result) {
-            history.unshift({ expr, result });
-            if (history.length > 10) history.pop();
-            renderHistory();
-        }
-
-        function renderHistory() {
-            if (history.length === 0) {
-                historyListEl.innerHTML = '<li class="history-empty">Cap calcul encara</li>';
-                return;
-            }
-            historyListEl.innerHTML = history.map(h =>
-                `<li onclick="loadFromHistory('${h.result}')">
-                    <span class="history-expr">${h.expr}</span>
-                    <span class="history-result">= ${h.result}</span>
-                </li>`
-            ).join('');
-        }
-
-        function loadFromHistory(val) {
-            expression = val;
-            resultEl.textContent = val;
-            updateDisplay();
-        }
-
-        function clearHistory() {
-            history = [];
-            renderHistory();
-        }
-
-        // Keyboard support
-        document.addEventListener('keydown', function(e) {
-            const key = e.key;
-            if (key >= '0' && key <= '9') append(key);
-            else if (key === '.') append('.');
-            else if (key === '+') append('+');
-            else if (key === '-') append('-');
-            else if (key === '*') append('\u00d7');
-            else if (key === '/') { e.preventDefault(); append('\u00f7'); }
-            else if (key === '(') append('(');
-            else if (key === ')') append(')');
-            else if (key === 'Enter' || key === '=') { e.preventDefault(); calculate(); }
-            else if (key === 'Backspace') clearEntry();
-            else if (key === 'Escape') clearAll();
-        });
-    </script>
-<script src="pissarra-widget.js?v=1776538660"></script>
+document.addEventListener('keydown',e=>{
+    const k=e.key;
+    if(k>='0'&&k<='9')ap(k);
+    else if(k==='.')ap('.');
+    else if(k==='+')ap('+');
+    else if(k==='-')ap('-');
+    else if(k==='*')ap('\u00d7');
+    else if(k==='/'){e.preventDefault();ap('\u00f7');}
+    else if(k==='('||k===')')ap(k);
+    else if(k==='Enter'||k==='='){e.preventDefault();calc();}
+    else if(k==='Backspace')ce();
+    else if(k==='Escape')clr();
+});
+</script>
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script src="calc-widget.js?v=1776538827"></script>
 </body>
 </html>

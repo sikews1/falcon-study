@@ -3,9 +3,9 @@
     // Create floating button
     const btn = document.createElement('button');
     btn.id = 'calc-float-btn';
-    btn.innerHTML = '&#x1F5A9;';
-    btn.title = 'Obrir calculadora';
-    btn.style.cssText = 'position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;font-size:1.5rem;cursor:pointer;box-shadow:0 4px 20px rgba(5,150,105,0.3);z-index:9000;transition:all 0.3s;display:flex;align-items:center;justify-content:center;';
+    btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="16" y1="10" x2="16" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="12" y2="14.01"/><line x1="16" y1="14" x2="16" y2="14.01"/><line x1="8" y1="18" x2="8" y2="18.01"/><line x1="12" y1="18" x2="16" y2="18"/></svg>';
+    btn.title = 'Calculadora';
+    btn.style.cssText = 'position:fixed;bottom:24px;right:24px;width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(5,150,105,0.3);z-index:9000;transition:all .25s;display:flex;align-items:center;justify-content:center;';
     btn.onmouseover = function() { this.style.transform = 'scale(1.1)'; this.style.boxShadow = '0 8px 30px rgba(5,150,105,0.4)'; };
     btn.onmouseout = function() { this.style.transform = ''; this.style.boxShadow = '0 4px 20px rgba(5,150,105,0.3)'; };
 

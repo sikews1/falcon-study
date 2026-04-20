@@ -459,7 +459,7 @@
 <body>
 
 <div class="top-bar">
-    <a href="index.html" class="home" style="color:var(--accent);font-weight:600;">&#8592; Cursos</a>
+    <a href="crowdstrike.html" class="home" style="color:var(--accent);font-weight:600;">&#8592; CrowdStrike</a>
     <a href="glosario.html">Glosario</a>
     <a href="modulos.html">Modulos</a>
     <a href="quiz.html">Quiz</a>
@@ -498,6 +498,43 @@
     <!-- 1. QUE ES -->
     <div class="shield-section" id="que-es">
         <h2>1. ¿Qué es Falcon Shield en 30 segundos?</h2>
+
+        <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(139, 92, 246, 0.06)); border-left: 4px solid var(--blue); padding: 18px 22px; border-radius: 0 12px 12px 0; margin-bottom: 18px;">
+            <div style="font-size: 0.7rem; font-weight: 700; color: var(--blue); letter-spacing: 0.1em; margin-bottom: 10px;">ANTES DE EMPEZAR: 7 PALABRAS QUE VAS A VER TODO EL RATO</div>
+            <p style="color: var(--text-secondary); margin-bottom: 10px;">Si entiendes estas 7 palabras, el resto de la página se lee solo:</p>
+            <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: 10px;">
+                <li style="background: var(--bg-raised); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+                    <strong style="color: var(--blue);">SaaS</strong> <span style="color: var(--text-muted); font-size: 0.82rem;">(Software as a Service)</span><br>
+                    <span style="color: var(--text-secondary); font-size: 0.88rem;">Cualquier aplicación que usas <em style="background: rgba(139, 92, 246, 0.12); padding: 1px 6px; border-radius: 4px; color: var(--purple); font-style: normal; font-weight: 600;">por navegador o app</em> sin instalar nada propio. Ejemplos: Gmail, Microsoft 365, Slack, Salesforce, GitHub, Dropbox, Zoom, Jira... Todas son SaaS.</span>
+                </li>
+                <li style="background: var(--bg-raised); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+                    <strong style="color: var(--blue);">MFA</strong> <span style="color: var(--text-muted); font-size: 0.82rem;">(Multi-Factor Authentication)</span><br>
+                    <span style="color: var(--text-secondary); font-size: 0.88rem;">El <em style="background: rgba(139, 92, 246, 0.12); padding: 1px 6px; border-radius: 4px; color: var(--purple); font-style: normal; font-weight: 600;">código extra</em> que te piden además del password (SMS, Google Authenticator, Authy). Sin MFA, robar una contraseña = entrar. Con MFA, no basta con la contraseña.</span>
+                </li>
+                <li style="background: var(--bg-raised); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+                    <strong style="color: var(--blue);">API</strong> <span style="color: var(--text-muted); font-size: 0.82rem;">(Application Programming Interface)</span><br>
+                    <span style="color: var(--text-secondary); font-size: 0.88rem;">El <em style="background: rgba(139, 92, 246, 0.12); padding: 1px 6px; border-radius: 4px; color: var(--purple); font-style: normal; font-weight: 600;">canal técnico</em> por el que dos aplicaciones hablan entre sí sin intervención humana. Shield usa las APIs de cada SaaS para leer sus datos.</span>
+                </li>
+                <li style="background: var(--bg-raised); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+                    <strong style="color: var(--blue);">OAuth</strong> <span style="color: var(--text-muted); font-size: 0.82rem;">(apps conectadas)</span><br>
+                    <span style="color: var(--text-secondary); font-size: 0.88rem;">Cuando una app externa te pide "conectar con Google" o "iniciar sesión con Microsoft", eso es OAuth. <em style="background: rgba(139, 92, 246, 0.12); padding: 1px 6px; border-radius: 4px; color: var(--purple); font-style: normal; font-weight: 600;">Das acceso a tu cuenta sin darle tu contraseña</em>. Si la app es maliciosa o abandonada, es un problema.</span>
+                </li>
+                <li style="background: var(--bg-raised); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+                    <strong style="color: var(--blue);">Endpoint</strong><br>
+                    <span style="color: var(--text-secondary); font-size: 0.88rem;">Cualquier <em style="background: rgba(139, 92, 246, 0.12); padding: 1px 6px; border-radius: 4px; color: var(--purple); font-style: normal; font-weight: 600;">dispositivo final</em>: un PC, un portátil, un servidor o un móvil. Si Falcon Prevent "protege endpoints" significa que protege los PCs y portátiles de la gente.</span>
+                </li>
+                <li style="background: var(--bg-raised); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+                    <strong style="color: var(--blue);">Active Directory (AD)</strong><br>
+                    <span style="color: var(--text-secondary); font-size: 0.88rem;">El <em style="background: rgba(139, 92, 246, 0.12); padding: 1px 6px; border-radius: 4px; color: var(--purple); font-style: normal; font-weight: 600;">directorio de usuarios</em> de la mayoría de empresas con entorno Microsoft. Guarda todos los usuarios, contraseñas y permisos internos. Si AD cae, no puedes ni entrar al correo.</span>
+                </li>
+                <li style="background: var(--bg-raised); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+                    <strong style="color: var(--blue);">SSPM</strong> <span style="color: var(--text-muted); font-size: 0.82rem;">(SaaS Security Posture Management)</span><br>
+                    <span style="color: var(--text-secondary); font-size: 0.88rem;">La <em style="background: rgba(139, 92, 246, 0.12); padding: 1px 6px; border-radius: 4px; color: var(--purple); font-style: normal; font-weight: 600;">categoría de productos</em> que auditan la seguridad de aplicaciones SaaS. Falcon Shield es un SSPM. Es como decir "Coca-Cola es un refresco" — SSPM es la categoría, Shield es el producto.</span>
+                </li>
+            </ul>
+            <p style="color: var(--text-secondary); margin: 12px 0 0; font-size: 0.88rem;"><strong style="color: var(--text-primary);">Analogía del cambio:</strong> antes tu empresa tenía un servidor de correo en la oficina. Hoy usa Microsoft 365 (SaaS). Antes los archivos vivían en un NAS interno. Hoy en Google Drive (SaaS). Ese salto es lo que ha hecho necesario un producto como Shield.</p>
+        </div>
+
         <p>Falcon Shield es el módulo de CrowdStrike que vigila tus <strong>aplicaciones SaaS</strong>: Microsoft 365, Google Workspace, Salesforce, Slack, GitHub, Okta, ServiceNow, Jira, Zoom, etc.</p>
         <p>Comprueba, de forma continua, si esas plataformas están <em>mal configuradas</em>, si hay <em>cuentas peligrosas</em>, si un <em>tercero conectado</em> tiene demasiados permisos, o si alguien está haciendo algo raro dentro de ellas.</p>
         <p>En una frase: <strong>es el "antivirus de configuración" para tu ecosistema SaaS.</strong> La categoría técnica se llama <em>SSPM</em> (SaaS Security Posture Management).</p>
@@ -563,7 +600,7 @@
             <div class="pillar">
                 <div class="icon">&#x1F6A8;</div>
                 <h4>Detección de amenazas (ITDR)</h4>
-                <p>Detecta comportamientos raros dentro del SaaS: <em>imposible travel</em>, exfiltración masiva de archivos, cambios de configuración sospechosos.</p>
+                <p><strong>ITDR = detectar ataques en vivo basados en identidad.</strong> Comportamientos raros dentro del SaaS: <em>imposible travel</em> (login desde Madrid y Brasil con minutos de diferencia), descarga masiva de archivos, cambios de configuración sospechosos.</p>
             </div>
             <div class="pillar">
                 <div class="icon">&#x1F4CB;</div>
@@ -608,7 +645,7 @@
         <div class="scenario">
             <span class="tag">M365 &middot; Misconfiguración</span>
             <div class="situation">Un admin de Microsoft 365 quita el MFA a su propia cuenta "solo un ratito".</div>
-            <p class="result">Shield detecta el cambio en minutos, lo marca como <strong>crítico</strong>, avisa en la consola y al SOC. El admin tendría que haber encontrado esto él mismo en 6 meses; ahora sale en el acto.</p>
+            <p class="result">Shield detecta el cambio en minutos, lo marca como <strong>crítico</strong>, avisa en la consola y al <em>SOC</em> (Security Operations Center, el equipo humano de vigilancia 24/7). El admin tendría que haber encontrado esto él mismo en 6 meses; ahora sale en el acto.</p>
         </div>
 
         <div class="scenario">
@@ -626,7 +663,7 @@
         <div class="scenario">
             <span class="tag">ITDR &middot; Comportamiento</span>
             <div class="situation">Un usuario inicia sesión en Slack desde Madrid a las 10:00 y desde Brasil a las 10:03.</div>
-            <p class="result">Shield detecta el <em>impossible travel</em>, correlaciona con otros SaaS (¿también pasó en M365?) y genera una detección. El equipo SOC investiga como si fuera una alerta de Falcon Insight.</p>
+            <p class="result">Shield detecta el <em>impossible travel</em> (viaje físicamente imposible), correlaciona con otros SaaS (¿también pasó en M365?) y genera una detección. El SOC la investiga igual que una alerta de <em>Falcon Insight</em> (el módulo EDR de CrowdStrike).</p>
         </div>
 
         <div class="scenario">
@@ -672,9 +709,9 @@
                     </tr>
                     <tr>
                         <td>Falcon Identity Protection</td>
-                        <td>Active Directory on-premises e híbrido</td>
-                        <td>Sensor en DC + integraciones</td>
-                        <td>Kerberoasting, Pass-the-Hash en AD</td>
+                        <td>Active Directory de la empresa (usuarios y contraseñas internos)</td>
+                        <td>Sensor en los servidores de AD</td>
+                        <td>Robo de contraseñas de admin en AD (ataques "Kerberoasting", "Pass-the-Hash")</td>
                     </tr>
                     <tr>
                         <td>Falcon Shield</td>
@@ -918,7 +955,7 @@
             <div class="video-list">
                 <div class="video-item">
                     <div class="vtitle">IAM Integrations for Identity Protection <span class="vtag feature">Feature focus</span></div>
-                    <p class="vdesc">Shield se conecta con <strong>Okta / Entra ID / Ping</strong> para correlar identidades entre SaaS y el IdP. Te permite ver cuentas que existen en una SaaS pero no en el IdP (cuentas huérfanas).</p>
+                    <p class="vdesc">Shield se conecta con <strong>Okta / Entra ID / Ping</strong> (son <em>IdP</em>: Identity Providers, el sistema central donde viven los usuarios de la empresa). Correla identidades entre SaaS y el IdP, y te permite ver cuentas que existen en una SaaS pero no en el IdP (cuentas huérfanas).</p>
                 </div>
                 <div class="video-item">
                     <div class="vtitle">Building a SaaS Security Program <span class="vtag">Getting started</span></div>

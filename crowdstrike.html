@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrowdStrike - Study Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .hub-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--bg-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all var(--t-base);
+            margin-bottom: 28px;
+        }
+        .back-link:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .hub-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .hub-title h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+        .hub-title h1 span {
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hub-title p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 22px;
+        }
+
+        .course-card {
+            background: var(--bg-raised);
+            border-radius: var(--radius-xl);
+            padding: 32px 30px;
+            border: 1px solid var(--border-subtle);
+            transition: all var(--t-base);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        }
+        .course-card:hover {
+            border-color: var(--border-default);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .course-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+            color: #fff;
+        }
+
+        .course-card h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .course-card .course-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .course-card .course-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+
+        .course-card .course-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 18px;
+        }
+        .course-card .course-features li {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 4px 0;
+            padding-left: 18px;
+            position: relative;
+        }
+        .course-card .course-features li::before {
+            content: '\2713';
+            position: absolute;
+            left: 0;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .course-card .course-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+        }
+
+        /* Admin card - orange */
+        .card-admin::before { background: linear-gradient(90deg, #f97316, #ef4444); }
+        .card-admin .course-icon { background: linear-gradient(135deg, #f97316, #ef4444); }
+        .card-admin .course-tag { background: var(--accent-soft); color: var(--accent); }
+        .card-admin:hover { border-color: #f97316; }
+        .card-admin .course-cta { background: var(--accent-soft); color: var(--accent); }
+        .card-admin:hover .course-cta { background: var(--accent); color: #fff; }
+
+        /* Shield card - purple/blue */
+        .card-shield::before { background: linear-gradient(90deg, #8b5cf6, #3b82f6, #06b6d4); }
+        .card-shield .course-icon { background: linear-gradient(135deg, #8b5cf6, #3b82f6); }
+        .card-shield .course-tag { background: var(--purple-soft); color: var(--purple); }
+        .card-shield:hover { border-color: #8b5cf6; }
+        .card-shield .course-cta { background: var(--purple-soft); color: var(--purple); }
+        .card-shield:hover .course-cta { background: var(--purple); color: #fff; }
+
+        .hub-context {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.05), rgba(139, 92, 246, 0.05));
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 20px 24px;
+            margin: 30px 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+        .hub-context strong { color: var(--text-primary); }
+
+        @media (max-width: 640px) {
+            .course-grid { grid-template-columns: 1fr; }
+            .hub-title h1 { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hub-container">
+
+    <a href="index.html" class="back-link">&#8592; Todos los cursos</a>
+
+    <div class="hub-title">
+        <h1><span>CrowdStrike</span></h1>
+        <p>Dos itinerarios independientes dentro de la plataforma Falcon. Elige según qué necesites aprender hoy.</p>
+    </div>
+
+    <div class="hub-context">
+        <strong>¿Cuál elegir?</strong> Si estás preparando la certificación de administrador (examen oficial), ve a <strong>Falcon Administrator</strong>. Si tu cliente está desplegando Falcon Shield y necesitas entenderlo rápido y saber gestionarlo, ve directo a <strong>Falcon Shield</strong>. Los dos itinerarios son independientes y puedes saltar entre ellos cuando quieras.
+    </div>
+
+    <div class="course-grid">
+
+        <a href="glosario.html" class="course-card card-admin">
+            <div class="course-icon">&#x1F6E1;&#xFE0F;</div>
+            <div class="course-tag">Certificación oficial</div>
+            <h2>Falcon Administrator</h2>
+            <div class="course-subtitle">Preparación completa del examen de administrador de la plataforma CrowdStrike Falcon. Material en español para estudiar a tu ritmo.</div>
+            <ul class="course-features">
+                <li>12 módulos con resumen, vocabulario y claves de examen</li>
+                <li>34 preguntas de quiz con corrección y explicación</li>
+                <li>45 flashcards para memorizar conceptos clave</li>
+                <li>Simulador de examen con tiempo y nota final</li>
+                <li>6 escenarios prácticos tipo caso real</li>
+                <li>Glosario bilingüe español-inglés</li>
+            </ul>
+            <span class="course-cta">Empezar certificación &rarr;</span>
+        </a>
+
+        <a href="shield.html" class="course-card card-shield">
+            <div class="course-icon">&#x1F6E1;&#xFE0F;</div>
+            <div class="course-tag">Guía práctica &middot; SSPM</div>
+            <h2>Falcon Shield</h2>
+            <div class="course-subtitle">Módulo de CrowdStrike para proteger aplicaciones SaaS (Microsoft 365, Google, Salesforce...). Explicado desde cero para entenderlo y explicarlo a un cliente.</div>
+            <ul class="course-features">
+                <li>Guía didáctica en 11 secciones (de 0 conocimientos a operar)</li>
+                <li>Analogías y 5 escenarios reales del día a día</li>
+                <li>Tabla comparativa Shield vs Identity vs Prevent</li>
+                <li>Glosario específico (SSPM, ITDR, findings, OAuth...)</li>
+                <li>Ruta oficial de los 20 videos "Getting Started" resumidos</li>
+                <li>Chuleta de 5 puntos para reuniones con cliente</li>
+            </ul>
+            <span class="course-cta">Abrir guía Shield &rarr;</span>
+        </a>
+
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: var(--text-muted); font-size: 0.8rem;">
+        Ambos itinerarios comparten glosario y estilos. Puedes moverte entre ellos desde la barra superior de cualquier página.
+    </div>
+
+</div>
+
+<script src="theme.js"></script>
+</body>
+</html>

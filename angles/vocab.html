@@ -13,39 +13,27 @@
         .ang-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
         .ang-nav a.home { color: #dc2626; font-weight: 600; }
 
-        .container { max-width: 700px; margin: 0 auto; padding: 24px 20px; }
+        .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
         h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
         h1 span { background: linear-gradient(135deg, #dc2626, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
 
+        .level-picker { display: flex; gap: 6px; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+        .lv-btn { padding: 8px 18px; border-radius: var(--radius-full); border: 2px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 700; cursor: pointer; font-size: 0.84rem; }
+        .lv-btn:hover { transform: translateY(-1px); }
+        .lv-btn[data-lv="easy"].active { background: #22c55e; color: #fff; border-color: #22c55e; }
+        .lv-btn[data-lv="medium"].active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+        .lv-btn[data-lv="hard"].active { background: #8b5cf6; color: #fff; border-color: #8b5cf6; }
+
         .theme-picker { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 20px; }
-        .theme-btn {
-            padding: 6px 12px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle);
-            background: var(--bg-raised); color: var(--text-secondary); font-size: 0.8rem; font-weight: 600;
-            cursor: pointer; transition: all 0.2s;
-        }
+        .theme-btn { padding: 6px 12px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .theme-btn:hover { border-color: #dc2626; color: #dc2626; }
         .theme-btn.active { background: #dc2626; color: #fff; border-color: #dc2626; }
 
         .card-container { perspective: 1000px; margin: 0 auto 20px; max-width: 520px; }
-        .flashcard {
-            position: relative;
-            width: 100%; min-height: 220px;
-            background: var(--bg-raised);
-            border-radius: var(--radius-xl);
-            border: 1px solid var(--border-subtle);
-            box-shadow: var(--shadow-lg);
-            cursor: pointer;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
+        .flashcard { position: relative; width: 100%; min-height: 220px; background: var(--bg-raised); border-radius: var(--radius-xl); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-lg); cursor: pointer; transition: transform 0.6s; transform-style: preserve-3d; }
         .flashcard.flipped { transform: rotateY(180deg); }
-        .flashcard-face {
-            position: absolute; inset: 0;
-            backface-visibility: hidden;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 30px 24px; text-align: center;
-        }
+        .flashcard-face { position: absolute; inset: 0; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 24px; text-align: center; }
         .flashcard-back { transform: rotateY(180deg); }
         .flashcard-emoji { font-size: 3.5rem; margin-bottom: 10px; }
         .flashcard-word { font-size: 1.8rem; font-weight: 800; color: #dc2626; margin-bottom: 6px; }
@@ -92,7 +80,13 @@
 
 <div class="container">
     <h1><span>Vocabulari</span> d'anglès</h1>
-    <p class="subtitle">Flashcards amb pronunciació i quiz al final. Clica la targeta per girar-la.</p>
+    <p class="subtitle">Flashcards amb pronunciació. Els temes canvien segons el nivell que triïs.</p>
+
+    <div class="level-picker">
+        <button class="lv-btn" data-lv="easy" onclick="setLevel('easy')">🟢 Primària</button>
+        <button class="lv-btn" data-lv="medium" onclick="setLevel('medium')">🔵 ESO</button>
+        <button class="lv-btn" data-lv="hard" onclick="setLevel('hard')">🟣 Batxillerat</button>
+    </div>
 
     <div class="theme-picker" id="themePicker"></div>
 
@@ -102,30 +96,30 @@
     <div class="card-container">
         <div class="flashcard" id="card" onclick="flipCard()">
             <div class="flashcard-face flashcard-front">
-                <div class="flashcard-emoji" id="frontEmoji">&#x1F431;</div>
+                <div class="flashcard-emoji" id="frontEmoji">🐱</div>
                 <div class="flashcard-word" id="frontWord">cat</div>
                 <div class="flashcard-tap">clica per veure la traducció</div>
             </div>
             <div class="flashcard-face flashcard-back">
-                <div class="flashcard-emoji" id="backEmoji">&#x1F431;</div>
+                <div class="flashcard-emoji" id="backEmoji">🐱</div>
                 <div class="flashcard-translation" id="backTranslation">gat</div>
-                <div class="flashcard-example" id="backExample">The cat is on the chair. (El gat és a la cadira.)</div>
+                <div class="flashcard-example" id="backExample">The cat is on the chair.</div>
             </div>
         </div>
     </div>
 
     <div class="actions">
         <button class="btn btn-prev" onclick="prevCard()">&#8592; Anterior</button>
-        <button class="btn btn-speak" onclick="speakWord()">&#x1F509; Escoltar</button>
-        <button class="btn btn-flip" onclick="flipCard()">Girar targeta</button>
+        <button class="btn btn-speak" onclick="speakWord()">🔉 Escoltar</button>
+        <button class="btn btn-flip" onclick="flipCard()">Girar</button>
         <button class="btn btn-next" onclick="nextCard()">Següent &#8594;</button>
     </div>
 
     <div class="quiz-mode">
-        <div class="quiz-title">Quiz ràpid &mdash; Què vol dir aquesta imatge?</div>
+        <div class="quiz-title">Quiz ràpid &mdash; Tria la paraula correcta</div>
         <div class="quiz-question">
-            <div class="emoji" id="quizEmoji">&#x1F436;</div>
-            <div class="prompt" id="quizPrompt">Tria la paraula correcta en anglès:</div>
+            <div class="emoji" id="quizEmoji">🐶</div>
+            <div class="prompt" id="quizPrompt">Quina paraula en anglès correspon?</div>
         </div>
         <div class="quiz-options" id="quizOptions"></div>
         <div class="quiz-score" id="quizScore">Encerts: 0 &bull; Errors: 0</div>
@@ -137,8 +131,7 @@
 <script>
 const VOCAB = {
     animals: {
-        label: 'Animals',
-        icon: '🐱',
+        label: 'Animals', icon: '🐱', levels: ['easy', 'medium', 'hard'],
         words: [
             { emoji: '🐱', en: 'cat', ca: 'gat', ex: 'The cat is on the chair.' },
             { emoji: '🐶', en: 'dog', ca: 'gos', ex: 'My dog likes to play.' },
@@ -155,8 +148,7 @@ const VOCAB = {
         ]
     },
     colors: {
-        label: 'Colors',
-        icon: '🎨',
+        label: 'Colors', icon: '🎨', levels: ['easy'],
         words: [
             { emoji: '🔴', en: 'red', ca: 'vermell', ex: 'The apple is red.' },
             { emoji: '🔵', en: 'blue', ca: 'blau', ex: 'The sky is blue.' },
@@ -170,9 +162,23 @@ const VOCAB = {
             { emoji: '🩷', en: 'pink', ca: 'rosa', ex: 'She wears a pink dress.' }
         ]
     },
+    family: {
+        label: 'Família', icon: '👨‍👩‍👧', levels: ['easy'],
+        words: [
+            { emoji: '👨', en: 'father', ca: 'pare', ex: 'My father works in a bank.' },
+            { emoji: '👩', en: 'mother', ca: 'mare', ex: 'My mother is a teacher.' },
+            { emoji: '👦', en: 'brother', ca: 'germà', ex: 'I have one brother.' },
+            { emoji: '👧', en: 'sister', ca: 'germana', ex: 'My sister is younger.' },
+            { emoji: '👴', en: 'grandfather', ca: 'avi', ex: 'My grandfather is funny.' },
+            { emoji: '👵', en: 'grandmother', ca: 'àvia', ex: 'My grandmother cooks well.' },
+            { emoji: '👶', en: 'baby', ca: 'nadó', ex: 'The baby is sleeping.' },
+            { emoji: '🧒', en: 'child', ca: 'nen/a', ex: 'The child is playing.' },
+            { emoji: '👪', en: 'family', ca: 'família', ex: 'My family is big.' },
+            { emoji: '🤝', en: 'friend', ca: 'amic/ga', ex: 'Anna is my best friend.' }
+        ]
+    },
     food: {
-        label: 'Menjar',
-        icon: '🍎',
+        label: 'Menjar', icon: '🍎', levels: ['easy', 'medium'],
         words: [
             { emoji: '🍎', en: 'apple', ca: 'poma', ex: 'I eat an apple every day.' },
             { emoji: '🍌', en: 'banana', ca: 'plàtan', ex: 'Monkeys love bananas.' },
@@ -188,23 +194,8 @@ const VOCAB = {
             { emoji: '🥚', en: 'egg', ca: 'ou', ex: 'Chickens lay eggs.' }
         ]
     },
-    family: {
-        label: 'Família',
-        icon: '👨‍👩‍👧',
-        words: [
-            { emoji: '👨', en: 'father', ca: 'pare', ex: 'My father works in a bank.' },
-            { emoji: '👩', en: 'mother', ca: 'mare', ex: 'My mother is a teacher.' },
-            { emoji: '👦', en: 'brother', ca: 'germà', ex: 'I have one brother.' },
-            { emoji: '👧', en: 'sister', ca: 'germana', ex: 'My sister is younger.' },
-            { emoji: '👴', en: 'grandfather', ca: 'avi', ex: 'My grandfather is funny.' },
-            { emoji: '👵', en: 'grandmother', ca: 'àvia', ex: 'My grandmother cooks well.' },
-            { emoji: '👶', en: 'baby', ca: 'nadó', ex: 'The baby is sleeping.' },
-            { emoji: '🧒', en: 'child', ca: 'nen/a', ex: 'The child is playing.' }
-        ]
-    },
     body: {
-        label: 'Cos',
-        icon: '👀',
+        label: 'Cos', icon: '👀', levels: ['easy', 'medium'],
         words: [
             { emoji: '👀', en: 'eyes', ca: 'ulls', ex: 'Her eyes are green.' },
             { emoji: '👄', en: 'mouth', ca: 'boca', ex: 'Open your mouth!' },
@@ -219,8 +210,7 @@ const VOCAB = {
         ]
     },
     city: {
-        label: 'Ciutat',
-        icon: '🏫',
+        label: 'Ciutat', icon: '🏫', levels: ['medium'],
         words: [
             { emoji: '🏫', en: 'school', ca: 'escola', ex: 'I go to school every morning.' },
             { emoji: '🏥', en: 'hospital', ca: 'hospital', ex: 'Doctors work at the hospital.' },
@@ -231,12 +221,13 @@ const VOCAB = {
             { emoji: '🚉', en: 'station', ca: 'estació', ex: 'The train station is big.' },
             { emoji: '🏟️', en: 'stadium', ca: 'estadi', ex: 'We watched football at the stadium.' },
             { emoji: '🌳', en: 'park', ca: 'parc', ex: 'Kids play at the park.' },
-            { emoji: '🛣️', en: 'street', ca: 'carrer', ex: 'I live on Main Street.' }
+            { emoji: '🛣️', en: 'street', ca: 'carrer', ex: 'I live on Main Street.' },
+            { emoji: '🏢', en: 'office', ca: 'oficina', ex: 'She works in an office downtown.' },
+            { emoji: '🛍️', en: 'mall', ca: 'centre comercial', ex: 'We bought shoes at the mall.' }
         ]
     },
     tech: {
-        label: 'Tecnologia',
-        icon: '💻',
+        label: 'Tecnologia', icon: '💻', levels: ['medium'],
         words: [
             { emoji: '💻', en: 'computer', ca: 'ordinador', ex: 'I use my computer every day.' },
             { emoji: '📱', en: 'phone', ca: 'telèfon', ex: 'She talks on the phone.' },
@@ -249,17 +240,111 @@ const VOCAB = {
             { emoji: '💾', en: 'file', ca: 'arxiu', ex: 'Save the file.' },
             { emoji: '🔋', en: 'battery', ca: 'bateria', ex: 'The battery is low.' }
         ]
+    },
+    travel: {
+        label: 'Viatges', icon: '✈️', levels: ['medium'],
+        words: [
+            { emoji: '✈️', en: 'airplane', ca: 'avió', ex: 'The airplane lands at 5pm.' },
+            { emoji: '🧳', en: 'suitcase', ca: 'maleta', ex: 'My suitcase is heavy.' },
+            { emoji: '🏨', en: 'hotel', ca: 'hotel', ex: 'We stayed at a nice hotel.' },
+            { emoji: '🗺️', en: 'map', ca: 'mapa', ex: 'I need a map of the city.' },
+            { emoji: '🎫', en: 'ticket', ca: 'bitllet', ex: 'Buy your ticket online.' },
+            { emoji: '🛂', en: 'passport', ca: 'passaport', ex: 'Show me your passport.' },
+            { emoji: '🚆', en: 'train', ca: 'tren', ex: 'The train is fast.' },
+            { emoji: '🚌', en: 'bus', ca: 'autobús', ex: 'I take the bus to work.' },
+            { emoji: '🏖️', en: 'beach', ca: 'platja', ex: 'The beach is beautiful today.' },
+            { emoji: '⛰️', en: 'mountain', ca: 'muntanya', ex: 'They climbed the mountain.' }
+        ]
+    },
+    emotions: {
+        label: 'Emocions', icon: '😊', levels: ['medium', 'hard'],
+        words: [
+            { emoji: '😊', en: 'happy', ca: 'content/a', ex: 'She feels happy today.' },
+            { emoji: '😢', en: 'sad', ca: 'trist/a', ex: 'He was sad after the movie.' },
+            { emoji: '😡', en: 'angry', ca: 'enfadat/da', ex: 'Don\'t be angry with me.' },
+            { emoji: '😨', en: 'scared', ca: 'espantat/da', ex: 'The dog scared the baby.' },
+            { emoji: '😴', en: 'tired', ca: 'cansat/da', ex: 'I\'m tired after school.' },
+            { emoji: '🤩', en: 'excited', ca: 'emocionat/da', ex: 'They\'re excited about the trip.' },
+            { emoji: '😳', en: 'embarrassed', ca: 'avergonyit/da', ex: 'I was embarrassed.' },
+            { emoji: '😌', en: 'relaxed', ca: 'relaxat/da', ex: 'I feel relaxed on holidays.' },
+            { emoji: '😕', en: 'confused', ca: 'confús/a', ex: 'I\'m confused by this problem.' },
+            { emoji: '🥱', en: 'bored', ca: 'avorrit/da', ex: 'This movie is boring.' }
+        ]
+    },
+    idioms: {
+        label: 'Idioms (expressions)', icon: '💡', levels: ['hard'],
+        words: [
+            { emoji: '🐱', en: 'It\'s raining cats and dogs', ca: 'Plou a bots i barrals', ex: 'We cancelled — it\'s raining cats and dogs.' },
+            { emoji: '🧊', en: 'Break the ice', ca: 'Trencar el gel', ex: 'He told a joke to break the ice.' },
+            { emoji: '🍰', en: 'A piece of cake', ca: 'Bufar i fer ampolles (molt fàcil)', ex: 'The test was a piece of cake.' },
+            { emoji: '🐴', en: 'Hold your horses', ca: 'Para el carro', ex: 'Hold your horses, let me think first.' },
+            { emoji: '⚰️', en: 'The elephant in the room', ca: 'El tema que tothom evita', ex: 'Nobody mentioned the elephant in the room.' },
+            { emoji: '🌙', en: 'Once in a blue moon', ca: 'Molt poques vegades', ex: 'I see her once in a blue moon.' },
+            { emoji: '🔥', en: 'Spill the beans', ca: 'Deixar anar el secret', ex: 'Don\'t spill the beans about the surprise!' },
+            { emoji: '🍋', en: 'When life gives you lemons, make lemonade', ca: 'A mal temps bona cara', ex: 'Things are tough but... when life gives you lemons!' },
+            { emoji: '🎯', en: 'Hit the nail on the head', ca: 'Clavar-la', ex: 'You hit the nail on the head with that answer.' },
+            { emoji: '🛌', en: 'Hit the hay', ca: 'Anar al llit', ex: 'I\'m tired, time to hit the hay.' }
+        ]
+    },
+    phrasalVerbs: {
+        label: 'Phrasal verbs', icon: '🔀', levels: ['hard'],
+        words: [
+            { emoji: '⏰', en: 'wake up', ca: 'despertar-se', ex: 'I wake up at 7am every day.' },
+            { emoji: '👕', en: 'put on', ca: 'posar-se (roba)', ex: 'Put on your jacket, it\'s cold.' },
+            { emoji: '🧦', en: 'take off', ca: 'treure\'s (roba) / enlairar-se', ex: 'Take off your shoes, please.' },
+            { emoji: '🔍', en: 'look for', ca: 'buscar', ex: 'I\'m looking for my keys.' },
+            { emoji: '👀', en: 'look after', ca: 'cuidar', ex: 'Can you look after my dog?' },
+            { emoji: '📞', en: 'call off', ca: 'cancel·lar', ex: 'They called off the meeting.' },
+            { emoji: '💥', en: 'break down', ca: 'espatllar-se', ex: 'My car broke down on the highway.' },
+            { emoji: '🎉', en: 'give up', ca: 'rendir-se', ex: 'Never give up on your dreams.' },
+            { emoji: '🚗', en: 'pick up', ca: 'recollir', ex: 'Can you pick me up at 6?' },
+            { emoji: '🔼', en: 'turn up', ca: 'aparèixer / pujar volum', ex: 'Turn up the music!' },
+            { emoji: '🔽', en: 'turn down', ca: 'rebutjar / baixar volum', ex: 'She turned down the job offer.' },
+            { emoji: '📚', en: 'find out', ca: 'descobrir', ex: 'I found out the truth yesterday.' }
+        ]
+    },
+    academic: {
+        label: 'Vocabulari acadèmic', icon: '🎓', levels: ['hard'],
+        words: [
+            { emoji: '🧠', en: 'analyze', ca: 'analitzar', ex: 'We need to analyze the data carefully.' },
+            { emoji: '💭', en: 'consider', ca: 'considerar', ex: 'Consider all the options before deciding.' },
+            { emoji: '📊', en: 'evaluate', ca: 'avaluar', ex: 'The teacher will evaluate our essays.' },
+            { emoji: '🎯', en: 'achieve', ca: 'aconseguir', ex: 'She achieved her dream of becoming a doctor.' },
+            { emoji: '🔬', en: 'research', ca: 'investigar', ex: 'They research climate change.' },
+            { emoji: '📖', en: 'demonstrate', ca: 'demostrar', ex: 'The experiment demonstrates the theory.' },
+            { emoji: '🎨', en: 'significant', ca: 'significatiu', ex: 'There was a significant increase in sales.' },
+            { emoji: '⚖️', en: 'furthermore', ca: 'a més a més', ex: 'The plan is good; furthermore, it\'s cheap.' },
+            { emoji: '🔄', en: 'however', ca: 'però / tanmateix', ex: 'I agree, however, I have one concern.' },
+            { emoji: '✅', en: 'therefore', ca: 'per tant', ex: 'It\'s raining, therefore, we\'ll stay home.' }
+        ]
     }
 };
 
+let currentLevel = new URLSearchParams(location.search).get('level') || 'easy';
+if (!['easy', 'medium', 'hard'].includes(currentLevel)) currentLevel = 'easy';
 let currentTheme = 'animals';
 let currentIdx = 0;
 let correct = 0, wrong = 0;
 
+function visibleThemes() {
+    return Object.keys(VOCAB).filter(k => VOCAB[k].levels.includes(currentLevel));
+}
+
+function setLevel(lv) {
+    currentLevel = lv;
+    document.querySelectorAll('.lv-btn').forEach(b => b.classList.toggle('active', b.dataset.lv === lv));
+    const themes = visibleThemes();
+    if (!themes.includes(currentTheme)) currentTheme = themes[0];
+    currentIdx = 0;
+    renderThemePicker();
+    showCard();
+    nextQuiz();
+}
+
 function renderThemePicker() {
     const picker = document.getElementById('themePicker');
     picker.innerHTML = '';
-    Object.keys(VOCAB).forEach(key => {
+    visibleThemes().forEach(key => {
         const btn = document.createElement('button');
         btn.className = 'theme-btn' + (key === currentTheme ? ' active' : '');
         btn.textContent = VOCAB[key].icon + ' ' + VOCAB[key].label;
@@ -285,7 +370,7 @@ function showCard() {
     document.getElementById('backTranslation').textContent = w.ca;
     document.getElementById('backExample').textContent = w.ex;
     document.getElementById('card').classList.remove('flipped');
-    document.getElementById('progress').textContent = `Carta ${currentIdx + 1} de ${list.length}`;
+    document.getElementById('progress').textContent = `Carta ${currentIdx + 1} de ${list.length} · ${VOCAB[currentTheme].label}`;
     document.getElementById('progressFill').style.width = `${((currentIdx + 1) / list.length) * 100}%`;
 }
 
@@ -312,6 +397,7 @@ function nextQuiz() {
     const options = [...others, correctWord].sort(() => Math.random() - 0.5);
 
     document.getElementById('quizEmoji').textContent = correctWord.emoji;
+    document.getElementById('quizPrompt').textContent = currentLevel === 'hard' ? `Quina és la traducció o ús correcte?` : `Quina paraula en anglès correspon?`;
     const optsDiv = document.getElementById('quizOptions');
     optsDiv.innerHTML = '';
     options.forEach(opt => {
@@ -334,9 +420,7 @@ function nextQuiz() {
     });
 }
 
-renderThemePicker();
-showCard();
-nextQuiz();
+setLevel(currentLevel);
 </script>
 </body>
 </html>

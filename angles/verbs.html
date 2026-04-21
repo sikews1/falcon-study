@@ -18,7 +18,13 @@
         h1 span { background: linear-gradient(135deg, #2563eb, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
 
-        .mode-picker { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; }
+        .level-picker { display: flex; gap: 6px; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+        .lv-btn { padding: 8px 18px; border-radius: var(--radius-full); border: 2px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 700; cursor: pointer; font-size: 0.84rem; }
+        .lv-btn[data-lv="easy"].active { background: #22c55e; color: #fff; border-color: #22c55e; }
+        .lv-btn[data-lv="medium"].active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+        .lv-btn[data-lv="hard"].active { background: #8b5cf6; color: #fff; border-color: #8b5cf6; }
+
+        .mode-picker { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
         .mode-btn { padding: 8px 16px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.85rem; }
         .mode-btn:hover { border-color: #2563eb; color: #2563eb; }
         .mode-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
@@ -68,13 +74,15 @@
 
 <div class="container">
     <h1><span>Verbs</span> d'anglès</h1>
-    <p class="subtitle">Aprèn els verbs més importants. Practica amb exercicis infinits.</p>
+    <p class="subtitle">Aprèn els verbs més importants. El contingut s'adapta al nivell.</p>
 
-    <div class="mode-picker">
-        <button class="mode-btn active" onclick="setMode('regular')">Verbs regulars</button>
-        <button class="mode-btn" onclick="setMode('irregular')">Verbs irregulars</button>
-        <button class="mode-btn" onclick="setMode('tobe')">To be / To have</button>
+    <div class="level-picker">
+        <button class="lv-btn" data-lv="easy" onclick="setLevel('easy')">🟢 Primària</button>
+        <button class="lv-btn" data-lv="medium" onclick="setLevel('medium')">🔵 ESO</button>
+        <button class="lv-btn" data-lv="hard" onclick="setLevel('hard')">🟣 Batxillerat</button>
     </div>
+
+    <div class="mode-picker" id="modePicker"></div>
 
     <div id="modeContent"></div>
 
@@ -146,14 +154,43 @@ const TOBE = [
     { subj: 'They', be: 'are', have: 'have' }
 ];
 
-let mode = 'regular';
+let currentLevel = new URLSearchParams(location.search).get('level') || 'easy';
+if (!['easy', 'medium', 'hard'].includes(currentLevel)) currentLevel = 'easy';
+
+const LEVEL_MODES = {
+    easy: [{ k: 'tobe', label: 'To be / To have' }],
+    medium: [{ k: 'tobe', label: 'To be / To have' }, { k: 'regular', label: 'Verbs regulars' }],
+    hard: [{ k: 'regular', label: 'Verbs regulars' }, { k: 'irregular', label: 'Verbs irregulars' }]
+};
+
+let mode = 'tobe';
 let correct = 0, wrong = 0;
 let currentExercise = null;
 
+function setLevel(lv) {
+    currentLevel = lv;
+    document.querySelectorAll('.lv-btn').forEach(b => b.classList.toggle('active', b.dataset.lv === lv));
+    mode = LEVEL_MODES[lv][0].k;
+    renderModePicker();
+    renderMode();
+    newExercise();
+}
+
+function renderModePicker() {
+    const picker = document.getElementById('modePicker');
+    picker.innerHTML = '';
+    LEVEL_MODES[currentLevel].forEach(m => {
+        const b = document.createElement('button');
+        b.className = 'mode-btn' + (m.k === mode ? ' active' : '');
+        b.textContent = m.label;
+        b.onclick = () => { mode = m.k; renderModePicker(); renderMode(); newExercise(); };
+        picker.appendChild(b);
+    });
+}
+
 function setMode(m) {
     mode = m;
-    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+    renderModePicker();
     renderMode();
     newExercise();
 }
@@ -233,8 +270,7 @@ function checkAnswer() {
     document.getElementById('score').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
 }
 
-renderMode();
-newExercise();
+setLevel(currentLevel);
 </script>
 </body>
 </html>

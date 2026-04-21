@@ -202,7 +202,8 @@ function check() {
     document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
 }
 
-show('mru');
+const urlLevel = new URLSearchParams(location.search).get('level');
+show(urlLevel === 'eso' ? 'mru' : 'mrua');
 </script>
 </body>
 </html>

@@ -160,6 +160,10 @@ function newQuiz() {
     });
 }
 
+const urlMode = new URLSearchParams(location.search).get('mode');
+if (urlMode === 'events') {
+    document.querySelector('.quiz-box').scrollIntoView({ behavior: 'smooth' });
+}
 newQuiz();
 </script>
 </body>

@@ -97,7 +97,9 @@ const FIGS = [
     { emoji: '🎭', name: 'William Shakespeare', era: 'moderna', dates: '1564-1616', intro: 'Dramaturg anglès. Autor de Hamlet, Romeu i Julieta, Macbeth.', fact: 'Va inventar més de 1.700 paraules angleses que s\'utilitzen avui.' }
 ];
 
-let currentEra = 'all';
+const urlLevel = new URLSearchParams(location.search).get('level');
+// Easy = per a primària, només figures més conegudes (antigua + moderna)
+let currentEra = urlLevel === 'easy' ? 'antiga' : 'all';
 let correct = 0, wrong = 0;
 
 function renderEra() {

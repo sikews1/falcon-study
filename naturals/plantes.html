@@ -238,7 +238,8 @@ function newQuiz() {
     });
 }
 
-show('parts');
+const urlLevel = new URLSearchParams(location.search).get('level');
+show(urlLevel === 'eso' ? 'photo' : 'parts');
 </script>
 </body>
 </html>

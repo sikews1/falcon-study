@@ -171,7 +171,9 @@ function newQuiz() {
     });
 }
 
-show('oceans');
+const urlMode = new URLSearchParams(location.search).get('mode');
+const modeMap = { oceans: 'oceans', muntanyes: 'muntanyes', rius: 'rius', climat: 'climat' };
+show(modeMap[urlMode] || 'oceans');
 </script>
 </body>
 </html>

@@ -172,13 +172,21 @@ const TOPICS = {
     }
 };
 
-let current = 'bv';
+const urlLevel = new URLSearchParams(location.search).get('level');
+// Primària: només regles bàsiques (bv, hmuda, dubtes)
+// ESO/Batx: totes les regles
+const EASY_TOPICS = ['bv', 'hmuda', 'dubtes'];
+function visibleTopics() {
+    return urlLevel === 'easy' ? EASY_TOPICS : Object.keys(TOPICS);
+}
+
+let current = visibleTopics()[0];
 let correct = 0, wrong = 0;
 
 function renderPicker() {
     const p = document.getElementById('picker');
     p.innerHTML = '';
-    Object.keys(TOPICS).forEach(k => {
+    visibleTopics().forEach(k => {
         const b = document.createElement('button');
         b.className = 'topic-btn' + (k === current ? ' active' : '');
         b.textContent = TOPICS[k].label;

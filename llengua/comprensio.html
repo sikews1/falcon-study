@@ -131,13 +131,15 @@ const TEXTS = {
     ]
 };
 
-let currentLevel = 'easy';
+let currentLevel = new URLSearchParams(location.search).get('level') || 'easy';
+if (!['easy', 'medium', 'hard'].includes(currentLevel)) currentLevel = 'easy';
 let correct = 0, wrong = 0;
 
 function setLevel(l) {
     currentLevel = l;
     document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+    const target = document.querySelector(`.level-btn[onclick*="'${l}'"]`);
+    if (target) target.classList.add('active');
     loadText();
 }
 
@@ -173,7 +175,7 @@ function loadText() {
     });
 }
 
-loadText();
+setLevel(currentLevel);
 </script>
 </body>
 </html>

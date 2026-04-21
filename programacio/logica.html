@@ -85,7 +85,8 @@
 <script src="../theme.js"></script>
 <script src="../auth.js"></script>
 <script>
-let mode = 'seq';
+const urlLevel = new URLSearchParams(location.search).get('level');
+let mode = urlLevel === 'hard' ? 'bool' : 'seq';
 let correct = 0, wrong = 0;
 let currentAnswer = null;
 
@@ -199,6 +200,7 @@ function renderBool() {
     });
 }
 
+document.querySelectorAll('.mode-btn').forEach(b => { b.classList.toggle('active', b.textContent.toLowerCase().includes(mode === 'bool' ? 'boolean' : 'seq')); });
 render();
 </script>
 </body>

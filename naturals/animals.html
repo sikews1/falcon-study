@@ -212,7 +212,10 @@ function newQuiz() {
     });
 }
 
-showTab('classes');
+const urlLevel = new URLSearchParams(location.search).get('level');
+const initialTab = urlLevel === 'eso' ? 'chains' : 'classes';
+document.querySelectorAll('.tab-btn').forEach(b => { if (b.textContent.includes(initialTab === 'chains' ? 'Cadenes' : 'Classificació')) b.classList.add('active'); else b.classList.remove('active'); });
+showTab(initialTab);
 </script>
 </body>
 </html>

@@ -170,12 +170,21 @@ const ALGORITHMS = [
     }
 ];
 
+const urlLevel = new URLSearchParams(location.search).get('level');
+// Per nivell fàcil, mostrem només algoritmes de la vida quotidiana amb menys passos (4)
+// Per defecte mostrem tots
+function eligibleAlgs() {
+    if (urlLevel === 'easy') return ALGORITHMS.filter(a => a.steps.length <= 5);
+    return ALGORITHMS;
+}
+
 let currentAlg = null;
 let userOrder = [];
 let correct = 0, wrong = 0;
 
 function loadExercise() {
-    currentAlg = ALGORITHMS[Math.floor(Math.random() * ALGORITHMS.length)];
+    const pool = eligibleAlgs();
+    currentAlg = pool[Math.floor(Math.random() * pool.length)];
     // Shuffle steps
     userOrder = [...currentAlg.steps].sort(() => Math.random() - 0.5);
     render();

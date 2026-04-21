@@ -200,7 +200,8 @@ function checkComp(chosen, correctOpt) {
     newCompare();
 }
 
-show('tips');
+const urlLevel = new URLSearchParams(location.search).get('level');
+show(urlLevel === 'easy' ? 'descomptes' : 'tips');
 </script>
 </body>
 </html>

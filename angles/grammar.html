@@ -18,6 +18,12 @@
         h1 span { background: linear-gradient(135deg, #7c3aed, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
 
+        .level-picker { display: flex; gap: 6px; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+        .lv-btn { padding: 8px 18px; border-radius: var(--radius-full); border: 2px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 700; cursor: pointer; font-size: 0.84rem; }
+        .lv-btn[data-lv="easy"].active { background: #22c55e; color: #fff; border-color: #22c55e; }
+        .lv-btn[data-lv="medium"].active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+        .lv-btn[data-lv="hard"].active { background: #8b5cf6; color: #fff; border-color: #8b5cf6; }
+
         .topic-picker { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 20px; }
         .topic-btn { padding: 6px 12px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.78rem; }
         .topic-btn:hover { border-color: #8b5cf6; color: #8b5cf6; }
@@ -64,6 +70,12 @@
 <div class="container">
     <h1><span>Gramàtica</span> d'anglès</h1>
     <p class="subtitle">Regles principals explicades i exercicis infinits de cada tema.</p>
+
+    <div class="level-picker">
+        <button class="lv-btn" data-lv="easy" onclick="setLevel('easy')">🟢 Primària</button>
+        <button class="lv-btn" data-lv="medium" onclick="setLevel('medium')">🔵 ESO</button>
+        <button class="lv-btn" data-lv="hard" onclick="setLevel('hard')">🟣 Batxillerat</button>
+    </div>
 
     <div class="topic-picker" id="topicPicker"></div>
     <div id="ruleContent"></div>
@@ -218,13 +230,29 @@ const TOPICS = {
     }
 };
 
-let currentTopic = 'articles';
+const LEVEL_TOPICS = {
+    easy: ['articles', 'plurals'],
+    medium: ['pronouns', 'tenses'],
+    hard: ['prepositions', 'tenses', 'pronouns']
+};
+
+let currentLevel = new URLSearchParams(location.search).get('level') || 'easy';
+if (!['easy', 'medium', 'hard'].includes(currentLevel)) currentLevel = 'easy';
+let currentTopic = LEVEL_TOPICS[currentLevel][0];
 let correct = 0, wrong = 0;
+
+function setLevel(lv) {
+    currentLevel = lv;
+    document.querySelectorAll('.lv-btn').forEach(b => b.classList.toggle('active', b.dataset.lv === lv));
+    currentTopic = LEVEL_TOPICS[lv][0];
+    render();
+    newExercise();
+}
 
 function renderTopicPicker() {
     const p = document.getElementById('topicPicker');
     p.innerHTML = '';
-    Object.keys(TOPICS).forEach(k => {
+    LEVEL_TOPICS[currentLevel].forEach(k => {
         const b = document.createElement('button');
         b.className = 'topic-btn' + (k === currentTopic ? ' active' : '');
         b.textContent = TOPICS[k].label;
@@ -266,9 +294,7 @@ function newExercise() {
     });
 }
 
-renderTopicPicker();
-render();
-newExercise();
+setLevel(currentLevel);
 </script>
 </body>
 </html>

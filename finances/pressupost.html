@@ -91,16 +91,32 @@
 <script src="../theme.js"></script>
 <script src="../auth.js"></script>
 <script>
-let incomes = [
+const urlLevel = new URLSearchParams(location.search).get('level');
+
+// Escenari simplificat per a primària (diners de paga)
+const EASY_INCOMES = [
+    { name: 'Paga setmanal (5€ x 4)', amount: 20 },
+    { name: 'Diners d\'un aniversari', amount: 10 }
+];
+const EASY_EXPENSES = [
+    { name: 'Llaminadures', amount: 8 },
+    { name: 'Joguina petita', amount: 12 },
+    { name: 'Entrada al cinema', amount: 7 }
+];
+// Escenari ESO (més realista)
+const MEDIUM_INCOMES = [
     { name: 'Paga setmanal x 4', amount: 40 },
     { name: 'Feines puntuals', amount: 20 }
 ];
-let expenses = [
+const MEDIUM_EXPENSES = [
     { name: 'Transport', amount: 15 },
     { name: 'Menjar fora', amount: 25 },
     { name: 'Oci (cinema, jocs)', amount: 15 },
     { name: 'Mòbil', amount: 10 }
 ];
+
+let incomes = urlLevel === 'easy' ? [...EASY_INCOMES] : [...MEDIUM_INCOMES];
+let expenses = urlLevel === 'easy' ? [...EASY_EXPENSES] : [...MEDIUM_EXPENSES];
 
 function render() {
     renderList('incomes', incomes);

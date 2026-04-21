@@ -163,7 +163,8 @@ function newQuiz() {
     });
 }
 
-show('cont');
+const urlMode = new URLSearchParams(location.search).get('mode');
+show(urlMode === 'advanced' ? 'quiz' : 'cont');
 </script>
 </body>
 </html>

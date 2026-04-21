@@ -250,7 +250,8 @@ const map = new jsVectorMap({
         hover: { fillOpacity: 0.75, cursor: 'pointer' },
         selected: { fill: '#16a34a' }
     },
-    regionsSelectable: false,
+    regionsSelectable: true,
+    regionsSelectableOne: false,
     series: {
         regions: [{
             attribute: 'fill',
@@ -300,9 +301,27 @@ function startMode(mode) {
     document.getElementById('final').classList.remove('show');
     updateScore();
     buildQuestionPool();
+
+    // In explore mode, each CCAA keeps its color. In quiz modes, all regions
+    // are grey so the user can't cheat by color matching.
+    applyRegionColors(mode === 'explore');
+
     if (mode === 'explore') setupExplore();
     else if (mode === 'locate') setupLocate();
     else if (mode === 'capital') setupCapital();
+}
+
+function applyRegionColors(withColors) {
+    if (withColors) {
+        Object.keys(provColors).forEach(code => {
+            map.series.regions[0].setValues({ [code]: provColors[code] });
+        });
+    } else {
+        // Paint all regions grey
+        const grey = {};
+        Object.keys(provColors).forEach(code => { grey[code] = '#cbd5e1'; });
+        map.series.regions[0].setValues(grey);
+    }
 }
 
 function buildQuestionPool() {

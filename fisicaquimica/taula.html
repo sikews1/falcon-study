@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taula periòdica</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .fq-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .fq-nav { background: rgba(9, 9, 11, 0.75); }
+        .fq-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .fq-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .fq-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .fq-nav a.home { color: #be185d; font-weight: 600; }
+
+        .container { max-width: 960px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #be185d, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .legend { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 16px; }
+        .leg { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--text-secondary); }
+        .leg .box { width: 14px; height: 14px; border-radius: 3px; }
+
+        .periodic-table { overflow-x: auto; margin-bottom: 18px; }
+        .periodic-grid { display: grid; grid-template-columns: repeat(18, 38px); grid-auto-rows: 46px; gap: 2px; min-width: 720px; margin: 0 auto; }
+        .el { border-radius: 4px; padding: 3px 2px; cursor: pointer; font-family: 'Courier New', monospace; text-align: center; transition: all 0.15s; display: flex; flex-direction: column; justify-content: center; }
+        .el:hover { transform: scale(1.15); z-index: 10; box-shadow: 0 0 12px rgba(0,0,0,0.3); }
+        .el .sym { font-weight: 900; font-size: 0.88rem; color: #fff; line-height: 1; }
+        .el .num { font-size: 0.55rem; color: rgba(255,255,255,0.7); }
+        .el.alkali { background: #dc2626; }
+        .el.alkaline { background: #ea580c; }
+        .el.transition { background: #ca8a04; }
+        .el.post-tm { background: #16a34a; }
+        .el.metalloid { background: #0d9488; }
+        .el.nonmetal { background: #2563eb; }
+        .el.halogen { background: #7c3aed; }
+        .el.noble { background: #be185d; }
+        .el.lanth { background: #64748b; }
+        .el.actin { background: #475569; }
+
+        .info-panel { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 22px; min-height: 140px; }
+        .info-panel h2 { color: var(--text-primary); font-size: 1.3rem; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+        .info-panel h2 .sym-big { padding: 6px 12px; border-radius: 8px; color: #fff; font-family: 'Courier New', monospace; }
+        .info-panel .meta { color: var(--text-muted); font-size: 0.82rem; margin-bottom: 10px; }
+        .info-panel p { color: var(--text-secondary); line-height: 1.7; font-size: 0.93rem; }
+    </style>
+</head>
+<body>
+
+<div class="fq-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="estats.html">Estats</a>
+    <a href="taula.html" class="active">Taula periòdica</a>
+    <a href="reaccions.html">Reaccions</a>
+    <a href="mecanica.html">Mecànica</a>
+</div>
+
+<div class="container">
+    <h1><span>Taula</span> periòdica</h1>
+    <p class="subtitle">Clica qualsevol element per veure'n la informació</p>
+
+    <div class="legend">
+        <div class="leg"><span class="box" style="background:#dc2626;"></span>Alcalins</div>
+        <div class="leg"><span class="box" style="background:#ea580c;"></span>Alcalinotèrris</div>
+        <div class="leg"><span class="box" style="background:#ca8a04;"></span>Metalls transició</div>
+        <div class="leg"><span class="box" style="background:#16a34a;"></span>Post-transició</div>
+        <div class="leg"><span class="box" style="background:#0d9488;"></span>Metal·loides</div>
+        <div class="leg"><span class="box" style="background:#2563eb;"></span>No metalls</div>
+        <div class="leg"><span class="box" style="background:#7c3aed;"></span>Halògens</div>
+        <div class="leg"><span class="box" style="background:#be185d;"></span>Gasos nobles</div>
+    </div>
+
+    <div class="periodic-table">
+        <div class="periodic-grid" id="grid"></div>
+    </div>
+
+    <div class="info-panel" id="info">
+        <h2>Clica un element</h2>
+        <p>Passa el ratolí per sobre i fes clic a qualsevol element de la taula per veure les seves propietats i curiositats.</p>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+// [period, group, symbol, name, Z, category, description]
+const ELEMENTS = [
+    [1,1,'H','Hidrogen',1,'nonmetal','L\'element més abundant de l\'univers. És el combustible de les estrelles i forma part de l\'aigua (H₂O).'],
+    [1,18,'He','Heli',2,'noble','Gas noble. Ens canvia la veu perquè el so viatja més ràpid a l\'heli que a l\'aire. S\'usa a globus i en medicina.'],
+    [2,1,'Li','Liti',3,'alkali','Metall molt lleuger. És l\'ingredient clau de les bateries dels mòbils, portàtils i cotxes elèctrics.'],
+    [2,2,'Be','Beril·li',4,'alkaline','Metall dur i lleuger. S\'usa en naus espacials i equips de raigs X.'],
+    [2,13,'B','Bor',5,'metalloid','Metal·loide usat en vidre resistent (Pyrex) i detergents.'],
+    [2,14,'C','Carboni',6,'nonmetal','La base de tota la vida! Forma el diamant, el grafit, el carbó i és en totes les molècules orgàniques.'],
+    [2,15,'N','Nitrogen',7,'nonmetal','El 78% de l\'aire que respirem és nitrogen. Essencial per als éssers vius.'],
+    [2,16,'O','Oxigen',8,'nonmetal','El respirem constantment. Sense oxigen, no hi ha combustió ni vida animal.'],
+    [2,17,'F','Fluor',9,'halogen','Halogen reactiu. Es posa al dentifrici per enfortir les dents.'],
+    [2,18,'Ne','Neó',10,'noble','Dona la llum vermella/taronja als rètols de "neó". Gas noble.'],
+    [3,1,'Na','Sodi',11,'alkali','Component de la sal comuna (NaCl). També és important per als nervis del cos.'],
+    [3,2,'Mg','Magnesi',12,'alkaline','Metall molt lleuger que crema amb flama blanca brillant (bengales).'],
+    [3,13,'Al','Alumini',13,'post-tm','Metall lleuger i resistent. Paper d\'alumini, llaunes de beguda, avions.'],
+    [3,14,'Si','Silici',14,'metalloid','La base dels xips dels ordinadors. També forma la sorra (SiO₂).'],
+    [3,15,'P','Fòsfor',15,'nonmetal','S\'encén fàcilment: es fa servir en llumins. És a l\'ADN.'],
+    [3,16,'S','Sofre',16,'nonmetal','Groc i amb olor característic (rotlle d\'ous). Als volcans i aigües termals.'],
+    [3,17,'Cl','Clor',17,'halogen','Groc-verdós. Desinfecta l\'aigua de piscines i de beure.'],
+    [3,18,'Ar','Argó',18,'noble','Gas noble. Omple les bombetes per evitar que el filament es cremi.'],
+    [4,1,'K','Potassi',19,'alkali','Important per als músculs. Hi ha potassi als plàtans i espinacs.'],
+    [4,2,'Ca','Calci',20,'alkaline','A la llet i als ossos. Els nostres ossos i dents són en gran part de calci.'],
+    [4,3,'Sc','Escandi',21,'transition','Rar. S\'usa a bats d\'aliatges esportius.'],
+    [4,4,'Ti','Titani',22,'transition','Molt resistent i lleuger. Implants mèdics, avions, bicicletes cares.'],
+    [4,5,'V','Vanadi',23,'transition','Endureix l\'acer. Claus de fixació, eines.'],
+    [4,6,'Cr','Crom',24,'transition','Brillant i resistent a l\'òxid. Per això es fa servir al cromat de cotxes i aixetes.'],
+    [4,7,'Mn','Manganès',25,'transition','Essencial per al cos humà. També a l\'acer i piles.'],
+    [4,8,'Fe','Ferro',26,'transition','El metall més usat per la humanitat. Als nostres glòbuls vermells també hi ha ferro.'],
+    [4,9,'Co','Cobalt',27,'transition','Dona color blau al vidre i la porcellana. També a bateries.'],
+    [4,10,'Ni','Níquel',28,'transition','Monedes d\'euro, instruments musicals. Molt resistent.'],
+    [4,11,'Cu','Coure',29,'transition','Taronjós. Conductor excel·lent: cablejat elèctric, canonades.'],
+    [4,12,'Zn','Zinc',30,'transition','Protegeix el ferro de l\'òxid (galvanitzat). A piles i cremes solars.'],
+    [4,13,'Ga','Gal·li',31,'post-tm','Es fon a 29°C: es descompon a la mà. A xips electrònics.'],
+    [4,14,'Ge','Germani',32,'metalloid','Semiconductor. S\'usa a fibra òptica i LEDs infrarojos.'],
+    [4,15,'As','Arsènic',33,'metalloid','Tòxic. Històricament usat com a verí. També en semiconductors.'],
+    [4,16,'Se','Seleni',34,'nonmetal','Essencial en dosis petites. Necessari per a la pell i la tiroide.'],
+    [4,17,'Br','Brom',35,'halogen','L\'únic no-metall líquid a temperatura ambient. Marró vermellós, tòxic.'],
+    [4,18,'Kr','Criptó',36,'noble','Gas noble. S\'usa a alguns flashos fotogràfics i làsers.'],
+    [5,1,'Rb','Rubidi',37,'alkali','Molt reactiu. Als rellotges atòmics.'],
+    [5,2,'Sr','Estronci',38,'alkaline','Dona color vermell intens als focs artificials.'],
+    [5,11,'Ag','Argent',47,'transition','Metall preciós. Joies, coberts, conductor elèctric excel·lent.'],
+    [5,13,'In','Indi',49,'post-tm','A les pantalles tàctils (ITO: òxid d\'indi-estany).'],
+    [5,14,'Sn','Estany',50,'post-tm','Llaunes d\'aliments (llautada protegeix el ferro). Soldadura electrònica.'],
+    [5,15,'Sb','Antimoni',51,'metalloid','Llavis i delineadors antics. Retardants de flama.'],
+    [5,16,'Te','Tel·luri',52,'metalloid','Als panells solars i aliatges.'],
+    [5,17,'I','Iode',53,'halogen','Necessari per a la tiroide. El Betadine és iode dissolt.'],
+    [5,18,'Xe','Xenó',54,'noble','Llums de cotxe (far xenó). Anestèsic en medicina.'],
+    [6,11,'Au','Or',79,'transition','El metall més preuat. No s\'oxida. Joies, monedes, electrònica d\'alta qualitat.'],
+    [6,12,'Hg','Mercuri',80,'transition','L\'únic metall líquid a temperatura ambient. Tòxic. Abans als termòmetres.'],
+    [6,13,'Tl','Tal·li',81,'post-tm','Tòxic. Històricament usat com a verí i raticida.'],
+    [6,14,'Pb','Plom',82,'post-tm','Pesant i tòxic. Tub de plom, bateries de cotxe, escuts antirradiació.'],
+    [6,18,'Rn','Radó',86,'noble','Radioactiu. De vegades s\'acumula a casa i pot ser perillós.'],
+    [7,1,'Fr','Franci',87,'alkali','Molt radioactiu. Gairebé no existeix a la natura.']
+];
+
+const CATEGORY_COLORS = {
+    alkali: '#dc2626', alkaline: '#ea580c', transition: '#ca8a04',
+    'post-tm': '#16a34a', metalloid: '#0d9488', nonmetal: '#2563eb',
+    halogen: '#7c3aed', noble: '#be185d'
+};
+
+const grid = document.getElementById('grid');
+ELEMENTS.forEach(([p, g, sym, name, z, cat, desc]) => {
+    const el = document.createElement('div');
+    el.className = 'el ' + cat;
+    el.style.gridRow = p;
+    el.style.gridColumn = g;
+    el.innerHTML = `<div class="num">${z}</div><div class="sym">${sym}</div>`;
+    el.onclick = () => showInfo(sym, name, z, cat, desc);
+    el.title = name;
+    grid.appendChild(el);
+});
+
+function showInfo(sym, name, z, cat, desc) {
+    const catNames = { alkali: 'Metall alcalí', alkaline: 'Metall alcalinotèrri', transition: 'Metall de transició', 'post-tm': 'Metall post-transició', metalloid: 'Metal·loide', nonmetal: 'No-metall', halogen: 'Halogen', noble: 'Gas noble' };
+    document.getElementById('info').innerHTML = `
+        <h2><span class="sym-big" style="background:${CATEGORY_COLORS[cat]}">${sym}</span> ${name}</h2>
+        <div class="meta">Z = ${z} &bull; ${catNames[cat]}</div>
+        <p>${desc}</p>
+    `;
+}
+</script>
+</body>
+</html>

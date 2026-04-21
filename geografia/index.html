@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geografia - Mapes Interactius</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .geo-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .geo-nav { background: rgba(9, 9, 11, 0.75); }
+        .geo-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .geo-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .geo-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .geo-nav a.home { color: #0891b2; font-weight: 600; }
+
+        .hero { text-align: center; padding: 48px 24px 40px; border-bottom: 1px solid var(--border-subtle); position: relative; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 80% at 30% 0%, rgba(8, 145, 178, 0.07) 0%, transparent 60%); }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; position: relative; }
+        .hero h1 span { background: linear-gradient(135deg, #0891b2, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; position: relative; }
+        .hero .badge { display: inline-block; margin-top: 12px; padding: 6px 16px; border-radius: var(--radius-full); background: rgba(8, 145, 178, 0.1); color: #0891b2; font-size: 0.8rem; font-weight: 600; position: relative; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+        .section-title { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; margin-top: 20px; }
+        .section-title span { padding: 4px 12px; border-radius: 12px; font-size: .75rem; color: #fff; }
+
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 14px; }
+
+        .course-card { background: var(--bg-raised); border-radius: var(--radius-lg); padding: 22px; border: 1px solid var(--border-subtle); transition: all 0.25s; text-decoration: none; color: inherit; display: block; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+        .course-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .course-card:hover { border-color: var(--border-default); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .course-card .card-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 12px; color: #fff; }
+        .course-card h3 { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+        .course-card p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+
+        .card-red::before { background: linear-gradient(90deg, #dc2626, #ef4444); } .card-red .card-icon { background: linear-gradient(135deg, #dc2626, #ef4444); } .card-red:hover { border-color: #ef4444; }
+        .card-blue::before { background: linear-gradient(90deg, #2563eb, #3b82f6); } .card-blue .card-icon { background: linear-gradient(135deg, #2563eb, #3b82f6); } .card-blue:hover { border-color: #3b82f6; }
+        .card-cyan::before { background: linear-gradient(90deg, #0891b2, #06b6d4); } .card-cyan .card-icon { background: linear-gradient(135deg, #0891b2, #06b6d4); } .card-cyan:hover { border-color: #06b6d4; }
+        .card-green::before { background: linear-gradient(90deg, #16a34a, #22c55e); } .card-green .card-icon { background: linear-gradient(135deg, #16a34a, #22c55e); } .card-green:hover { border-color: #22c55e; }
+        .card-orange::before { background: linear-gradient(90deg, #ea580c, #f97316); } .card-orange .card-icon { background: linear-gradient(135deg, #ea580c, #f97316); } .card-orange:hover { border-color: #f97316; }
+
+        .footer { text-align: center; padding: 30px 20px; color: var(--text-muted); font-size: 0.8rem; }
+        @media (max-width: 640px) { .courses-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+
+<div class="geo-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html" class="active">Inici</a>
+    <a href="espanya.html">Espanya</a>
+    <a href="europa.html">Europa</a>
+    <a href="mon.html">Món</a>
+    <a href="fisic.html">Físic</a>
+</div>
+
+<div class="hero">
+    <h1><span>Geografia</span></h1>
+    <p>Mapes interactius amb drag-and-drop, capitals, països i banderes</p>
+    <div class="badge">&#x1F30D; Explora el món</div>
+</div>
+
+<div class="container">
+
+    <h2 class="section-title"><span style="background:#22c55e;">PRIMÀRIA</span> 8 - 12 anys</h2>
+    <div class="courses-grid">
+        <a href="espanya.html" class="course-card card-red"><div class="card-icon">&#x1F1EA;&#x1F1F8;</div><h3>Espanya: CCAA</h3><p>Arrossega el nom a cada comunitat autònoma. Aprèn capitals.</p></a>
+        <a href="mon.html?mode=continents" class="course-card card-cyan"><div class="card-icon">&#x1F30E;</div><h3>Continents</h3><p>Els 7 continents del món amb els seus països destacats</p></a>
+        <a href="fisic.html?mode=oceans" class="course-card card-blue"><div class="card-icon">&#x1F30A;</div><h3>Oceans i mars</h3><p>Els 5 oceans i mars principals</p></a>
+    </div>
+
+    <h2 class="section-title"><span style="background:#3b82f6;">ESO</span> 12 - 16 anys</h2>
+    <div class="courses-grid">
+        <a href="europa.html" class="course-card card-blue"><div class="card-icon">&#x1F1EA;&#x1F1FA;</div><h3>Països d'Europa</h3><p>Associa país amb bandera i capital</p></a>
+        <a href="mon.html" class="course-card card-cyan"><div class="card-icon">&#x1F30D;</div><h3>Capitals del món</h3><p>Quiz de capitals per continent</p></a>
+        <a href="fisic.html" class="course-card card-green"><div class="card-icon">&#x1F3D4;&#xFE0F;</div><h3>Geografia física</h3><p>Rius, muntanyes, serralades, climes</p></a>
+    </div>
+
+    <h2 class="section-title"><span style="background:#8b5cf6;">BATXILLERAT</span> 16 - 18 anys</h2>
+    <div class="courses-grid">
+        <a href="mon.html?mode=advanced" class="course-card card-orange"><div class="card-icon">&#x1F3DB;&#xFE0F;</div><h3>Geopolítica</h3><p>Organitzacions internacionals, conflictes, fronteres</p></a>
+        <a href="fisic.html?mode=climat" class="course-card card-green"><div class="card-icon">&#x1F324;&#xFE0F;</div><h3>Climes i biomes</h3><p>Tipus de clima, biomes, zones climàtiques</p></a>
+    </div>
+
+</div>
+
+<div class="footer">Geografia &mdash; Espanya, Europa, món i geografia física</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+</body>
+</html>

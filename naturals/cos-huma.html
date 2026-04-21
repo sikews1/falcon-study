@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El cos humà - Naturals</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .nat-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .nat-nav { background: rgba(9, 9, 11, 0.75); }
+        .nat-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .nat-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .nat-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .nat-nav a.home { color: #16a34a; font-weight: 600; }
+
+        .container { max-width: 920px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #dc2626, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        @media (max-width: 720px) { .layout { grid-template-columns: 1fr; } }
+
+        .body-svg-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 18px; display: flex; align-items: center; justify-content: center; min-height: 520px; }
+        .body-svg-box svg { width: 100%; max-width: 260px; }
+
+        .hotspot { cursor: pointer; transition: all 0.25s; }
+        .hotspot:hover circle { fill: #f97316; r: 14; }
+        .hotspot.active circle { fill: #dc2626; r: 16; }
+
+        .info-panel { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px 28px; }
+        .info-panel h2 { color: #dc2626; font-size: 1.25rem; margin-bottom: 4px; }
+        .info-panel .subtitle-panel { font-style: italic; color: var(--text-muted); font-size: 0.82rem; margin-bottom: 14px; }
+        .info-panel .emoji-large { font-size: 3rem; text-align: center; margin: 12px 0; }
+        .info-panel p { color: var(--text-secondary); line-height: 1.7; font-size: 0.93rem; margin-bottom: 10px; }
+        .info-panel .fun-fact { background: rgba(22, 163, 74, 0.08); border-left: 3px solid #16a34a; padding: 12px 16px; border-radius: 0 10px 10px 0; font-size: 0.85rem; margin-top: 10px; }
+        .info-panel .fun-fact::before { content: '💡 Sabies que... '; font-weight: 700; color: #16a34a; }
+
+        .quiz-section { margin-top: 28px; background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; }
+        .quiz-section h2 { color: var(--text-primary); font-size: 1.1rem; margin-bottom: 14px; }
+        .quiz-prompt { text-align: center; font-size: 1rem; margin-bottom: 12px; color: var(--text-primary); }
+        .quiz-emoji { font-size: 3.5rem; text-align: center; margin-bottom: 8px; }
+        .quiz-opts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .quiz-opt { padding: 12px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 600; color: var(--text-primary); font-size: 0.9rem; transition: all 0.2s; }
+        .quiz-opt:hover { border-color: #dc2626; }
+        .quiz-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; }
+        .quiz-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="nat-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="cos-huma.html" class="active">Cos humà</a>
+    <a href="sistemes.html">Sistemes</a>
+    <a href="animals.html">Animals</a>
+    <a href="plantes.html">Plantes</a>
+</div>
+
+<div class="container">
+    <h1><span>El cos</span> humà</h1>
+    <p class="subtitle">Clica els punts del cos per descobrir les parts i els òrgans.</p>
+
+    <div class="layout">
+        <div class="body-svg-box">
+            <svg viewBox="0 0 200 400">
+                <!-- Body outline -->
+                <ellipse cx="100" cy="50" rx="32" ry="40" fill="#fde68a" stroke="#d97706" stroke-width="2"/>
+                <path d="M 60 90 Q 60 140 70 200 L 60 300 L 65 390 L 85 390 L 90 290 L 110 290 L 115 390 L 135 390 L 140 300 L 130 200 Q 140 140 140 90 Z" fill="#fcd34d" stroke="#d97706" stroke-width="2"/>
+                <!-- Arms -->
+                <path d="M 60 100 L 35 180 L 30 250 L 45 250 L 52 185 L 70 110" fill="#fcd34d" stroke="#d97706" stroke-width="2"/>
+                <path d="M 140 100 L 165 180 L 170 250 L 155 250 L 148 185 L 130 110" fill="#fcd34d" stroke="#d97706" stroke-width="2"/>
+
+                <!-- Hotspots -->
+                <g class="hotspot" data-part="cap" onclick="selectPart('cap')"><circle cx="100" cy="50" r="12" fill="#dc2626" opacity="0.7"/></g>
+                <g class="hotspot" data-part="ulls" onclick="selectPart('ulls')"><circle cx="92" cy="42" r="5" fill="#2563eb" opacity="0.7"/><circle cx="108" cy="42" r="5" fill="#2563eb" opacity="0.7"/></g>
+                <g class="hotspot" data-part="cervell" onclick="selectPart('cervell')"><circle cx="100" cy="30" r="10" fill="#ec4899" opacity="0.7"/></g>
+                <g class="hotspot" data-part="cor" onclick="selectPart('cor')"><circle cx="92" cy="145" r="12" fill="#dc2626" opacity="0.7"/></g>
+                <g class="hotspot" data-part="pulmons" onclick="selectPart('pulmons')"><circle cx="120" cy="135" r="10" fill="#0891b2" opacity="0.7"/></g>
+                <g class="hotspot" data-part="estomac" onclick="selectPart('estomac')"><circle cx="105" cy="180" r="10" fill="#f97316" opacity="0.7"/></g>
+                <g class="hotspot" data-part="bracos" onclick="selectPart('bracos')"><circle cx="40" cy="200" r="10" fill="#8b5cf6" opacity="0.7"/></g>
+                <g class="hotspot" data-part="cames" onclick="selectPart('cames')"><circle cx="75" cy="340" r="10" fill="#059669" opacity="0.7"/></g>
+                <g class="hotspot" data-part="peus" onclick="selectPart('peus')"><circle cx="75" cy="385" r="10" fill="#ca8a04" opacity="0.7"/></g>
+            </svg>
+        </div>
+
+        <div class="info-panel" id="info">
+            <h2>Clica una part del cos</h2>
+            <p style="color: var(--text-muted);">A l'esquerra tens el dibuix d'una persona amb cercles de colors. Clica-hi a sobre i descobriràs què és i què fa cada part.</p>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        <h2>&#x1F3AF; Quiz &mdash; Què part del cos és?</h2>
+        <div class="quiz-emoji" id="quizEmoji">🧠</div>
+        <div class="quiz-prompt" id="quizPrompt">Quin òrgan o part del cos és aquesta?</div>
+        <div class="quiz-opts" id="quizOpts"></div>
+        <div class="score" id="score">Encerts: 0 &bull; Errors: 0</div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const PARTS = {
+    cap: { name: 'El cap', emoji: '🧑', fn: 'Protegeix el cervell i conté els òrgans dels sentits: ulls, orelles, nas i boca.', fact: 'El cap d\'un nadó és gran respecte al cos perquè el cervell creix molt ràpid els primers anys.', keywords: ['cap'] },
+    ulls: { name: 'Els ulls', emoji: '👀', fn: 'Capten la llum i envien senyals al cervell perquè puguem veure colors, formes i moviments.', fact: 'Parpallegem uns 15-20 cops per minut per mantenir els ulls nets i humits.', keywords: ['ulls', 'visió'] },
+    cervell: { name: 'El cervell', emoji: '🧠', fn: 'És l\'ordinador central del cos. Controla el pensament, els moviments, la memòria i les emocions.', fact: 'El cervell consumeix un 20% de l\'energia del cos tot i ser només un 2% del pes.', keywords: ['cervell', 'pensar'] },
+    cor: { name: 'El cor', emoji: '❤️', fn: 'És una bomba que envia la sang a tot el cos. Batega sense aturar-se ni de dia ni de nit.', fact: 'El cor d\'una persona batega més de 100.000 vegades cada dia.', keywords: ['cor', 'sang'] },
+    pulmons: { name: 'Els pulmons', emoji: '🫁', fn: 'Agafen l\'aire quan respires i treuen l\'oxigen perquè la sang el reparteixi al cos.', fact: 'Si estiguessis els pulmons plans, ocuparien més d\'una pista de tenis per dins.', keywords: ['pulmons', 'respirar'] },
+    estomac: { name: 'L\'estómac', emoji: '🫄', fn: 'Barreja i tritura el menjar amb sucs especials per poder digerir-lo.', fact: 'L\'estómac té una capa de mucosa que es renova cada pocs dies per no autodigerir-se.', keywords: ['estómac', 'digerir'] },
+    bracos: { name: 'Els braços', emoji: '💪', fn: 'Et permeten agafar coses, abraçar, escriure i moure objectes. Tenen músculs i ossos (húmer, radi, cúbit).', fact: 'Tens 27 ossos a cada mà — és la part del cos amb més ossos per centímetre!', keywords: ['braços', 'mans'] },
+    cames: { name: 'Les cames', emoji: '🦵', fn: 'Suporten tot el pes del cos i et permeten caminar, córrer, saltar i pujar.', fact: 'El fèmur (os de la cuixa) és l\'os més llarg i fort del cos humà.', keywords: ['cames', 'caminar'] },
+    peus: { name: 'Els peus', emoji: '🦶', fn: 'Estan en contacte amb el terra i et mantenen en equilibri. Tenen molts nervis molt sensibles.', fact: 'Cada peu té 26 ossos. Entre els dos peus, tens una quarta part de tots els ossos del cos.', keywords: ['peus'] }
+};
+
+function selectPart(key) {
+    document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
+    document.querySelector(`.hotspot[data-part="${key}"]`).classList.add('active');
+    const p = PARTS[key];
+    document.getElementById('info').innerHTML = `
+        <h2>${p.name}</h2>
+        <div class="emoji-large">${p.emoji}</div>
+        <p><strong>Per a què serveix?</strong></p>
+        <p>${p.fn}</p>
+        <div class="fun-fact">${p.fact}</div>
+    `;
+}
+
+let correct = 0, wrong = 0;
+function newQuiz() {
+    const keys = Object.keys(PARTS);
+    const correctKey = keys[Math.floor(Math.random() * keys.length)];
+    const p = PARTS[correctKey];
+    const others = keys.filter(k => k !== correctKey).sort(() => Math.random() - 0.5).slice(0, 3);
+    const options = [...others, correctKey].sort(() => Math.random() - 0.5);
+
+    document.getElementById('quizEmoji').textContent = p.emoji;
+    const optsDiv = document.getElementById('quizOpts');
+    optsDiv.innerHTML = '';
+    options.forEach(k => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = PARTS[k].name;
+        btn.onclick = () => {
+            if (k === correctKey) {
+                btn.classList.add('correct');
+                correct++;
+                setTimeout(newQuiz, 800);
+            } else {
+                btn.classList.add('wrong');
+                wrong++;
+            }
+            document.getElementById('score').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+        optsDiv.appendChild(btn);
+    });
+}
+
+newQuiz();
+</script>
+</body>
+</html>

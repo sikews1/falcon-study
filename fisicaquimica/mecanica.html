@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mecànica - Física i Química</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .fq-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .fq-nav { background: rgba(9, 9, 11, 0.75); }
+        .fq-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .fq-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .fq-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .fq-nav a.home { color: #be185d; font-weight: 600; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #7c3aed, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .tabs { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .tab-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .tab-btn:hover { border-color: #7c3aed; color: #7c3aed; }
+        .tab-btn.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+
+        .formula-card { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 22px; margin-bottom: 14px; }
+        .formula-card h2 { color: #7c3aed; font-size: 1.15rem; margin-bottom: 10px; }
+        .formula-card p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 10px; font-size: 0.92rem; }
+        .formula-card p strong { color: var(--text-primary); }
+        .formula-box { background: var(--bg-base); padding: 14px 18px; border-radius: 12px; text-align: center; font-family: 'Courier New', monospace; font-size: 1.2rem; color: #7c3aed; font-weight: 800; margin: 10px 0; }
+        .formula-box small { color: var(--text-secondary); font-size: 0.8rem; display: block; margin-top: 6px; font-weight: normal; }
+
+        .exercise { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 22px; }
+        .exercise h2 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 14px; text-align: center; }
+        .prompt { text-align: center; padding: 16px; background: var(--bg-base); border-radius: 12px; margin-bottom: 14px; font-size: 0.95rem; color: var(--text-primary); line-height: 1.7; }
+        .prompt .highlight { color: #7c3aed; font-weight: 700; }
+
+        .input-row { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+        .input-row input { padding: 10px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-primary); font-size: 1rem; font-weight: 700; max-width: 140px; text-align: center; }
+        .input-row input:focus { outline: none; border-color: #7c3aed; }
+        .input-row .unit { color: var(--text-secondary); font-weight: 600; font-size: 0.95rem; }
+        .btn { padding: 10px 20px; border-radius: var(--radius-full); border: none; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
+        .btn-check { background: #7c3aed; color: #fff; }
+        .btn-check:hover { background: #8b5cf6; }
+        .btn-new { background: var(--bg-base); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { border-color: #7c3aed; color: #7c3aed; }
+
+        .feedback { text-align: center; padding: 12px; border-radius: 10px; margin-top: 12px; font-weight: 600; display: none; }
+        .feedback.ok { background: rgba(34, 197, 94, 0.15); color: #16a34a; display: block; }
+        .feedback.ko { background: rgba(239, 68, 68, 0.15); color: #dc2626; display: block; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+
+        .chart-box { background: var(--bg-base); border-radius: 12px; padding: 14px; margin: 10px 0; }
+        .chart-box h4 { color: var(--text-secondary); font-size: 0.85rem; text-align: center; margin-bottom: 10px; }
+        svg { width: 100%; max-width: 600px; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<div class="fq-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="estats.html">Estats</a>
+    <a href="taula.html">Taula periòdica</a>
+    <a href="reaccions.html">Reaccions</a>
+    <a href="mecanica.html" class="active">Mecànica</a>
+</div>
+
+<div class="container">
+    <h1><span>Mecànica</span></h1>
+    <p class="subtitle">Moviment, velocitat, acceleració i lleis de Newton</p>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="show('mru')">MRU (velocitat constant)</button>
+        <button class="tab-btn" onclick="show('mrua')">MRUA (acceleració)</button>
+        <button class="tab-btn" onclick="show('newton')">Lleis de Newton</button>
+    </div>
+
+    <div id="content"></div>
+
+    <div class="exercise">
+        <h2>&#x1F3AF; Exercici</h2>
+        <div class="prompt" id="prompt"></div>
+        <div class="input-row">
+            <input type="number" id="ans" placeholder="?" step="0.01" onkeyup="if(event.key==='Enter') check()">
+            <span class="unit" id="unit">m/s</span>
+            <button class="btn btn-check" onclick="check()">Comprovar</button>
+            <button class="btn btn-new" onclick="newEx()">Nou</button>
+        </div>
+        <div class="feedback" id="fb"></div>
+        <div class="score" id="sc">Encerts: 0 &bull; Errors: 0</div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+let mode = 'mru';
+let correct = 0, wrong = 0;
+let currentAnswer = 0;
+
+function show(m) {
+    mode = m;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event?.target?.classList?.add('active');
+    const c = document.getElementById('content');
+    if (m === 'mru') {
+        c.innerHTML = `
+            <div class="formula-card">
+                <h2>Moviment Rectilini Uniforme (MRU)</h2>
+                <p>Un objecte es mou en línia recta amb <strong>velocitat constant</strong>. No accelera ni frena.</p>
+                <div class="formula-box">v = e / t<small>velocitat = espai / temps</small></div>
+                <p><strong>Unitats:</strong> velocitat en m/s o km/h &bull; espai en metres o km &bull; temps en segons o hores. Si vols passar km/h → m/s, divideix per 3,6.</p>
+                <p>També: <strong>e = v · t</strong> (espai) i <strong>t = e / v</strong> (temps)</p>
+            </div>
+        `;
+    } else if (m === 'mrua') {
+        c.innerHTML = `
+            <div class="formula-card">
+                <h2>Moviment Rectilini Uniformement Accelerat (MRUA)</h2>
+                <p>L'objecte <strong>accelera o frena</strong> de forma constant. La velocitat canvia.</p>
+                <div class="formula-box">v = v₀ + a · t<small>velocitat final = velocitat inicial + acceleració × temps</small></div>
+                <div class="formula-box">e = v₀ · t + ½ · a · t²<small>espai recorregut</small></div>
+                <p>Cas especial: <strong>caiguda lliure</strong>. A la Terra, l'acceleració de la gravetat és g = 9,8 m/s² (sovint s'arrodoneix a 10 m/s² per càlculs ràpids).</p>
+            </div>
+        `;
+    } else {
+        c.innerHTML = `
+            <div class="formula-card">
+                <h2>Les 3 lleis de Newton</h2>
+                <p><strong>1a llei (inèrcia):</strong> un objecte en repòs es queda en repòs, i un en moviment segueix en línia recta, tret que una força l'empenyi.</p>
+                <p><strong>2a llei (F = m · a):</strong> la força aplicada a un cos és igual a la seva massa per l'acceleració que experimenta.</p>
+                <div class="formula-box">F = m · a<small>força (N) = massa (kg) × acceleració (m/s²)</small></div>
+                <p><strong>3a llei (acció-reacció):</strong> tota acció produeix una reacció igual i contrària. Quan tu empenyes la paret, la paret t'empeny a tu amb la mateixa força.</p>
+            </div>
+        `;
+    }
+    newEx();
+}
+
+function newEx() {
+    const fb = document.getElementById('fb');
+    fb.className = 'feedback';
+    document.getElementById('ans').value = '';
+    document.getElementById('ans').focus();
+
+    if (mode === 'mru') {
+        const type = Math.floor(Math.random() * 3);
+        if (type === 0) {
+            // Calc velocity
+            const e = 10 + Math.floor(Math.random() * 90) * 10;
+            const t = 2 + Math.floor(Math.random() * 18);
+            currentAnswer = e / t;
+            document.getElementById('prompt').innerHTML = `Un cotxe recorre <span class="highlight">${e} m</span> en <span class="highlight">${t} s</span>.<br><br>Quina és la seva velocitat?`;
+            document.getElementById('unit').textContent = 'm/s';
+        } else if (type === 1) {
+            // Calc distance
+            const v = 10 + Math.floor(Math.random() * 40) * 2;
+            const t = 2 + Math.floor(Math.random() * 20);
+            currentAnswer = v * t;
+            document.getElementById('prompt').innerHTML = `Un ciclista va a <span class="highlight">${v} km/h</span> durant <span class="highlight">${t} h</span>.<br><br>Quin espai recorrerà?`;
+            document.getElementById('unit').textContent = 'km';
+        } else {
+            // Calc time
+            const e = 60 + Math.floor(Math.random() * 40) * 10;
+            const v = 2 + Math.floor(Math.random() * 18) * 2;
+            currentAnswer = e / v;
+            document.getElementById('prompt').innerHTML = `Un tren recorre <span class="highlight">${e} km</span> a <span class="highlight">${v} km/h</span>.<br><br>Quant temps triga?`;
+            document.getElementById('unit').textContent = 'h';
+        }
+    } else if (mode === 'mrua') {
+        // Calc velocity after acceleration
+        const v0 = Math.floor(Math.random() * 20);
+        const a = 1 + Math.floor(Math.random() * 10);
+        const t = 2 + Math.floor(Math.random() * 10);
+        currentAnswer = v0 + a * t;
+        document.getElementById('prompt').innerHTML = `Un objecte parteix amb velocitat <span class="highlight">v₀ = ${v0} m/s</span> i accelera a <span class="highlight">a = ${a} m/s²</span> durant <span class="highlight">${t} s</span>.<br><br>Quina velocitat té al final?<br><em>(v = v₀ + a·t)</em>`;
+        document.getElementById('unit').textContent = 'm/s';
+    } else {
+        // Newton F=m·a
+        const m = 5 + Math.floor(Math.random() * 20);
+        const a = 1 + Math.floor(Math.random() * 9);
+        currentAnswer = m * a;
+        document.getElementById('prompt').innerHTML = `Un objecte de <span class="highlight">${m} kg</span> accelera a <span class="highlight">${a} m/s²</span>.<br><br>Quina força s'hi aplica?<br><em>(F = m · a)</em>`;
+        document.getElementById('unit').textContent = 'N';
+    }
+}
+
+function check() {
+    const v = parseFloat(document.getElementById('ans').value);
+    const fb = document.getElementById('fb');
+    if (Math.abs(v - currentAnswer) < 0.1) {
+        fb.className = 'feedback ok';
+        fb.textContent = `✓ Correcte! La resposta és ${currentAnswer.toFixed(2)}`;
+        correct++;
+        setTimeout(newEx, 1200);
+    } else {
+        fb.className = 'feedback ko';
+        fb.textContent = `✗ No. La resposta era ${currentAnswer.toFixed(2)}`;
+        wrong++;
+    }
+    document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+}
+
+show('mru');
+</script>
+</body>
+</html>

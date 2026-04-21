@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plantes - Naturals</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .nat-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .nat-nav { background: rgba(9, 9, 11, 0.75); }
+        .nat-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .nat-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .nat-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .nat-nav a.home { color: #16a34a; font-weight: 600; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #16a34a, #22c55e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .tabs { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .tab-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .tab-btn:hover { border-color: #16a34a; color: #16a34a; }
+        .tab-btn.active { background: #16a34a; color: #fff; border-color: #16a34a; }
+
+        .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+        @media (max-width: 720px) { .layout { grid-template-columns: 1fr; } }
+
+        .plant-svg-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 18px; display: flex; align-items: center; justify-content: center; min-height: 420px; }
+        .plant-svg-box svg { width: 100%; max-width: 220px; }
+
+        .hotspot { cursor: pointer; transition: all 0.25s; }
+        .hotspot:hover circle { r: 14; }
+        .hotspot.active circle { stroke: #16a34a; stroke-width: 4; }
+
+        .info-panel { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; }
+        .info-panel h2 { color: #16a34a; font-size: 1.2rem; margin-bottom: 6px; }
+        .info-panel .emoji-large { font-size: 3rem; text-align: center; margin: 12px 0; }
+        .info-panel p { color: var(--text-secondary); line-height: 1.7; font-size: 0.93rem; margin-bottom: 10px; }
+        .info-panel .fun-fact { background: rgba(22, 163, 74, 0.08); border-left: 3px solid #16a34a; padding: 12px 16px; border-radius: 0 10px 10px 0; font-size: 0.85rem; margin-top: 10px; }
+        .info-panel .fun-fact::before { content: '🌱 '; }
+
+        .photo-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; }
+        .photo-box h2 { color: #16a34a; font-size: 1.2rem; margin-bottom: 12px; text-align: center; }
+        .photo-diagram { background: var(--bg-base); padding: 20px; border-radius: 12px; text-align: center; font-size: 1rem; line-height: 1.9; color: var(--text-primary); }
+        .photo-diagram .arrow { color: #16a34a; font-weight: 900; }
+        .photo-diagram .input { color: #2563eb; font-weight: 700; }
+        .photo-diagram .plant { color: #16a34a; font-weight: 700; font-size: 1.2rem; }
+        .photo-diagram .output { color: #dc2626; font-weight: 700; }
+
+        .quiz-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-top: 16px; }
+        .quiz-box h2 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 14px; }
+        .quiz-prompt { text-align: center; font-weight: 600; color: var(--text-primary); padding: 14px; background: var(--bg-base); border-radius: 10px; margin-bottom: 12px; }
+        .quiz-opts { display: grid; gap: 8px; }
+        .quiz-opt { padding: 12px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 600; color: var(--text-primary); font-size: 0.92rem; text-align: left; }
+        .quiz-opt:hover { border-color: #16a34a; }
+        .quiz-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; }
+        .quiz-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="nat-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="cos-huma.html">Cos humà</a>
+    <a href="sistemes.html">Sistemes</a>
+    <a href="animals.html">Animals</a>
+    <a href="plantes.html" class="active">Plantes</a>
+</div>
+
+<div class="container">
+    <h1><span>Les plantes</span></h1>
+    <p class="subtitle">Parts de la planta, fotosíntesi i cicle de la vida</p>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="show('parts')">Parts de la planta</button>
+        <button class="tab-btn" onclick="show('photo')">Fotosíntesi</button>
+        <button class="tab-btn" onclick="show('cycle')">Cicle de la vida</button>
+    </div>
+
+    <div id="content"></div>
+
+    <div class="quiz-box">
+        <h2>&#x1F3AF; Quiz de plantes</h2>
+        <div class="quiz-prompt" id="qP"></div>
+        <div class="quiz-opts" id="qO"></div>
+        <div class="score" id="sc">Encerts: 0 &bull; Errors: 0</div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const PARTS = {
+    arrels: { name: 'Les arrels', emoji: '🌱', fn: 'Subjecten la planta al terra i xuclen aigua i nutrients del sòl. Alguns arbres tenen arrels de 30 metres de profunditat!', fact: 'La paraula "radical" (en mates i en política) ve del llatí radix, "arrel", perquè va a l\'essència.' },
+    tija: { name: 'La tija', emoji: '🌿', fn: 'Suporta les fulles i les flors. Transporta l\'aigua de les arrels fins dalt, com una canonada.', fact: 'Els arbres són plantes amb tija llenyosa (tronc) que pot viure centenars d\'anys.' },
+    fulles: { name: 'Les fulles', emoji: '🍃', fn: 'Capturen la llum del sol i el CO₂ de l\'aire per fabricar el menjar de la planta (fotosíntesi).', fact: 'Les fulles són verdes per una substància anomenada clorofil·la, que atrapa l\'energia del sol.' },
+    flor: { name: 'La flor', emoji: '🌸', fn: 'És l\'òrgan reproductor. Fa la llavor. Atreu insectes amb colors i olor per pol·linitzar.', fact: 'Algunes flors com el gira-sol segueixen el sol durant el dia (heliotropisme).' },
+    fruit: { name: 'El fruit', emoji: '🍎', fn: 'Protegeix les llavors i ajuda a dispersar-les (animals se\'l mengen i escampen les llavors).', fact: 'El plàtan, el tomàquet i la síndria són tècnicament fruits (tots tenen llavors).' }
+};
+
+const CYCLE = [
+    { emoji: '🌰', name: 'Llavor', desc: 'Una petita llavor cau al terra.' },
+    { emoji: '💧', name: 'Germinació', desc: 'Amb aigua i calor, la llavor s\'obre i surt una arrel.' },
+    { emoji: '🌱', name: 'Plàntula', desc: 'Apareix una petita tija amb dues fulles.' },
+    { emoji: '🌿', name: 'Planta jove', desc: 'Creix, treu més fulles i es fa més alta.' },
+    { emoji: '🌸', name: 'Flor', desc: 'Surten flors que atrauen insectes.' },
+    { emoji: '🐝', name: 'Pol·linització', desc: 'Les abelles porten pol·len d\'una flor a una altra.' },
+    { emoji: '🍎', name: 'Fruit i llavor', desc: 'Les flors es converteixen en fruits amb noves llavors.' }
+];
+
+const QUIZ = [
+    { q: 'Quina part de la planta fabrica el menjar amb llum del sol?', opts: ['Arrels', 'Tija', 'Fulles', 'Fruit'], a: 2 },
+    { q: 'Què fan les arrels?', opts: ['Atrauen insectes', 'Xuclen aigua del sòl', 'Fan fotosíntesi', 'Protegeixen llavors'], a: 1 },
+    { q: 'Per què són verdes les fulles?', opts: ['Per la sang', 'Per la clorofil·la', 'Per la llum del sol', 'Perquè són joves'], a: 1 },
+    { q: 'Quina és la funció de la flor?', opts: ['Absorbir aigua', 'Fer fotosíntesi', 'Reproducció', 'Donar ombra'], a: 2 },
+    { q: 'Qui ajuda a pol·linitzar moltes flors?', opts: ['El vent i les abelles', 'Els peixos', 'Els llops', 'La lluna'], a: 0 },
+    { q: 'Què necessita una planta per fer fotosíntesi?', opts: ['Llum, aigua, CO₂', 'Terra i sang', 'Pedres i neu', 'Sucre i sal'], a: 0 },
+    { q: 'Què surt primer quan germina una llavor?', opts: ['La fulla', 'La flor', 'L\'arrel', 'La fruita'], a: 2 },
+    { q: 'Què fa la planta durant la fotosíntesi?', opts: ['Absorbeix oxigen', 'Fabrica sucre i allibera oxigen', 'Respira CO₂ només', 'Digereix terra'], a: 1 }
+];
+
+let correct = 0, wrong = 0;
+let currentPart = 'fulles';
+
+function show(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event?.target?.classList?.add('active');
+    const c = document.getElementById('content');
+
+    if (tab === 'parts') {
+        c.innerHTML = `
+            <div class="layout">
+                <div class="plant-svg-box">
+                    <svg viewBox="0 0 200 400">
+                        <!-- Ground -->
+                        <rect x="0" y="340" width="200" height="60" fill="#78350f"/>
+                        <!-- Roots -->
+                        <path d="M 100 345 L 75 385 M 100 345 L 125 385 M 100 345 L 60 380 M 100 345 L 140 380 M 100 345 L 100 395" stroke="#92400e" stroke-width="3" fill="none"/>
+                        <!-- Stem -->
+                        <rect x="95" y="150" width="10" height="200" fill="#16a34a" rx="3"/>
+                        <!-- Leaves -->
+                        <ellipse cx="70" cy="220" rx="30" ry="14" fill="#22c55e" transform="rotate(-20 70 220)"/>
+                        <ellipse cx="130" cy="200" rx="30" ry="14" fill="#22c55e" transform="rotate(20 130 200)"/>
+                        <ellipse cx="70" cy="170" rx="28" ry="12" fill="#22c55e" transform="rotate(-20 70 170)"/>
+                        <!-- Flower -->
+                        <circle cx="100" cy="120" r="15" fill="#facc15"/>
+                        <circle cx="80" cy="115" r="14" fill="#fbbf24"/>
+                        <circle cx="120" cy="115" r="14" fill="#fbbf24"/>
+                        <circle cx="90" cy="100" r="14" fill="#fbbf24"/>
+                        <circle cx="110" cy="100" r="14" fill="#fbbf24"/>
+                        <circle cx="100" cy="115" r="8" fill="#a16207"/>
+                        <!-- Fruit (small) -->
+                        <circle cx="130" cy="250" r="12" fill="#dc2626"/>
+
+                        <!-- Hotspots -->
+                        <g class="hotspot" data-part="arrels" onclick="selectPart('arrels')"><circle cx="100" cy="370" r="10" fill="#a16207" opacity="0.7"/></g>
+                        <g class="hotspot" data-part="tija" onclick="selectPart('tija')"><circle cx="100" cy="260" r="10" fill="#16a34a" opacity="0.7"/></g>
+                        <g class="hotspot active" data-part="fulles" onclick="selectPart('fulles')"><circle cx="70" cy="195" r="10" fill="#22c55e" opacity="0.7"/></g>
+                        <g class="hotspot" data-part="flor" onclick="selectPart('flor')"><circle cx="100" cy="108" r="10" fill="#f59e0b" opacity="0.7"/></g>
+                        <g class="hotspot" data-part="fruit" onclick="selectPart('fruit')"><circle cx="130" cy="250" r="10" fill="#dc2626" opacity="0.8"/></g>
+                    </svg>
+                </div>
+                <div class="info-panel" id="info"></div>
+            </div>
+        `;
+        selectPart(currentPart);
+    } else if (tab === 'photo') {
+        c.innerHTML = `
+            <div class="photo-box">
+                <h2>🌞 La fotosíntesi</h2>
+                <div class="photo-diagram">
+                    <span class="input">💧 Aigua</span> + <span class="input">💨 CO₂</span> + <span style="color:#f59e0b;font-weight:700;">☀️ Llum</span>
+                    <span class="arrow"> → </span>
+                    <span class="plant">🌿 Planta</span>
+                    <span class="arrow"> → </span>
+                    <span class="output">🍯 Sucre</span> + <span class="output">💨 Oxigen</span>
+                </div>
+                <p style="color:var(--text-secondary);line-height:1.7;margin-top:16px;font-size:0.93rem;">Les plantes són fàbriques increïbles. Amb <strong>aigua</strong> (que xuclen per les arrels), <strong>diòxid de carboni</strong> (que agafen de l'aire per les fulles) i <strong>energia del sol</strong> (que capturen amb la clorofil·la verda), produeixen <strong>sucre</strong> (menjar) i <strong>oxigen</strong> (que respirem els animals).</p>
+                <p style="color:var(--text-secondary);line-height:1.7;font-size:0.93rem;"><strong>Per què és important?</strong> Sense fotosíntesi no hi hauria oxigen a l'aire ni menjar per a cap animal. Tots els éssers vius depenem de les plantes.</p>
+            </div>
+        `;
+    } else {
+        c.innerHTML = `
+            <div class="photo-box">
+                <h2>🔄 Cicle de la vida d'una planta</h2>
+                <div style="display:grid;gap:10px;margin-top:14px;">
+                    ${CYCLE.map((s, i) => `
+                        <div style="display:flex;align-items:center;gap:14px;background:var(--bg-base);padding:14px 16px;border-radius:12px;border:1px solid var(--border-subtle);">
+                            <div style="font-size:2rem;">${s.emoji}</div>
+                            <div style="flex:1;">
+                                <div style="font-weight:700;color:#16a34a;">${i + 1}. ${s.name}</div>
+                                <div style="color:var(--text-secondary);font-size:0.88rem;line-height:1.5;">${s.desc}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <p style="color:var(--text-secondary);line-height:1.7;margin-top:16px;font-size:0.88rem;text-align:center;">I el cicle torna a començar: les llavors cauen al terra, germinen, i una nova planta neix. 🌱</p>
+            </div>
+        `;
+    }
+    newQuiz();
+}
+
+function selectPart(key) {
+    currentPart = key;
+    document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
+    document.querySelector(`.hotspot[data-part="${key}"]`)?.classList.add('active');
+    const p = PARTS[key];
+    const info = document.getElementById('info');
+    if (info) {
+        info.innerHTML = `
+            <h2>${p.name}</h2>
+            <div class="emoji-large">${p.emoji}</div>
+            <p>${p.fn}</p>
+            <div class="fun-fact">${p.fact}</div>
+        `;
+    }
+}
+
+function newQuiz() {
+    const q = QUIZ[Math.floor(Math.random() * QUIZ.length)];
+    document.getElementById('qP').textContent = q.q;
+    const o = document.getElementById('qO');
+    o.innerHTML = '';
+    q.opts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = opt;
+        btn.onclick = () => {
+            if (i === q.a) { btn.classList.add('correct'); correct++; setTimeout(newQuiz, 800); }
+            else { btn.classList.add('wrong'); document.querySelectorAll('.quiz-opt')[q.a].classList.add('correct'); wrong++; }
+            document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+        o.appendChild(btn);
+    });
+}
+
+show('parts');
+</script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Períodes - Història</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .his-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .his-nav { background: rgba(9, 9, 11, 0.75); }
+        .his-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .his-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .his-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .his-nav a.home { color: #92400e; font-weight: 600; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #92400e, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .period-picker { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .pp-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .pp-btn:hover { border-color: #d97706; color: #d97706; }
+        .pp-btn.active { background: #d97706; color: #fff; border-color: #d97706; }
+
+        .period-card { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 28px; margin-bottom: 16px; }
+        .period-card .big-emoji { font-size: 3.5rem; text-align: center; margin-bottom: 8px; }
+        .period-card h2 { color: #d97706; font-size: 1.3rem; margin-bottom: 6px; text-align: center; }
+        .period-card .date-range { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; font-style: italic; }
+        .period-card .description { color: var(--text-secondary); line-height: 1.75; margin-bottom: 16px; font-size: 0.95rem; }
+
+        .key-points { list-style: none; padding: 0; margin-bottom: 16px; }
+        .key-points li { padding: 12px 16px; margin-bottom: 8px; background: var(--bg-base); border-radius: 10px; border-left: 3px solid #d97706; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
+        .key-points li strong { color: var(--text-primary); }
+
+        .fun-facts { background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; padding: 14px 18px; border-radius: 0 10px 10px 0; font-size: 0.88rem; }
+        .fun-facts::before { content: '💡 Curiositats'; display: block; font-weight: 700; color: #d97706; margin-bottom: 6px; font-size: 0.78rem; letter-spacing: 0.05em; }
+        .fun-facts p { color: var(--text-secondary); line-height: 1.6; margin-bottom: 6px; }
+
+        .quiz-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-top: 16px; }
+        .quiz-box h2 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 14px; text-align: center; }
+        .quiz-prompt { text-align: center; padding: 14px; background: var(--bg-base); border-radius: 10px; margin-bottom: 12px; color: var(--text-primary); font-weight: 600; }
+        .quiz-opts { display: grid; gap: 8px; }
+        .quiz-opt { padding: 12px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 600; color: var(--text-primary); font-size: 0.92rem; text-align: left; }
+        .quiz-opt:hover { border-color: #d97706; }
+        .quiz-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; }
+        .quiz-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="his-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="timeline.html">Línia del temps</a>
+    <a href="periodes.html" class="active">Períodes</a>
+    <a href="personatges.html">Personatges</a>
+</div>
+
+<div class="container">
+    <h1><span>Períodes</span> de la història</h1>
+    <p class="subtitle">Tria un període i descobreix què va passar</p>
+
+    <div class="period-picker" id="picker"></div>
+    <div id="content"></div>
+
+    <div class="quiz-box">
+        <h2>&#x1F3AF; Quiz del període</h2>
+        <div class="quiz-prompt" id="qP"></div>
+        <div class="quiz-opts" id="qO"></div>
+        <div class="score" id="sc">Encerts: 0 &bull; Errors: 0</div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const PERIODS = {
+    prehistoria: {
+        emoji: '🦴', label: 'Prehistòria',
+        range: 'fa 3 milions d\'anys – 3.000 aC',
+        desc: 'Els humans evolucionen a partir d\'altres primats. Viuen caçant i recol·lectant fruits. Descobreixen el foc i creen les primeres eines. Més tard aprenen a conrear la terra i domesticar animals.',
+        points: [
+            '<strong>Paleolític:</strong> pedra tallada, caça, nòmades. Pintures rupestres a Altamira i Lascaux.',
+            '<strong>Mesolític:</strong> eines més precises, primeres cases i poblats.',
+            '<strong>Neolític:</strong> agricultura i ramaderia. Els humans deixen de ser nòmades.',
+            '<strong>Edat dels metalls:</strong> coure, bronze i ferro. Eines, armes i adorns.'
+        ],
+        facts: [
+            'El <strong>foc</strong> va ser el primer gran invent: permetia cuinar, escalfar, protegir-se i il·luminar la nit.',
+            'Les <strong>pintures d\'Altamira</strong> (Cantàbria) tenen més de 15.000 anys!'
+        ],
+        quiz: [
+            { q: 'En quina època es descobreix l\'agricultura?', opts: ['Paleolític', 'Mesolític', 'Neolític', 'Edat dels metalls'], a: 2 },
+            { q: 'On hi ha pintures rupestres famoses a Espanya?', opts: ['Sagrada Família', 'Altamira', 'Alhambra', 'Escorial'], a: 1 },
+            { q: 'Quina fou la primera gran descoberta humana?', opts: ['La roda', 'El foc', 'L\'escriptura', 'El metall'], a: 1 }
+        ]
+    },
+    antiga: {
+        emoji: '🏛️', label: 'Edat Antiga',
+        range: '3.000 aC – 476 dC',
+        desc: 'Apareix l\'escriptura (3.000 aC) i amb ella la història. Floreixen Egipte, Mesopotàmia, Grècia i Roma. Grècia inventa la democràcia i Roma construeix el primer imperi mundial.',
+        points: [
+            '<strong>Egipte:</strong> faraons, piràmides, jeroglífics, momificació. Tres mil anys de civilització al riu Nil.',
+            '<strong>Grècia:</strong> democràcia a Atenes (segle V aC), filosofia (Sòcrates, Plató, Aristòtil), Jocs Olímpics.',
+            '<strong>Roma:</strong> imperi de 500 anys. Dret romà, aqüeductes, Colosseu, llatí (base del català i l\'espanyol).',
+            '<strong>Caiguda de Roma (476 dC):</strong> marca el final de l\'Edat Antiga.'
+        ],
+        facts: [
+            '<strong>Julio Cèsar</strong> és assassinat el 44 aC pel seu fill adoptiu Brut ("Tu quoque, Brute?").',
+            'Els <strong>Jocs Olímpics</strong> es van inventar a Olímpia (Grècia) l\'any 776 aC.'
+        ],
+        quiz: [
+            { q: 'On va néixer la democràcia?', opts: ['Roma', 'Egipte', 'Atenes', 'Babilònia'], a: 2 },
+            { q: 'Qui va governar Egipte?', opts: ['Emperadors', 'Faraons', 'Presidents', 'Reis'], a: 1 },
+            { q: 'Quan cau l\'Imperi Romà?', opts: ['100 aC', '100 dC', '476 dC', '1000 dC'], a: 2 }
+        ]
+    },
+    mitjana: {
+        emoji: '🏰', label: 'Edat Mitjana',
+        range: '476 – 1492',
+        desc: 'Després de la caiguda de Roma, Europa es fragmenta en regnes petits. Neix l\'Islam (segle VII) i conquista part d\'Espanya fins al 1492. Sistema feudal: reis, nobles, cavallers i camperols.',
+        points: [
+            '<strong>Feudalisme:</strong> el rei dona terres als nobles a canvi d\'ajuda militar. Els camperols treballen la terra.',
+            '<strong>Islam a Espanya (711-1492):</strong> 781 anys de presència musulmana. L\'Alhambra de Granada és el seu símbol.',
+            '<strong>Reconquesta:</strong> els regnes cristians recuperen la península. Acaba amb la presa de Granada (1492).',
+            '<strong>Pesta Negra (1347-1352):</strong> mata un terç de la població europea.'
+        ],
+        facts: [
+            'Al segle XI hi havia 5 regnes cristians a la península: Castella, Lleó, Aragó, Navarra i Portugal.',
+            'Les <strong>croades</strong> eren expedicions militars cristianes a Terra Santa (Jerusalem). Hi van haver 9 entre 1095 i 1291.'
+        ],
+        quiz: [
+            { q: 'Quin any acaba l\'Edat Mitjana?', opts: ['476', '1000', '1492', '1789'], a: 2 },
+            { q: 'Què és el feudalisme?', opts: ['Una religió', 'Sistema social basat en terres i lleialtats', 'Un joc', 'Un idioma'], a: 1 },
+            { q: 'Què és l\'Alhambra?', opts: ['Un rei musulmà', 'Un palau àrab a Granada', 'Una ciutat italiana', 'Una ordre religiosa'], a: 1 }
+        ]
+    },
+    moderna: {
+        emoji: '⛵', label: 'Edat Moderna',
+        range: '1492 – 1789',
+        desc: 'Època de grans descobriments. Colom arriba a Amèrica (1492). Espanya i Portugal construeixen grans imperis colonials. Renaixement a Itàlia amb artistes com Leonardo Da Vinci i Michelangelo. Revolució científica amb Galileu i Newton.',
+        points: [
+            '<strong>Descobriment d\'Amèrica (1492):</strong> Colom, patrocinat pels Reis Catòlics, arriba al Carib.',
+            '<strong>Renaixement:</strong> revival de la cultura clàssica. Art, ciència, literatura esclaten a Itàlia.',
+            '<strong>Reforma Protestant (1517):</strong> Luther divideix l\'església cristiana en catòlica i protestant.',
+            '<strong>Il·lustració (segle XVIII):</strong> pensadors com Voltaire i Rousseau defensen la raó i la llibertat.',
+            '<strong>Imperi espanyol:</strong> arriba a ser el més gran del món al segle XVI.'
+        ],
+        facts: [
+            '<strong>Leonardo Da Vinci</strong> va pintar la Gioconda, però també va dissenyar helicòpters i tancs 400 anys abans d\'inventar-se.',
+            'La <strong>impremta de Gutenberg</strong> (1450) va fer que els llibres fossin assequibles per primera vegada.'
+        ],
+        quiz: [
+            { q: 'Quin any descobreix Colom Amèrica?', opts: ['1420', '1492', '1521', '1600'], a: 1 },
+            { q: 'Qui va pintar la Gioconda?', opts: ['Miquel Àngel', 'Rafael', 'Leonardo Da Vinci', 'Velázquez'], a: 2 },
+            { q: 'Què va inventar Gutenberg?', opts: ['L\'electricitat', 'La impremta', 'La bandera', 'El telèfon'], a: 1 }
+        ]
+    },
+    contemporania: {
+        emoji: '🏭', label: 'Edat Contemporània',
+        range: '1789 – avui',
+        desc: 'La Revolució Francesa (1789) marca l\'inici. Revolució Industrial canvia com vivim i treballem. Dues guerres mundials al segle XX. Caiguda del Mur de Berlín (1989). Avui vivim a l\'era digital.',
+        points: [
+            '<strong>Revolució Francesa (1789):</strong> fi de la monarquia absolutista. Neixen els drets humans.',
+            '<strong>Revolució Industrial:</strong> màquines, fàbriques, ferrocarril, telègraf. Canvia tot.',
+            '<strong>Primera Guerra Mundial (1914-1918):</strong> 16 milions de morts.',
+            '<strong>Segona Guerra Mundial (1939-1945):</strong> 70-85 milions de morts. Holocaust. Bomba atòmica.',
+            '<strong>Guerra Freda (1947-1991):</strong> tensió EUA vs URSS. Carrera espacial, armament nuclear.',
+            '<strong>Era digital (1990-):</strong> internet, smartphones, IA.'
+        ],
+        facts: [
+            'L\'<strong>home arriba a la Lluna</strong> el 20 de juliol de 1969 (Apollo 11).',
+            'El <strong>Mur de Berlín</strong> va caure el 9 de novembre de 1989, reunificant Alemanya.'
+        ],
+        quiz: [
+            { q: 'Quin any va ser la Revolució Francesa?', opts: ['1492', '1789', '1848', '1914'], a: 1 },
+            { q: 'Quan cau el Mur de Berlín?', opts: ['1945', '1968', '1989', '2001'], a: 2 },
+            { q: 'Quan van arribar els humans a la Lluna?', opts: ['1945', '1969', '1985', '2001'], a: 1 }
+        ]
+    }
+};
+
+const urlParam = new URLSearchParams(window.location.search).get('p');
+let current = urlParam && PERIODS[urlParam] ? urlParam : 'prehistoria';
+let correct = 0, wrong = 0;
+
+function renderPicker() {
+    const p = document.getElementById('picker');
+    p.innerHTML = '';
+    Object.keys(PERIODS).forEach(k => {
+        const b = document.createElement('button');
+        b.className = 'pp-btn' + (k === current ? ' active' : '');
+        b.textContent = PERIODS[k].emoji + ' ' + PERIODS[k].label;
+        b.onclick = () => { current = k; render(); newQuiz(); };
+        p.appendChild(b);
+    });
+}
+
+function render() {
+    renderPicker();
+    const p = PERIODS[current];
+    document.getElementById('content').innerHTML = `
+        <div class="period-card">
+            <div class="big-emoji">${p.emoji}</div>
+            <h2>${p.label}</h2>
+            <div class="date-range">${p.range}</div>
+            <p class="description">${p.desc}</p>
+            <ul class="key-points">${p.points.map(x => `<li>${x}</li>`).join('')}</ul>
+            <div class="fun-facts">${p.facts.map(f => `<p>${f}</p>`).join('')}</div>
+        </div>
+    `;
+}
+
+function newQuiz() {
+    const list = PERIODS[current].quiz;
+    const q = list[Math.floor(Math.random() * list.length)];
+    document.getElementById('qP').textContent = q.q;
+    const o = document.getElementById('qO');
+    o.innerHTML = '';
+    q.opts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = opt;
+        btn.onclick = () => {
+            if (i === q.a) { btn.classList.add('correct'); correct++; setTimeout(newQuiz, 900); }
+            else { btn.classList.add('wrong'); document.querySelectorAll('.quiz-opt')[q.a].classList.add('correct'); wrong++; }
+            document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+        o.appendChild(btn);
+    });
+}
+
+render();
+newQuiz();
+</script>
+</body>
+</html>

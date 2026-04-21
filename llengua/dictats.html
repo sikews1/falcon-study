@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictats - Llengua</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .ll-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .ll-nav { background: rgba(9, 9, 11, 0.75); }
+        .ll-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .ll-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .ll-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .ll-nav a.home { color: #7c3aed; font-weight: 600; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #2563eb, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .level-picker { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; }
+        .level-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .level-btn:hover { border-color: #2563eb; color: #2563eb; }
+        .level-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+        .dict-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-bottom: 16px; }
+        .dict-box h2 { text-align: center; color: var(--text-primary); font-size: 1.1rem; margin-bottom: 14px; }
+        .audio-controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+        .btn { padding: 10px 20px; border-radius: var(--radius-full); border: none; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
+        .btn-listen { background: #2563eb; color: #fff; font-size: 1rem; padding: 14px 28px; }
+        .btn-listen:hover { background: #3b82f6; }
+        .btn-new { background: var(--bg-raised); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { border-color: #2563eb; }
+
+        .input-area { margin-bottom: 14px; }
+        .input-area textarea { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-base); color: var(--text-primary); font-size: 1rem; min-height: 100px; resize: vertical; line-height: 1.6; }
+        .input-area textarea:focus { outline: none; border-color: #2563eb; }
+
+        .check-btn { padding: 12px 28px; border-radius: var(--radius-full); background: #2563eb; color: #fff; border: none; font-weight: 700; cursor: pointer; font-size: 0.95rem; }
+        .check-btn:hover { background: #3b82f6; }
+
+        .result-box { background: var(--bg-base); padding: 18px; border-radius: 12px; margin-top: 14px; display: none; }
+        .result-box.show { display: block; }
+        .result-box h3 { color: var(--text-primary); font-size: 0.95rem; margin-bottom: 10px; }
+        .orig-text { background: var(--bg-raised); padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; font-size: 0.95rem; line-height: 1.7; color: var(--text-primary); font-family: 'Georgia', serif; }
+        .diff { background: var(--bg-raised); padding: 12px 14px; border-radius: 8px; font-size: 0.9rem; line-height: 1.8; }
+        .diff .ok { color: #16a34a; font-weight: 700; background: rgba(34, 197, 94, 0.1); padding: 1px 4px; border-radius: 3px; }
+        .diff .ko { color: #dc2626; font-weight: 700; background: rgba(239, 68, 68, 0.12); padding: 1px 4px; border-radius: 3px; text-decoration: line-through; }
+        .score-line { margin-top: 12px; text-align: center; font-weight: 700; font-size: 1.1rem; }
+        .score-line.good { color: #16a34a; }
+        .score-line.med { color: #eab308; }
+        .score-line.bad { color: #dc2626; }
+
+        .tip { background: rgba(37, 99, 235, 0.06); border-left: 3px solid #2563eb; padding: 12px 16px; border-radius: 0 10px 10px 0; font-size: 0.85rem; color: var(--text-secondary); margin-top: 14px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+<div class="ll-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="ortografia.html">Ortografia</a>
+    <a href="dictats.html" class="active">Dictats</a>
+    <a href="comprensio.html">Comprensió</a>
+    <a href="redaccio.html">Redacció</a>
+</div>
+
+<div class="container">
+    <h1><span>Dictats</span> en català</h1>
+    <p class="subtitle">Escolta la frase, escriu-la, comprova els errors</p>
+
+    <div class="level-picker">
+        <button class="level-btn active" onclick="setLevel('easy')">Primària</button>
+        <button class="level-btn" onclick="setLevel('medium')">ESO</button>
+        <button class="level-btn" onclick="setLevel('hard')">Batxillerat</button>
+    </div>
+
+    <div class="dict-box">
+        <h2>&#x1F3A7; Dictat actual</h2>
+        <div class="audio-controls">
+            <button class="btn btn-listen" onclick="speak()">&#x1F509; Escoltar (clica diverses vegades si cal)</button>
+            <button class="btn btn-new" onclick="newDictat()">&#x1F504; Nova frase</button>
+        </div>
+        <div class="input-area">
+            <textarea id="input" placeholder="Escriu aquí el que escoltis..."></textarea>
+        </div>
+        <div style="text-align:center;">
+            <button class="check-btn" onclick="check()">Comprovar</button>
+        </div>
+        <div class="result-box" id="result"></div>
+        <div class="tip">&#x1F4A1; <strong>Consell:</strong> escolta <strong>diverses vegades</strong> abans d'escriure. Fixa't bé en accents, majúscules i signes de puntuació. El navegador ha de suportar síntesi de veu (tots els moderns la tenen).</div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const PHRASES = {
+    easy: [
+        'El gat dorm sobre la catifa.',
+        'Ahir vaig anar al parc amb el meu germà.',
+        'La mare ha comprat pomes i plàtans al mercat.',
+        'Hi ha un ocell que canta a la finestra.',
+        'Avui fa molt fred i plou des del matí.',
+        'El meu gos es diu Rex i és molt petit.',
+        'A l\'escola estudiem matemàtiques i català.',
+        'Les flors del jardí són de molts colors.',
+        'El diumenge anem a dinar a casa dels avis.',
+        'Els peixos neden a l\'aquari de la classe.'
+    ],
+    medium: [
+        'Ahir vaig passejar pel barri vell i vaig descobrir una llibreria antiga.',
+        'L\'arbre del pati ha crescut molt des que el vam plantar el curs passat.',
+        'El professor d\'història ens va explicar els esdeveniments de la Revolució Francesa.',
+        'Tot i que plovia, vam decidir anar d\'excursió a la muntanya.',
+        'La meva àvia cuina paella millor que ningú del poble.',
+        'Al museu hi havia una exposició fascinant sobre dinosaures.',
+        'Els amics de la Clara van organitzar una festa sorpresa pel seu aniversari.',
+        'Caldria reduir el consum d\'energia per protegir el medi ambient.',
+        'L\'any 1492 Colom va arribar a Amèrica amb tres caravel·les.',
+        'Sense la teva ajuda, no hauria pogut acabar el projecte a temps.'
+    ],
+    hard: [
+        'L\'avenç imparable de la intel·ligència artificial plantejarà, en els pròxims anys, qüestions ètiques ineludibles.',
+        'Si no s\'adopten mesures concretes, la crisi climàtica amenaça de transformar irreversiblement els ecosistemes del planeta.',
+        'Malgrat les dificultats inicials, la perseverança de l\'equip ha permès assolir els objectius abans del termini previst.',
+        'La dicotomia entre llibertat individual i responsabilitat col·lectiva travessa bona part de la filosofia contemporània.',
+        'L\'anàlisi detallada dels manuscrits medievals ha revelat influències sorprenents entre cultures aparentment distants.'
+    ]
+};
+
+let currentLevel = 'easy';
+let currentPhrase = '';
+
+function setLevel(l) {
+    currentLevel = l;
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    newDictat();
+}
+
+function newDictat() {
+    const list = PHRASES[currentLevel];
+    currentPhrase = list[Math.floor(Math.random() * list.length)];
+    document.getElementById('input').value = '';
+    document.getElementById('result').className = 'result-box';
+    document.getElementById('input').focus();
+    setTimeout(speak, 300);
+}
+
+function speak() {
+    if (!('speechSynthesis' in window)) { alert('El teu navegador no suporta síntesi de veu.'); return; }
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(currentPhrase);
+    u.lang = 'ca-ES';
+    u.rate = currentLevel === 'easy' ? 0.75 : (currentLevel === 'medium' ? 0.85 : 0.95);
+    speechSynthesis.speak(u);
+}
+
+function check() {
+    const input = document.getElementById('input').value.trim();
+    const orig = currentPhrase;
+    const inputWords = input.split(/\s+/);
+    const origWords = orig.split(/\s+/);
+
+    let diffHtml = '';
+    let correct = 0;
+    const max = Math.max(inputWords.length, origWords.length);
+    for (let i = 0; i < max; i++) {
+        if (origWords[i] === inputWords[i]) {
+            diffHtml += `<span class="ok">${origWords[i]}</span> `;
+            correct++;
+        } else if (!origWords[i]) {
+            diffHtml += `<span class="ko">${inputWords[i] || ''}</span> `;
+        } else if (!inputWords[i]) {
+            diffHtml += `<span class="ko">[falta: ${origWords[i]}]</span> `;
+        } else {
+            diffHtml += `<span class="ko">${inputWords[i]}</span> <span class="ok">${origWords[i]}</span> `;
+        }
+    }
+
+    const pct = Math.round((correct / origWords.length) * 100);
+    let rating = 'bad';
+    let msg = 'Error ' + (origWords.length - correct) + ' paraules. Segueix practicant!';
+    if (pct >= 90) { rating = 'good'; msg = 'Excel·lent! ' + pct + '% correcte.'; }
+    else if (pct >= 70) { rating = 'med'; msg = 'Bé! ' + pct + '% correcte.'; }
+
+    const r = document.getElementById('result');
+    r.className = 'result-box show';
+    r.innerHTML = `
+        <h3>Frase original:</h3>
+        <div class="orig-text">${orig}</div>
+        <h3>La teva resposta (paraules correctes en verd):</h3>
+        <div class="diff">${diffHtml}</div>
+        <div class="score-line ${rating}">${msg}</div>
+    `;
+}
+
+newDictat();
+</script>
+</body>
+</html>

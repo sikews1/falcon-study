@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ortografia - Llengua</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .ll-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .ll-nav { background: rgba(9, 9, 11, 0.75); }
+        .ll-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .ll-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .ll-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .ll-nav a.home { color: #7c3aed; font-weight: 600; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #7c3aed, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .topic-picker { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 20px; }
+        .topic-btn { padding: 6px 12px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.78rem; }
+        .topic-btn:hover { border-color: #7c3aed; color: #7c3aed; }
+        .topic-btn.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+
+        .rule-card { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 22px; margin-bottom: 14px; }
+        .rule-card h2 { color: #7c3aed; font-size: 1.1rem; margin-bottom: 10px; }
+        .rule-card p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 10px; font-size: 0.92rem; }
+        .rule-card p strong { color: var(--text-primary); }
+        .rule-card .examples { background: var(--bg-base); padding: 12px 16px; border-radius: 10px; font-size: 0.9rem; line-height: 1.8; color: var(--text-primary); }
+        .rule-card .examples .ok { color: #16a34a; font-weight: 700; }
+        .rule-card .examples .ko { color: #dc2626; text-decoration: line-through; }
+
+        .exercise { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 22px; margin-top: 14px; }
+        .exercise h2 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 14px; text-align: center; }
+        .prompt { text-align: center; padding: 16px; background: var(--bg-base); border-radius: 10px; margin-bottom: 14px; font-size: 1.05rem; color: var(--text-primary); }
+        .prompt .blank { background: #fff; border: 2px dashed #7c3aed; padding: 2px 10px; border-radius: 6px; color: transparent; display: inline-block; min-width: 40px; }
+        .quiz-opts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .quiz-opt { padding: 12px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 600; color: var(--text-primary); font-size: 0.95rem; }
+        .quiz-opt:hover { border-color: #7c3aed; }
+        .quiz-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; }
+        .quiz-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="ll-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="ortografia.html" class="active">Ortografia</a>
+    <a href="dictats.html">Dictats</a>
+    <a href="comprensio.html">Comprensió</a>
+    <a href="redaccio.html">Redacció</a>
+</div>
+
+<div class="container">
+    <h1><span>Ortografia</span> catalana</h1>
+    <p class="subtitle">Regles clau amb exercicis infinits per cada tema</p>
+
+    <div class="topic-picker" id="picker"></div>
+    <div id="ruleBox"></div>
+
+    <div class="exercise">
+        <h2>&#x1F3AF; Exercici infinit</h2>
+        <div class="prompt" id="p"></div>
+        <div class="quiz-opts" id="o"></div>
+        <div class="score" id="sc">Encerts: 0 &bull; Errors: 0</div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const TOPICS = {
+    bv: {
+        label: 'B / V',
+        rule: `<h2>B o V?</h2>
+        <p>En català, <strong>B i V es pronuncien gairebé igual</strong>, però s'escriuen diferent. Hi ha regles i famílies de paraules.</p>
+        <p><strong>S'escriu B:</strong> després de M (<em>ambient, tombar</em>), en paraules com <em>bisbe, bomba, blat</em>.</p>
+        <p><strong>S'escriu V:</strong> després de N (<em>canvi, enveja</em>), en l'imperfet de verbs de la 1a conjugació (<em>cantava, estudiava</em>).</p>
+        <div class="examples">
+            <span class="ok">ambient, envejar, cantava, canvi</span><br>
+            <span class="ko">anvient, enbejar, cantaba, canbi</span>
+        </div>`,
+        exercises: [
+            { q: 'am___ient', opts: ['b', 'v'], a: 0 },
+            { q: 'can___i', opts: ['b', 'v'], a: 1 },
+            { q: 'canta___a (jo)', opts: ['b', 'v'], a: 1 },
+            { q: 'en___eja', opts: ['b', 'v'], a: 1 },
+            { q: 'tom___ar', opts: ['b', 'v'], a: 0 },
+            { q: 'el___a (abella)', opts: ['b', 'v'], a: 0 },
+            { q: 'go___ern', opts: ['b', 'v'], a: 1 },
+            { q: 'com___regar', opts: ['b', 'v'], a: 0 }
+        ]
+    },
+    accents: {
+        label: 'Accents',
+        rule: `<h2>Accents: obert (è, ò) i tancat (é, ó)</h2>
+        <p>En català hi ha <strong>dos tipus d'accent</strong>:</p>
+        <p><strong>Accent obert (\`):</strong> à, è, ò. S'usa en <em>cafè, això, mà</em>.</p>
+        <p><strong>Accent tancat (´):</strong> é, í, ó, ú. S'usa en <em>préssec, cantó, música</em>.</p>
+        <p>Regles d'accentuació: <strong>agudes</strong> (última síl·laba): només si acaben en vocal, vocal+s, en, in. <strong>Planes</strong>: totes les que no acaben en vocal, vocal+s, en, in. <strong>Esdrúixoles</strong>: sempre porten accent.</p>
+        <div class="examples">
+            Agudes: <span class="ok">cantó, cafè</span> &bull; Planes: <span class="ok">música</span> &bull; Esdrúixoles: <span class="ok">història</span>
+        </div>`,
+        exercises: [
+            { q: 'Cafe (aguda acabada en -e). Accent?', opts: ['cafè', 'café', 'cafe'], a: 0 },
+            { q: 'Musica (esdrúixola). Com s\'escriu?', opts: ['musíca', 'música', 'musica'], a: 1 },
+            { q: 'Historia (plana acabada en -a)?', opts: ['história', 'història', 'historia'], a: 1 },
+            { q: 'Canto (aguda, per mi). Accent?', opts: ['cantó', 'canto', 'cántó'], a: 0 },
+            { q: 'Professor (aguda en -or)?', opts: ['professor', 'professór', 'prófessor'], a: 0 },
+            { q: 'Aviat (paraula aguda en -t)?', opts: ['àviàt', 'aviat', 'aviát'], a: 1 }
+        ]
+    },
+    ceca: {
+        label: 'Ç',
+        rule: `<h2>La ç (ce trencada)</h2>
+        <p>La <strong>ç</strong> és una C amb un ganxet a sota. Es fa servir davant de <strong>a, o, u</strong> i al final de paraula per fer el so de [s].</p>
+        <p>Davant d'<strong>e, i</strong>, només s'usa <strong>c</strong> (ja sona [s]).</p>
+        <div class="examples">
+            <span class="ok">plaça, lluç, força, março, braç</span><br>
+            <span class="ok">cent, cinema</span> (davant e/i: c)<br>
+            <span class="ko">placa (en lloc de plaça)</span>
+        </div>`,
+        exercises: [
+            { q: 'Pla___a (lloc)', opts: ['c', 'ç'], a: 1 },
+            { q: 'Bra___', opts: ['ç', 'c'], a: 0 },
+            { q: '___ent (nombre 100)', opts: ['c', 'ç'], a: 0 },
+            { q: '___ircumstància', opts: ['c', 'ç'], a: 0 },
+            { q: 'For___a', opts: ['c', 'ç'], a: 1 },
+            { q: 'Marça___', opts: ['c', 'ç'], a: 1 }
+        ]
+    },
+    hmuda: {
+        label: 'H muda',
+        rule: `<h2>La h muda</h2>
+        <p>En català la <strong>h no sona</strong>. Sempre s'escriu però no es pronuncia.</p>
+        <p>Paraules amb h: <em>home, hora, hotel, hospital, història, ahir, cohet</em>.</p>
+        <p>Paraules SENSE h (tot i que en castellà sí): <em>avui (hoy), harmonia → harmonia sí té h en català, olor (olor) sense h</em>.</p>
+        <div class="examples">
+            <span class="ok">home, hora, hotel, ahir</span><br>
+            <span class="ko">ome, ora</span>
+        </div>`,
+        exercises: [
+            { q: 'H o no H? ___ora', opts: ['h', '(res)'], a: 0 },
+            { q: 'H o no H? ___ome', opts: ['h', '(res)'], a: 0 },
+            { q: 'H o no H? ___olor', opts: ['h', '(res)'], a: 1 },
+            { q: 'H o no H? ___ivern', opts: ['h', '(res)'], a: 0 },
+            { q: 'H o no H? a___ir', opts: ['h', '(res)'], a: 0 },
+            { q: 'H o no H? ___ostia', opts: ['h', '(res)'], a: 0 }
+        ]
+    },
+    dubtes: {
+        label: 'Paraules dubte',
+        rule: `<h2>Paraules que es confonen</h2>
+        <p>Llista de parelles que sovint s'escriuen malament:</p>
+        <div class="examples">
+            <strong>hi ha</strong> (verb haver) vs <strong>hi</strong> (adverbi): <span class="ok">Hi ha pa</span> / <span class="ok">Hi vaig anar</span><br>
+            <strong>és</strong> (verb ser) vs <strong>es</strong> (pronom): <span class="ok">És gran</span> / <span class="ok">Es diu Joan</span><br>
+            <strong>hi</strong> (no <span class="ko">hiy</span>) vs <strong>-hi</strong> (enclítica)<br>
+            <strong>per</strong> (causa) vs <strong>per a</strong> (finalitat): <span class="ok">per tu</span> / <span class="ok">per a tu</span><br>
+            <strong>sinó</strong> (conjunció) vs <strong>si no</strong> (condicional): <span class="ok">No canta sinó que balla</span> / <span class="ok">Si no plou, sortim</span>
+        </div>`,
+        exercises: [
+            { q: '___ un gat al jardí.', opts: ['Hi ha', 'Hi a', 'Hia'], a: 0 },
+            { q: '___ molt maco.', opts: ['És', 'Es', 'Ets'], a: 0 },
+            { q: '___ diu Maria.', opts: ['És', 'Es', 'Ets'], a: 1 },
+            { q: 'No ho vull ___ ho necessito.', opts: ['sinó', 'si no', 'sino'], a: 1 },
+            { q: 'No ho he fet jo, ___ ell.', opts: ['sinó', 'si no', 'sino'], a: 0 }
+        ]
+    }
+};
+
+let current = 'bv';
+let correct = 0, wrong = 0;
+
+function renderPicker() {
+    const p = document.getElementById('picker');
+    p.innerHTML = '';
+    Object.keys(TOPICS).forEach(k => {
+        const b = document.createElement('button');
+        b.className = 'topic-btn' + (k === current ? ' active' : '');
+        b.textContent = TOPICS[k].label;
+        b.onclick = () => { current = k; render(); newEx(); };
+        p.appendChild(b);
+    });
+}
+
+function render() {
+    renderPicker();
+    document.getElementById('ruleBox').innerHTML = `<div class="rule-card">${TOPICS[current].rule}</div>`;
+}
+
+function newEx() {
+    const list = TOPICS[current].exercises;
+    const e = list[Math.floor(Math.random() * list.length)];
+    document.getElementById('p').textContent = e.q;
+    const o = document.getElementById('o');
+    o.innerHTML = '';
+    e.opts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = opt;
+        btn.onclick = () => {
+            if (i === e.a) { btn.classList.add('correct'); correct++; setTimeout(newEx, 800); }
+            else { btn.classList.add('wrong'); wrong++; }
+            document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+        o.appendChild(btn);
+    });
+}
+
+render();
+newEx();
+</script>
+</body>
+</html>

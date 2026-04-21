@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Física i Química</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .fq-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .fq-nav { background: rgba(9, 9, 11, 0.75); }
+        .fq-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .fq-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .fq-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .fq-nav a.home { color: #be185d; font-weight: 600; }
+
+        .hero { text-align: center; padding: 48px 24px 40px; border-bottom: 1px solid var(--border-subtle); }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+        .hero h1 span { background: linear-gradient(135deg, #be185d, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; }
+        .hero .badge { display: inline-block; margin-top: 12px; padding: 6px 16px; border-radius: var(--radius-full); background: rgba(190, 24, 93, 0.1); color: #be185d; font-size: 0.8rem; font-weight: 600; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+        .section-title { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; margin-top: 20px; }
+        .section-title span { padding: 4px 12px; border-radius: 12px; font-size: .75rem; color: #fff; }
+
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 14px; }
+
+        .course-card { background: var(--bg-raised); border-radius: var(--radius-lg); padding: 22px; border: 1px solid var(--border-subtle); transition: all 0.25s; text-decoration: none; color: inherit; display: block; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+        .course-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .course-card:hover { border-color: var(--border-default); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .course-card .card-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 12px; color: #fff; }
+        .course-card h3 { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+        .course-card p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+
+        .card-pink::before { background: linear-gradient(90deg, #be185d, #ec4899); } .card-pink .card-icon { background: linear-gradient(135deg, #be185d, #ec4899); } .card-pink:hover { border-color: #ec4899; }
+        .card-blue::before { background: linear-gradient(90deg, #2563eb, #3b82f6); } .card-blue .card-icon { background: linear-gradient(135deg, #2563eb, #3b82f6); } .card-blue:hover { border-color: #3b82f6; }
+        .card-orange::before { background: linear-gradient(90deg, #ea580c, #f97316); } .card-orange .card-icon { background: linear-gradient(135deg, #ea580c, #f97316); } .card-orange:hover { border-color: #f97316; }
+        .card-purple::before { background: linear-gradient(90deg, #7c3aed, #8b5cf6); } .card-purple .card-icon { background: linear-gradient(135deg, #7c3aed, #8b5cf6); } .card-purple:hover { border-color: #8b5cf6; }
+
+        .footer { text-align: center; padding: 30px 20px; color: var(--text-muted); font-size: 0.8rem; }
+        @media (max-width: 640px) { .courses-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+
+<div class="fq-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html" class="active">Inici</a>
+    <a href="estats.html">Estats</a>
+    <a href="taula.html">Taula periòdica</a>
+    <a href="reaccions.html">Reaccions</a>
+    <a href="mecanica.html">Mecànica</a>
+</div>
+
+<div class="hero">
+    <h1><span>Física</span> i Química</h1>
+    <p>Estats de la matèria, taula periòdica, reaccions i mecànica bàsica</p>
+    <div class="badge">&#x2697;&#xFE0F; Descobreix com funciona la natura</div>
+</div>
+
+<div class="container">
+
+    <h2 class="section-title"><span style="background:#3b82f6;">ESO</span> 12 - 16 anys</h2>
+    <div class="courses-grid">
+        <a href="estats.html" class="course-card card-blue"><div class="card-icon">&#x1F4A7;</div><h3>Estats de la matèria</h3><p>Sòlid, líquid, gas. Canvis d'estat amb simulació</p></a>
+        <a href="taula.html" class="course-card card-pink"><div class="card-icon">&#x2697;&#xFE0F;</div><h3>Taula periòdica</h3><p>Elements químics interactius, grups i propietats</p></a>
+        <a href="mecanica.html?level=eso" class="course-card card-orange"><div class="card-icon">&#x1F3C3;</div><h3>Moviment i velocitat</h3><p>MRU: velocitat, espai, temps (V = e/t)</p></a>
+    </div>
+
+    <h2 class="section-title"><span style="background:#8b5cf6;">BATXILLERAT</span> 16 - 18 anys</h2>
+    <div class="courses-grid">
+        <a href="reaccions.html" class="course-card card-pink"><div class="card-icon">&#x1F9EA;</div><h3>Reaccions químiques</h3><p>Equilibrar equacions, tipus de reaccions</p></a>
+        <a href="mecanica.html" class="course-card card-purple"><div class="card-icon">&#x2699;&#xFE0F;</div><h3>Mecànica avançada</h3><p>MRUA, gràfiques, lleis de Newton, treball i energia</p></a>
+    </div>
+
+</div>
+
+<div class="footer">Física i Química &mdash; Simulacions i exercicis interactius</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+</body>
+</html>

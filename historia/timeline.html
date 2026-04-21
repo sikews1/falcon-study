@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Línia del temps - Història</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .his-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .his-nav { background: rgba(9, 9, 11, 0.75); }
+        .his-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .his-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .his-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .his-nav a.home { color: #92400e; font-weight: 600; }
+
+        .container { max-width: 820px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #92400e, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .timeline { position: relative; padding-left: 50px; margin-top: 30px; }
+        .timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, #16a34a 0%, #d97706 25%, #dc2626 50%, #7c3aed 75%, #2563eb 100%); border-radius: 2px; }
+
+        .event {
+            position: relative;
+            background: var(--bg-raised);
+            border-radius: var(--radius-lg);
+            padding: 18px 22px;
+            margin-bottom: 18px;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.2s;
+        }
+        .event:hover { border-color: #d97706; transform: translateX(4px); box-shadow: var(--shadow-md); }
+        .event::before {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 22px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--bg-raised);
+            border: 4px solid #d97706;
+        }
+        .event.prehistoria::before { border-color: #16a34a; }
+        .event.antiga::before { border-color: #d97706; }
+        .event.mitjana::before { border-color: #dc2626; }
+        .event.moderna::before { border-color: #7c3aed; }
+        .event.contemporania::before { border-color: #2563eb; }
+
+        .event .year { font-weight: 800; color: #d97706; font-size: 0.92rem; margin-bottom: 4px; }
+        .event.prehistoria .year { color: #16a34a; }
+        .event.mitjana .year { color: #dc2626; }
+        .event.moderna .year { color: #7c3aed; }
+        .event.contemporania .year { color: #2563eb; }
+
+        .event h3 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 8px; }
+        .event p { color: var(--text-secondary); font-size: 0.92rem; line-height: 1.7; }
+
+        .quiz-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-top: 30px; }
+        .quiz-box h2 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 14px; text-align: center; }
+        .quiz-prompt { text-align: center; padding: 14px; background: var(--bg-base); border-radius: 10px; margin-bottom: 12px; color: var(--text-primary); font-weight: 600; }
+        .quiz-opts { display: grid; gap: 8px; }
+        .quiz-opt { padding: 12px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 600; color: var(--text-primary); font-size: 0.92rem; text-align: left; }
+        .quiz-opt:hover { border-color: #d97706; }
+        .quiz-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; }
+        .quiz-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="his-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="timeline.html" class="active">Línia del temps</a>
+    <a href="periodes.html">Períodes</a>
+    <a href="personatges.html">Personatges</a>
+</div>
+
+<div class="container">
+    <h1><span>Línia del temps</span></h1>
+    <p class="subtitle">Des dels primers humans fins a avui. Cada color = una edat de la història.</p>
+
+    <div class="timeline">
+        <div class="event prehistoria">
+            <div class="year">3.000.000 aC &mdash; 3.000 aC · PREHISTÒRIA</div>
+            <h3>Del Paleolític al Neolític</h3>
+            <p>Els primers humans eren caçadors-recol·lectors. Descobriren el foc i van fer eines de pedra. Fa 10.000 anys van començar a conrear la terra i a domesticar animals.</p>
+        </div>
+
+        <div class="event antiga">
+            <div class="year">3.000 aC &mdash; 476 dC · EDAT ANTIGA</div>
+            <h3>Egipte, Grècia i Roma</h3>
+            <p>Neixen les primeres grans civilitzacions: Egipte amb les piràmides, Grècia amb la democràcia i la filosofia, i Roma amb el seu imperi que arriba fins a Europa, Àfrica i Àsia.</p>
+        </div>
+
+        <div class="event mitjana">
+            <div class="year">476 &mdash; 1492 · EDAT MITJANA</div>
+            <h3>Castells, reis i cavallers</h3>
+            <p>Després de la caiguda de Roma, Europa es divideix en regnes. Neix l'Islam (segle VII). Temps de catedrals, cavallers, epidèmies (pesta negra) i dominació feudal.</p>
+        </div>
+
+        <div class="event moderna">
+            <div class="year">1492 &mdash; 1789 · EDAT MODERNA</div>
+            <h3>Descobriments i Il·lustració</h3>
+            <p>Colom arriba a Amèrica (1492). Renaixement, Reforma Protestant, la impremta, viatges transoceànics, ciència (Galileu, Newton), Il·lustració i naixement dels EUA.</p>
+        </div>
+
+        <div class="event contemporania">
+            <div class="year">1789 &mdash; avui · EDAT CONTEMPORÀNIA</div>
+            <h3>Revolucions i tecnologia</h3>
+            <p>Revolució Francesa (1789), Revolució Industrial, dues guerres mundials (1914-18, 1939-45), caiguda del Mur de Berlín (1989), internet, era digital.</p>
+        </div>
+    </div>
+
+    <div class="quiz-box">
+        <h2>&#x1F3AF; Quiz &mdash; En quina edat va passar això?</h2>
+        <div class="quiz-prompt" id="qP"></div>
+        <div class="quiz-opts" id="qO"></div>
+        <div class="score" id="sc">Encerts: 0 &bull; Errors: 0</div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const QUIZ = [
+    { q: 'Descobriment d\'Amèrica (1492)', a: 'Edat Moderna' },
+    { q: 'Primers humans fan foc', a: 'Prehistòria' },
+    { q: 'Roma és l\'imperi més gran', a: 'Edat Antiga' },
+    { q: 'Cavallers i castells', a: 'Edat Mitjana' },
+    { q: 'Primera guerra mundial (1914)', a: 'Edat Contemporània' },
+    { q: 'Piràmides d\'Egipte', a: 'Edat Antiga' },
+    { q: 'Revolució Francesa (1789)', a: 'Edat Contemporània' },
+    { q: 'Revolució Industrial', a: 'Edat Contemporània' },
+    { q: 'Neolític i agricultura', a: 'Prehistòria' },
+    { q: 'Renaixement i Leonardo Da Vinci', a: 'Edat Moderna' },
+    { q: 'Pesta Negra (1347)', a: 'Edat Mitjana' },
+    { q: 'Democràcia a Atenes', a: 'Edat Antiga' }
+];
+const OPTS = ['Prehistòria', 'Edat Antiga', 'Edat Mitjana', 'Edat Moderna', 'Edat Contemporània'];
+let correct = 0, wrong = 0;
+
+function newQuiz() {
+    const q = QUIZ[Math.floor(Math.random() * QUIZ.length)];
+    document.getElementById('qP').textContent = q.q;
+    const o = document.getElementById('qO');
+    o.innerHTML = '';
+    OPTS.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = opt;
+        btn.onclick = () => {
+            if (opt === q.a) { btn.classList.add('correct'); correct++; setTimeout(newQuiz, 900); }
+            else { btn.classList.add('wrong'); wrong++; }
+            document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+        o.appendChild(btn);
+    });
+}
+
+newQuiz();
+</script>
+</body>
+</html>

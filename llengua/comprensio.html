@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprensió lectora - Llengua</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .ll-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .ll-nav { background: rgba(9, 9, 11, 0.75); }
+        .ll-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .ll-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .ll-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .ll-nav a.home { color: #7c3aed; font-weight: 600; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #16a34a, #22c55e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .level-picker { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+        .level-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .level-btn:hover { border-color: #16a34a; color: #16a34a; }
+        .level-btn.active { background: #16a34a; color: #fff; border-color: #16a34a; }
+
+        .text-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px 28px; margin-bottom: 16px; line-height: 1.8; }
+        .text-box h2 { color: #16a34a; font-size: 1.15rem; margin-bottom: 12px; }
+        .text-box p { color: var(--text-primary); font-size: 0.98rem; margin-bottom: 12px; font-family: 'Georgia', serif; }
+
+        .questions { display: grid; gap: 10px; }
+        .q-card { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 18px 22px; }
+        .q-label { font-size: 0.72rem; font-weight: 700; color: #16a34a; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; }
+        .q-text { font-weight: 600; color: var(--text-primary); margin-bottom: 10px; line-height: 1.6; }
+        .q-opts { display: grid; gap: 8px; }
+        .q-opt { padding: 12px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 500; color: var(--text-primary); font-size: 0.92rem; text-align: left; }
+        .q-opt:hover { border-color: #16a34a; }
+        .q-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; font-weight: 600; }
+        .q-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; font-weight: 600; }
+
+        .btn { padding: 10px 22px; border-radius: var(--radius-full); border: none; font-weight: 700; cursor: pointer; font-size: 0.9rem; background: #16a34a; color: #fff; }
+        .btn:hover { background: #22c55e; }
+        .actions { text-align: center; margin-top: 16px; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="ll-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="ortografia.html">Ortografia</a>
+    <a href="dictats.html">Dictats</a>
+    <a href="comprensio.html" class="active">Comprensió</a>
+    <a href="redaccio.html">Redacció</a>
+</div>
+
+<div class="container">
+    <h1><span>Comprensió</span> lectora</h1>
+    <p class="subtitle">Llegeix el text amb atenció i respon les preguntes</p>
+
+    <div class="level-picker">
+        <button class="level-btn active" onclick="setLevel('easy')">Primària</button>
+        <button class="level-btn" onclick="setLevel('medium')">ESO</button>
+        <button class="level-btn" onclick="setLevel('hard')">Batxillerat</button>
+    </div>
+
+    <div id="content"></div>
+
+    <div class="actions"><button class="btn" onclick="loadText()">&#x1F504; Nou text</button></div>
+    <div class="score" id="score">Encerts: 0 &bull; Errors: 0</div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const TEXTS = {
+    easy: [
+        {
+            title: 'La Berta i el seu gat',
+            text: `La Berta té un gat que es diu Milo. És negre amb les potes blanques. Cada matí, la Berta li dona llet i peix. Al migdia, el Milo dorm al sofà. A la tarda, la Berta li llança una pilota de llana i el gat hi juga. Al vespre, tots dos miren la tele junts. La Berta està molt contenta perquè el Milo és el seu millor amic.`,
+            q: [
+                { q: 'Quin color té el Milo?', opts: ['Tot blanc', 'Tot negre', 'Negre amb potes blanques', 'Gris'], a: 2 },
+                { q: 'Què li dona la Berta al matí?', opts: ['Llet i peix', 'Pa i aigua', 'Galetes', 'Pollastre'], a: 0 },
+                { q: 'Quan dorm el gat?', opts: ['Al matí', 'Al migdia', 'A la tarda', 'Al vespre'], a: 1 }
+            ]
+        },
+        {
+            title: 'Els planetes',
+            text: `Al sistema solar hi ha vuit planetes que giren al voltant del Sol. El més petit és Mercuri i el més gran és Júpiter. La Terra és el tercer, comptant des del Sol. Mart és vermell i per això li diuen el planeta vermell. Saturn té anells molt bonics. Venus és el planeta més calent. Neptú és el més llunyà i és de color blau intens.`,
+            q: [
+                { q: 'Quants planetes té el sistema solar?', opts: ['6', '7', '8', '9'], a: 2 },
+                { q: 'Quin és el planeta més gran?', opts: ['Saturn', 'Júpiter', 'Neptú', 'La Terra'], a: 1 },
+                { q: 'Per què diuen a Mart "el planeta vermell"?', opts: ['Per la mida', 'Pel color', 'Pels anells', 'Per la temperatura'], a: 1 },
+                { q: 'Quin planeta té anells?', opts: ['Mart', 'Saturn', 'Júpiter', 'La Terra'], a: 1 }
+            ]
+        }
+    ],
+    medium: [
+        {
+            title: 'La invenció del xocolata',
+            text: `Els maies, una antiga civilització d'Amèrica Central, ja bevien xocolata fa més de 3.000 anys. La feien amb les llavors del cacau, però era molt diferent de la que coneixem avui: era una beguda amarga i picant. Els asteques també la bevien i fins i tot la feien servir com a moneda. Quan els espanyols van arribar a Amèrica el segle XVI, van portar el cacau a Europa. Allà, algú va tenir la idea d'afegir-hi sucre i llet. Va ser així com va néixer la xocolata dolça que mengem avui. Suïssa i Bèlgica són ara famosos mundialment per les seves xocolatines.`,
+            q: [
+                { q: 'Qui va inventar primer la xocolata?', opts: ['Els asteques', 'Els maies', 'Els espanyols', 'Els suïssos'], a: 1 },
+                { q: 'Com era la xocolata original?', opts: ['Dolça i cremosa', 'Amarga i picant', 'Igual que ara', 'Freda i líquida'], a: 1 },
+                { q: 'Per a què utilitzaven el cacau els asteques, a més de menjar?', opts: ['Per pintar', 'Com a moneda', 'Per jugar', 'Com a medicina'], a: 1 },
+                { q: 'Quan va arribar el cacau a Europa?', opts: ['Fa 100 anys', 'Al segle XVI', 'Abans de Crist', 'Al segle XX'], a: 1 }
+            ]
+        },
+        {
+            title: 'El riu Amazones',
+            text: `L'Amazones és el riu més cabalós del món i el segon més llarg, després del Nil. Neix als Andes peruans i desemboca a l'oceà Atlàntic, a Brasil, després de recórrer uns 6.400 quilòmetres. Travessa la selva amazònica, considerada el "pulmó del planeta" perquè produeix una gran quantitat de l'oxigen que respirem. A les seves aigües viuen més de 3.000 espècies de peixos, entre ells les piranyes i el pirarucú, un peix gegant que pot arribar als 3 metres. La selva amazònica està amenaçada per la desforestació, que posa en perill moltes espècies animals.`,
+            q: [
+                { q: 'Quin és el riu més llarg del món, segons el text?', opts: ['L\'Amazones', 'El Nil', 'El Missisipi', 'El Iang-Tsé'], a: 1 },
+                { q: 'On neix l\'Amazones?', opts: ['Al Brasil', 'Als Andes peruans', 'A la selva', 'Al mar'], a: 1 },
+                { q: 'Per què diuen a la selva amazònica "pulmó del planeta"?', opts: ['Perquè és gran', 'Perquè té rius', 'Perquè produeix molt oxigen', 'Perquè hi viuen piranyes'], a: 2 },
+                { q: 'Quina és una amenaça actual?', opts: ['Les piranyes', 'La desforestació', 'El Sol', 'Els peixos grans'], a: 1 }
+            ]
+        }
+    ],
+    hard: [
+        {
+            title: 'La paradoxa del temps lliure',
+            text: `Malgrat que la tecnologia ens prometia donar-nos més temps lliure, la realitat és que moltes persones se senten més ocupades que mai. Els estudis sociològics recents suggereixen que el problema no és la quantitat absoluta de temps, sinó la <em>fragmentació</em> que patim: rebem interrupcions constants de notificacions, missatges i correus que impedeixen concentrar-nos en una tasca durant períodes llargs. Alguns experts defensen un retorn voluntari a rutines més lentes, amb moments sense dispositius, per recuperar la capacitat d'atenció profunda. Paradoxalment, els llocs sense Internet —deliberadament escassos— s'han convertit en productes de luxe buscats per aquells que volen desconnectar.`,
+            q: [
+                { q: 'Quina paradoxa presenta l\'autor?', opts: ['La tecnologia hauria de donar temps però no', 'La gent vol desconnectar de la natura', 'Els experts defensen usar més mòbils', 'La lentitud és dolenta'], a: 0 },
+                { q: 'Segons el text, quin és el problema principal?', opts: ['La falta de temps total', 'La fragmentació del temps', 'La tecnologia és cara', 'La gent treballa massa'], a: 1 },
+                { q: 'Què proposen alguns experts?', opts: ['Treballar menys hores', 'Moments sense dispositius', 'Prohibir el mòbil', 'Més connexions a Internet'], a: 1 },
+                { q: 'Què s\'ha convertit en un "producte de luxe"?', opts: ['El temps', 'Els llocs sense Internet', 'Les rutines ràpides', 'Les notificacions'], a: 1 }
+            ]
+        }
+    ]
+};
+
+let currentLevel = 'easy';
+let correct = 0, wrong = 0;
+
+function setLevel(l) {
+    currentLevel = l;
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    loadText();
+}
+
+function loadText() {
+    const list = TEXTS[currentLevel];
+    const t = list[Math.floor(Math.random() * list.length)];
+    document.getElementById('content').innerHTML = `
+        <div class="text-box">
+            <h2>${t.title}</h2>
+            <p>${t.text}</p>
+        </div>
+        <div class="questions">
+            ${t.q.map((q, i) => `
+                <div class="q-card">
+                    <div class="q-label">Pregunta ${i + 1}</div>
+                    <div class="q-text">${q.q}</div>
+                    <div class="q-opts">
+                        ${q.opts.map((o, j) => `<button class="q-opt" data-c="${j === q.a}">${o}</button>`).join('')}
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    document.querySelectorAll('.q-opt').forEach(btn => {
+        btn.onclick = () => {
+            const ok = btn.dataset.c === 'true';
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.q-opt').forEach(b => b.disabled = true);
+            if (ok) { btn.classList.add('correct'); correct++; }
+            else { btn.classList.add('wrong'); parent.querySelector('[data-c="true"]').classList.add('correct'); wrong++; }
+            document.getElementById('score').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+    });
+}
+
+loadText();
+</script>
+</body>
+</html>

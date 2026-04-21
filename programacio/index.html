@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programació per nens</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .pr-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .pr-nav { background: rgba(9, 9, 11, 0.75); }
+        .pr-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .pr-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .pr-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .pr-nav a.home { color: #4338ca; font-weight: 600; }
+
+        .hero { text-align: center; padding: 48px 24px 40px; border-bottom: 1px solid var(--border-subtle); }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+        .hero h1 span { background: linear-gradient(135deg, #4338ca, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; }
+        .hero .badge { display: inline-block; margin-top: 12px; padding: 6px 16px; border-radius: var(--radius-full); background: rgba(67, 56, 202, 0.1); color: #4338ca; font-size: 0.8rem; font-weight: 600; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+        .section-title { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; margin-top: 20px; }
+        .section-title span { padding: 4px 12px; border-radius: 12px; font-size: .75rem; color: #fff; }
+
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 14px; }
+
+        .course-card { background: var(--bg-raised); border-radius: var(--radius-lg); padding: 22px; border: 1px solid var(--border-subtle); transition: all 0.25s; text-decoration: none; color: inherit; display: block; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+        .course-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .course-card:hover { border-color: var(--border-default); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .course-card .card-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 12px; color: #fff; }
+        .course-card h3 { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+        .course-card p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+
+        .card-indigo::before { background: linear-gradient(90deg, #4338ca, #6366f1); } .card-indigo .card-icon { background: linear-gradient(135deg, #4338ca, #6366f1); } .card-indigo:hover { border-color: #6366f1; }
+        .card-blue::before { background: linear-gradient(90deg, #2563eb, #3b82f6); } .card-blue .card-icon { background: linear-gradient(135deg, #2563eb, #3b82f6); } .card-blue:hover { border-color: #3b82f6; }
+        .card-green::before { background: linear-gradient(90deg, #16a34a, #22c55e); } .card-green .card-icon { background: linear-gradient(135deg, #16a34a, #22c55e); } .card-green:hover { border-color: #22c55e; }
+        .card-orange::before { background: linear-gradient(90deg, #ea580c, #f97316); } .card-orange .card-icon { background: linear-gradient(135deg, #ea580c, #f97316); } .card-orange:hover { border-color: #f97316; }
+
+        .footer { text-align: center; padding: 30px 20px; color: var(--text-muted); font-size: 0.8rem; }
+        @media (max-width: 640px) { .courses-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+
+<div class="pr-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html" class="active">Inici</a>
+    <a href="logica.html">Lògica</a>
+    <a href="blocs.html">Blocs</a>
+    <a href="python.html">Python</a>
+    <a href="algoritmes.html">Algoritmes</a>
+</div>
+
+<div class="hero">
+    <h1><span>Programació</span> per nens</h1>
+    <p>Pensament computacional, puzzles de lògica i primeres línies de codi</p>
+    <div class="badge">&#x1F4BB; Aprèn a pensar com un programador</div>
+</div>
+
+<div class="container">
+
+    <h2 class="section-title"><span style="background:#22c55e;">PRIMÀRIA</span> 8 - 12 anys</h2>
+    <div class="courses-grid">
+        <a href="logica.html" class="course-card card-indigo"><div class="card-icon">&#x1F9E9;</div><h3>Lògica i seqüències</h3><p>Endevina quin és el següent, segueix el patró</p></a>
+        <a href="blocs.html" class="course-card card-blue"><div class="card-icon">&#x1F9F1;</div><h3>Blocs (tipus Scratch)</h3><p>Arrossega blocs per moure un personatge per un laberint</p></a>
+        <a href="algoritmes.html?level=easy" class="course-card card-orange"><div class="card-icon">&#x1F37D;&#xFE0F;</div><h3>Algoritmes del dia a dia</h3><p>Les receptes són algoritmes! Ordena els passos</p></a>
+    </div>
+
+    <h2 class="section-title"><span style="background:#3b82f6;">ESO</span> 12 - 16 anys</h2>
+    <div class="courses-grid">
+        <a href="python.html" class="course-card card-green"><div class="card-icon">&#x1F40D;</div><h3>Primers passos amb Python</h3><p>Variables, print, operacions, condicions &mdash; amb editor interactiu</p></a>
+        <a href="algoritmes.html" class="course-card card-orange"><div class="card-icon">&#x1F504;</div><h3>Algoritmes avançats</h3><p>Bucles, condicions, funcions. Com els ordenadors "pensen".</p></a>
+        <a href="logica.html?level=hard" class="course-card card-indigo"><div class="card-icon">&#x1F9E0;</div><h3>Lògica booleana</h3><p>Veritat/Fals, AND, OR, NOT &mdash; la base de tot el codi</p></a>
+    </div>
+
+</div>
+
+<div class="footer">Programació &mdash; Pensament computacional des de zero</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+</body>
+</html>

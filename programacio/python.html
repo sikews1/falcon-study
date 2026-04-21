@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python - Programació</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .pr-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .pr-nav { background: rgba(9, 9, 11, 0.75); }
+        .pr-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .pr-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .pr-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .pr-nav a.home { color: #4338ca; font-weight: 600; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #16a34a, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .lesson-picker { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .lp-btn { padding: 6px 12px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.78rem; }
+        .lp-btn:hover { border-color: #16a34a; color: #16a34a; }
+        .lp-btn.active { background: #16a34a; color: #fff; border-color: #16a34a; }
+
+        .lesson { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-bottom: 16px; }
+        .lesson h2 { color: #16a34a; font-size: 1.15rem; margin-bottom: 10px; }
+        .lesson p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 10px; font-size: 0.92rem; }
+        .lesson p strong { color: var(--text-primary); }
+
+        .code { background: #0f172a; color: #e2e8f0; padding: 14px 18px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.92rem; line-height: 1.7; overflow-x: auto; margin: 10px 0; }
+        .code .kw { color: #f472b6; font-weight: 700; }
+        .code .str { color: #86efac; }
+        .code .num { color: #fbbf24; }
+        .code .cmt { color: #64748b; font-style: italic; }
+        .code .fn { color: #60a5fa; }
+
+        .editor-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 20px; }
+        .editor-box h2 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 12px; }
+        .editor-box textarea { width: 100%; background: #0f172a; color: #e2e8f0; border: none; border-radius: 10px; padding: 14px; font-family: 'Courier New', monospace; font-size: 0.95rem; line-height: 1.7; min-height: 180px; resize: vertical; }
+        .editor-box textarea:focus { outline: 2px solid #16a34a; }
+        .editor-actions { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+        .btn { padding: 10px 20px; border-radius: var(--radius-full); border: none; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
+        .btn-run { background: #16a34a; color: #fff; }
+        .btn-run:hover { background: #22c55e; }
+        .btn-ex { background: var(--bg-base); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-ex:hover { border-color: #16a34a; color: #16a34a; }
+
+        .output { background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 14px; font-family: 'Courier New', monospace; font-size: 0.9rem; min-height: 50px; margin-top: 10px; white-space: pre-wrap; color: var(--text-primary); }
+        .output.err { color: #dc2626; background: rgba(239, 68, 68, 0.05); border-color: #ef4444; }
+
+        .info-box { background: rgba(67, 56, 202, 0.06); border-left: 3px solid #4338ca; padding: 12px 16px; border-radius: 0 10px 10px 0; color: var(--text-secondary); line-height: 1.6; font-size: 0.88rem; margin-bottom: 14px; }
+        .info-box strong { color: var(--text-primary); }
+    </style>
+</head>
+<body>
+
+<div class="pr-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="logica.html">Lògica</a>
+    <a href="blocs.html">Blocs</a>
+    <a href="python.html" class="active">Python</a>
+    <a href="algoritmes.html">Algoritmes</a>
+</div>
+
+<div class="container">
+    <h1><span>Python</span> per començar</h1>
+    <p class="subtitle">Primers conceptes amb editor interactiu (simulat, prou per aprendre)</p>
+
+    <div class="lesson-picker" id="picker"></div>
+    <div id="lesson"></div>
+
+    <div class="editor-box">
+        <h2>&#x1F4BB; Editor Python (prova tu)</h2>
+        <div class="info-box">Aquest editor simula Python per aprendre la sintaxi. Entén <code>print()</code>, variables i operacions bàsiques. Per a programes reals, utilitza <strong>replit.com</strong> o <strong>python.org</strong>.</div>
+        <textarea id="code" placeholder="# Escriu el teu codi Python aquí
+name = &quot;Marina&quot;
+print(&quot;Hola,&quot;, name)"></textarea>
+        <div class="editor-actions">
+            <button class="btn btn-run" onclick="runCode()">▶️ Executar</button>
+            <button class="btn btn-ex" onclick="loadExample()">📋 Exemple del tema</button>
+        </div>
+        <div class="output" id="output">Resultat apareixerà aquí...</div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const LESSONS = {
+    hello: {
+        label: '1. Hola món',
+        content: `
+            <div class="lesson">
+                <h2>Primer programa: "Hola món"</h2>
+                <p>El comando <strong>print()</strong> imprimeix text a la pantalla. El text entre cometes es diu <em>string</em> (cadena de text).</p>
+                <div class="code"><span class="fn">print</span>(<span class="str">"Hola, món!"</span>)
+<span class="fn">print</span>(<span class="str">"Com estàs?"</span>)</div>
+                <p>El <span class="cmt">#</span> comença un comentari, que Python ignora.</p>
+                <div class="code"><span class="cmt"># Això és un comentari</span>
+<span class="fn">print</span>(<span class="str">"Aquesta línia sí s'executa"</span>)</div>
+            </div>
+        `,
+        example: `print("Hola, món!")
+print("Això és Python 🐍")
+# Això és un comentari (no es mostra)`
+    },
+    vars: {
+        label: '2. Variables',
+        content: `
+            <div class="lesson">
+                <h2>Variables: caixes amb un nom</h2>
+                <p>Una <strong>variable</strong> és com una caixa amb un nom on guardes un valor. Pots canviar el valor quan vulguis.</p>
+                <div class="code"><span class="kw">name</span> = <span class="str">"Marina"</span>
+<span class="kw">age</span> = <span class="num">12</span>
+<span class="fn">print</span>(<span class="str">"Hola,"</span>, <span class="kw">name</span>)
+<span class="fn">print</span>(<span class="str">"Tens"</span>, <span class="kw">age</span>, <span class="str">"anys"</span>)</div>
+                <p>Hi ha <strong>tipus</strong> de dades:</p>
+                <ul style="padding-left: 22px; color: var(--text-secondary); line-height: 1.8;">
+                    <li><strong>string</strong>: text entre cometes: <span style="font-family:monospace;">"hola"</span></li>
+                    <li><strong>int</strong>: números sencers: <span style="font-family:monospace;">42</span></li>
+                    <li><strong>float</strong>: números amb decimals: <span style="font-family:monospace;">3.14</span></li>
+                    <li><strong>bool</strong>: <span style="font-family:monospace;">True</span> o <span style="font-family:monospace;">False</span></li>
+                </ul>
+            </div>
+        `,
+        example: `name = "Joan"
+age = 14
+print("Em dic", name, "i tinc", age, "anys")
+
+height = 1.55
+print("Faig", height, "metres")`
+    },
+    math: {
+        label: '3. Operacions',
+        content: `
+            <div class="lesson">
+                <h2>Operacions matemàtiques</h2>
+                <p>Python és com una calculadora molt potent:</p>
+                <div class="code"><span class="fn">print</span>(<span class="num">5</span> + <span class="num">3</span>)    <span class="cmt"># 8 (suma)</span>
+<span class="fn">print</span>(<span class="num">10</span> - <span class="num">4</span>)   <span class="cmt"># 6 (resta)</span>
+<span class="fn">print</span>(<span class="num">6</span> * <span class="num">7</span>)    <span class="cmt"># 42 (multiplicació)</span>
+<span class="fn">print</span>(<span class="num">20</span> / <span class="num">4</span>)   <span class="cmt"># 5.0 (divisió)</span>
+<span class="fn">print</span>(<span class="num">2</span> ** <span class="num">10</span>)  <span class="cmt"># 1024 (potència)</span>
+<span class="fn">print</span>(<span class="num">17</span> % <span class="num">5</span>)   <span class="cmt"># 2 (residu)</span></div>
+            </div>
+        `,
+        example: `# Calcular àrea d'un rectangle
+base = 5
+height = 3
+area = base * height
+print("Àrea =", area)`
+    },
+    conditions: {
+        label: '4. Condicions',
+        content: `
+            <div class="lesson">
+                <h2>If / elif / else</h2>
+                <p>Amb <strong>if</strong> fas que el codi decideixi què fer segons una condició.</p>
+                <div class="code"><span class="kw">age</span> = <span class="num">15</span>
+
+<span class="kw">if</span> <span class="kw">age</span> >= <span class="num">18</span>:
+    <span class="fn">print</span>(<span class="str">"Ets major d'edat"</span>)
+<span class="kw">elif</span> <span class="kw">age</span> >= <span class="num">13</span>:
+    <span class="fn">print</span>(<span class="str">"Ets adolescent"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Ets un nen/a"</span>)</div>
+                <p>Operadors de comparació: <span style="font-family:monospace;">==</span> (igual), <span style="font-family:monospace;">!=</span> (diferent), <span style="font-family:monospace;">&lt;</span>, <span style="font-family:monospace;">&gt;</span>, <span style="font-family:monospace;">&lt;=</span>, <span style="font-family:monospace;">&gt;=</span></p>
+            </div>
+        `,
+        example: `nota = 7
+
+if nota >= 9:
+    print("Excel·lent!")
+elif nota >= 5:
+    print("Aprovat")
+else:
+    print("Suspès")`
+    },
+    loops: {
+        label: '5. Bucles',
+        content: `
+            <div class="lesson">
+                <h2>For: repetir coses</h2>
+                <p>Amb <strong>for</strong> pots fer que una cosa es repeteixi moltes vegades sense copiar codi.</p>
+                <div class="code"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">print</span>(<span class="str">"Línia número"</span>, i)
+
+<span class="cmt"># Imprimeix 5 vegades (de 0 a 4)</span></div>
+                <p>Amb <strong>while</strong> repeteixes mentre una condició sigui certa:</p>
+                <div class="code"><span class="kw">count</span> = <span class="num">0</span>
+<span class="kw">while</span> <span class="kw">count</span> &lt; <span class="num">3</span>:
+    <span class="fn">print</span>(<span class="str">"Hola!"</span>)
+    <span class="kw">count</span> = <span class="kw">count</span> + <span class="num">1</span></div>
+            </div>
+        `,
+        example: `# Taula de multiplicar del 7
+for i in range(1, 11):
+    result = 7 * i
+    print("7 x", i, "=", result)`
+    }
+};
+
+let current = 'hello';
+
+function renderPicker() {
+    const p = document.getElementById('picker');
+    p.innerHTML = '';
+    Object.keys(LESSONS).forEach(k => {
+        const b = document.createElement('button');
+        b.className = 'lp-btn' + (k === current ? ' active' : '');
+        b.textContent = LESSONS[k].label;
+        b.onclick = () => { current = k; render(); };
+        p.appendChild(b);
+    });
+}
+
+function render() {
+    renderPicker();
+    document.getElementById('lesson').innerHTML = LESSONS[current].content;
+}
+
+function loadExample() {
+    document.getElementById('code').value = LESSONS[current].example;
+    document.getElementById('output').textContent = 'Codi carregat. Prem ▶️ Executar.';
+    document.getElementById('output').classList.remove('err');
+}
+
+function runCode() {
+    const code = document.getElementById('code').value;
+    const out = document.getElementById('output');
+    out.classList.remove('err');
+    try {
+        const result = simulatePython(code);
+        out.textContent = result || '(sense sortida)';
+    } catch (e) {
+        out.classList.add('err');
+        out.textContent = 'Error: ' + e.message;
+    }
+}
+
+function simulatePython(code) {
+    // Very basic Python simulator - handles print(), variables, arithmetic, basic if/else, for range
+    const vars = {};
+    const output = [];
+    const lines = code.split('\n');
+
+    function evalExpr(expr) {
+        expr = expr.trim();
+        if (!expr) return '';
+        // Strings
+        if ((expr.startsWith('"') && expr.endsWith('"')) || (expr.startsWith("'") && expr.endsWith("'"))) {
+            return expr.slice(1, -1);
+        }
+        // Number
+        if (!isNaN(parseFloat(expr)) && /^-?[\d.]+$/.test(expr)) return parseFloat(expr);
+        // Boolean
+        if (expr === 'True') return true;
+        if (expr === 'False') return false;
+        // Variable
+        if (expr in vars) return vars[expr];
+        // Arithmetic expressions - use Function constructor safely-ish on known tokens
+        const tokens = expr.match(/"[^"]*"|'[^']*'|\d+\.?\d*|\w+|[+\-*/%()]|\*\*/g);
+        if (!tokens) return expr;
+        const safe = tokens.map(t => {
+            if (/^".*"$|^'.*'$/.test(t)) return JSON.stringify(t.slice(1, -1));
+            if (/^-?[\d.]+$/.test(t)) return t;
+            if (['+','-','*','/','%','(',')','**'].includes(t)) return t;
+            if (t in vars) return JSON.stringify(vars[t]);
+            return t;
+        }).join(' ');
+        try { return eval(safe); } catch (e) { return expr; }
+    }
+
+    function parseArgs(s) {
+        // split by commas respecting quotes
+        const parts = [];
+        let buf = '', depth = 0, inStr = null;
+        for (const ch of s) {
+            if (inStr) { buf += ch; if (ch === inStr) inStr = null; }
+            else if (ch === '"' || ch === "'") { inStr = ch; buf += ch; }
+            else if (ch === '(' || ch === '[') { depth++; buf += ch; }
+            else if (ch === ')' || ch === ']') { depth--; buf += ch; }
+            else if (ch === ',' && depth === 0) { parts.push(buf); buf = ''; }
+            else buf += ch;
+        }
+        if (buf.trim()) parts.push(buf);
+        return parts.map(p => p.trim());
+    }
+
+    let i = 0;
+    function execBlock(indent) {
+        while (i < lines.length) {
+            const line = lines[i];
+            const trimmed = line.replace(/^\s+/, '');
+            const lineIndent = line.length - trimmed.length;
+            if (!trimmed || trimmed.startsWith('#')) { i++; continue; }
+            if (lineIndent < indent) return;
+            i++;
+
+            if (trimmed.startsWith('print(')) {
+                const args = trimmed.slice(6, trimmed.lastIndexOf(')'));
+                const vals = parseArgs(args).map(evalExpr);
+                output.push(vals.join(' '));
+            } else if (trimmed.startsWith('for ')) {
+                const m = trimmed.match(/for\s+(\w+)\s+in\s+range\(([^)]+)\):/);
+                if (m) {
+                    const varName = m[1];
+                    const rangeArgs = parseArgs(m[2]).map(evalExpr);
+                    let start = 0, end = 0;
+                    if (rangeArgs.length === 1) end = rangeArgs[0];
+                    else { start = rangeArgs[0]; end = rangeArgs[1]; }
+                    const forStart = i;
+                    for (let n = start; n < end; n++) {
+                        vars[varName] = n;
+                        i = forStart;
+                        execBlock(lineIndent + 4);
+                    }
+                }
+            } else if (trimmed.startsWith('if ') || trimmed.startsWith('elif ') || trimmed === 'else:') {
+                const m = trimmed.match(/^(if|elif)\s+(.+):$/);
+                let cond = false;
+                if (trimmed === 'else:') cond = true;
+                else if (m) {
+                    const expr = m[2];
+                    // Simple comparison
+                    const cm = expr.match(/(.+?)\s*(==|!=|<=|>=|<|>)\s*(.+)/);
+                    if (cm) {
+                        const a = evalExpr(cm[1]);
+                        const b = evalExpr(cm[3]);
+                        switch (cm[2]) {
+                            case '==': cond = a == b; break;
+                            case '!=': cond = a != b; break;
+                            case '<': cond = a < b; break;
+                            case '>': cond = a > b; break;
+                            case '<=': cond = a <= b; break;
+                            case '>=': cond = a >= b; break;
+                        }
+                    } else cond = !!evalExpr(expr);
+                }
+                if (cond) {
+                    execBlock(lineIndent + 4);
+                    // skip rest of elif/else chain
+                    while (i < lines.length) {
+                        const nl = lines[i].replace(/^\s+/, '');
+                        if (lines[i].length - nl.length <= lineIndent && (nl.startsWith('elif ') || nl === 'else:')) {
+                            i++;
+                            // skip block
+                            while (i < lines.length) {
+                                const nli = lines[i].length - lines[i].replace(/^\s+/, '').length;
+                                if (nli <= lineIndent) break;
+                                i++;
+                            }
+                        } else break;
+                    }
+                } else {
+                    // skip this block
+                    while (i < lines.length) {
+                        const nli = lines[i].length - lines[i].replace(/^\s+/, '').length;
+                        if (nli <= lineIndent) break;
+                        i++;
+                    }
+                }
+            } else if (/^\w+\s*=/.test(trimmed)) {
+                const [name, ...rest] = trimmed.split('=');
+                const value = rest.join('=').trim();
+                vars[name.trim()] = evalExpr(value);
+            }
+        }
+    }
+
+    execBlock(0);
+    return output.join('\n');
+}
+
+render();
+</script>
+</body>
+</html>

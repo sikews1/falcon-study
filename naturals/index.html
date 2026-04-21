@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciències Naturals - Exercicis Interactius</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .nat-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .nat-nav { background: rgba(9, 9, 11, 0.75); }
+        .nat-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .nat-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .nat-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .nat-nav a.home { color: #16a34a; font-weight: 600; }
+
+        .hero { text-align: center; padding: 48px 24px 40px; border-bottom: 1px solid var(--border-subtle); position: relative; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 80% at 30% 0%, rgba(22, 163, 74, 0.07) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 70% 20%, rgba(132, 204, 22, 0.05) 0%, transparent 60%); pointer-events: none; }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; position: relative; }
+        .hero h1 span { background: linear-gradient(135deg, #16a34a, #84cc16); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; position: relative; }
+        .hero .badge { display: inline-block; margin-top: 12px; padding: 6px 16px; border-radius: var(--radius-full); background: rgba(22, 163, 74, 0.1); color: #16a34a; font-size: 0.8rem; font-weight: 600; position: relative; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+        .section-title { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .section-title span { padding: 4px 12px; border-radius: 12px; font-size: .75rem; color: #fff; }
+
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 16px; margin-bottom: 28px; }
+
+        .course-card { background: var(--bg-raised); border-radius: var(--radius-lg); padding: 22px; border: 1px solid var(--border-subtle); transition: all 0.25s; text-decoration: none; color: inherit; display: block; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+        .course-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .course-card:hover { border-color: var(--border-default); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .course-card .card-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 12px; color: #fff; }
+        .course-card h3 { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+        .course-card p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+
+        .card-green::before { background: linear-gradient(90deg, #16a34a, #22c55e); }
+        .card-green .card-icon { background: linear-gradient(135deg, #16a34a, #22c55e); }
+        .card-green:hover { border-color: #16a34a; }
+
+        .card-red::before { background: linear-gradient(90deg, #dc2626, #ef4444); }
+        .card-red .card-icon { background: linear-gradient(135deg, #dc2626, #ef4444); }
+        .card-red:hover { border-color: #ef4444; }
+
+        .card-blue::before { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+        .card-blue .card-icon { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+        .card-blue:hover { border-color: #3b82f6; }
+
+        .card-orange::before { background: linear-gradient(90deg, #ea580c, #f97316); }
+        .card-orange .card-icon { background: linear-gradient(135deg, #ea580c, #f97316); }
+        .card-orange:hover { border-color: #f97316; }
+
+        .card-teal::before { background: linear-gradient(90deg, #0d9488, #14b8a6); }
+        .card-teal .card-icon { background: linear-gradient(135deg, #0d9488, #14b8a6); }
+        .card-teal:hover { border-color: #14b8a6; }
+
+        .footer { text-align: center; padding: 30px 20px; color: var(--text-muted); font-size: 0.8rem; }
+        @media (max-width: 640px) { .courses-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+
+<div class="nat-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html" class="active">Inici</a>
+    <a href="cos-huma.html">Cos humà</a>
+    <a href="sistemes.html">Sistemes</a>
+    <a href="animals.html">Animals</a>
+    <a href="plantes.html">Plantes</a>
+</div>
+
+<div class="hero">
+    <h1><span>Ciències</span> Naturals</h1>
+    <p>Descobreix el cos humà, els animals, les plantes i els ecosistemes</p>
+    <div class="badge">&#x1F33F; Aprèn com funciona la vida</div>
+</div>
+
+<div class="container">
+
+    <h2 class="section-title"><span style="background:#22c55e;">PRIMÀRIA</span> 6 - 12 anys</h2>
+    <div class="courses-grid">
+        <a href="cos-huma.html" class="course-card card-red">
+            <div class="card-icon">&#x1F464;</div>
+            <h3>El cos humà</h3>
+            <p>Diagrama interactiu: clica cada part i aprèn com es diu i per a què serveix</p>
+        </a>
+        <a href="animals.html" class="course-card card-orange">
+            <div class="card-icon">&#x1F98A;</div>
+            <h3>Els animals</h3>
+            <p>Mamífers, aus, peixos, rèptils... classificació amb quiz de fotos</p>
+        </a>
+        <a href="plantes.html" class="course-card card-green">
+            <div class="card-icon">&#x1F33B;</div>
+            <h3>Les plantes</h3>
+            <p>Parts de la planta, fotosíntesi, cicle de la vida</p>
+        </a>
+    </div>
+
+    <h2 class="section-title"><span style="background:#3b82f6;">ESO</span> 12 - 16 anys</h2>
+    <div class="courses-grid">
+        <a href="sistemes.html" class="course-card card-blue">
+            <div class="card-icon">&#x1FAC0;</div>
+            <h3>Sistemes del cos</h3>
+            <p>Digestiu, respiratori, circulatori, nerviós — com funciona cadascun</p>
+        </a>
+        <a href="animals.html?level=eso" class="course-card card-teal">
+            <div class="card-icon">&#x1F9EC;</div>
+            <h3>Classificació avançada</h3>
+            <p>Invertebrats, vertebrats, cadenes alimentàries, ecosistemes</p>
+        </a>
+        <a href="plantes.html?level=eso" class="course-card card-green">
+            <div class="card-icon">&#x1F331;</div>
+            <h3>Reproducció de plantes</h3>
+            <p>Sexual vs asexual, pol·linització, dispersió de llavors</p>
+        </a>
+    </div>
+
+</div>
+
+<div class="footer">Ciències Naturals &mdash; Cos humà, animals, plantes i ecosistemes</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+</body>
+</html>

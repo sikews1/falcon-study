@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espanya - Geografia</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .geo-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .geo-nav { background: rgba(9, 9, 11, 0.75); }
+        .geo-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .geo-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .geo-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .geo-nav a.home { color: #0891b2; font-weight: 600; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #dc2626, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .tabs { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .tab-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .tab-btn:hover { border-color: #dc2626; color: #dc2626; }
+        .tab-btn.active { background: #dc2626; color: #fff; border-color: #dc2626; }
+
+        .ccaa-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin-bottom: 20px; }
+        .ccaa-card { background: var(--bg-raised); border-radius: 10px; padding: 12px 14px; border: 1px solid var(--border-subtle); transition: all 0.2s; }
+        .ccaa-card h4 { font-size: 0.9rem; color: #dc2626; margin-bottom: 4px; font-weight: 700; }
+        .ccaa-card .capital { color: var(--text-secondary); font-size: 0.82rem; }
+        .ccaa-card .capital::before { content: '🏛️ '; }
+
+        .quiz-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-top: 16px; }
+        .quiz-box h2 { color: var(--text-primary); font-size: 1.1rem; margin-bottom: 14px; text-align: center; }
+        .quiz-mode { display: flex; gap: 6px; justify-content: center; margin-bottom: 14px; }
+        .mode-btn { padding: 6px 12px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-base); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.78rem; }
+        .mode-btn.active { background: #dc2626; color: #fff; border-color: #dc2626; }
+
+        .quiz-prompt { text-align: center; padding: 14px; background: var(--bg-base); border-radius: 10px; margin-bottom: 12px; color: var(--text-primary); font-weight: 600; font-size: 1.05rem; }
+        .quiz-opts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .quiz-opt { padding: 12px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 600; color: var(--text-primary); font-size: 0.92rem; transition: all 0.2s; }
+        .quiz-opt:hover { border-color: #dc2626; }
+        .quiz-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; }
+        .quiz-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="geo-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="espanya.html" class="active">Espanya</a>
+    <a href="europa.html">Europa</a>
+    <a href="mon.html">Món</a>
+    <a href="fisic.html">Físic</a>
+</div>
+
+<div class="container">
+    <h1><span>Espanya</span></h1>
+    <p class="subtitle">Les 17 comunitats autònomes i les 2 ciutats autònomes amb les seves capitals</p>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('list')">Llista de CCAA</button>
+        <button class="tab-btn" onclick="showTab('quiz')">Quiz de capitals</button>
+    </div>
+
+    <div id="content"></div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const CCAA = [
+    { name: 'Andalusia', cap: 'Sevilla' },
+    { name: 'Aragó', cap: 'Saragossa' },
+    { name: 'Astúries', cap: 'Oviedo' },
+    { name: 'Illes Balears', cap: 'Palma' },
+    { name: 'Canàries', cap: 'Santa Cruz de Tenerife / Las Palmas' },
+    { name: 'Cantàbria', cap: 'Santander' },
+    { name: 'Castella i Lleó', cap: 'Valladolid' },
+    { name: 'Castella-la Manxa', cap: 'Toledo' },
+    { name: 'Catalunya', cap: 'Barcelona' },
+    { name: 'País Valencià', cap: 'València' },
+    { name: 'Extremadura', cap: 'Mèrida' },
+    { name: 'Galícia', cap: 'Santiago de Compostel·la' },
+    { name: 'La Rioja', cap: 'Logronyo' },
+    { name: 'Madrid', cap: 'Madrid' },
+    { name: 'Múrcia', cap: 'Múrcia' },
+    { name: 'Navarra', cap: 'Pamplona' },
+    { name: 'País Basc', cap: 'Vitòria' },
+    { name: 'Ceuta', cap: 'Ceuta (ciutat autònoma)' },
+    { name: 'Melilla', cap: 'Melilla (ciutat autònoma)' }
+];
+
+let mode = 'ca->cap';
+let correct = 0, wrong = 0;
+
+function showTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event?.target?.classList?.add('active');
+    const c = document.getElementById('content');
+    if (tab === 'list') {
+        c.innerHTML = `
+            <div class="ccaa-list">
+                ${CCAA.map(cc => `
+                    <div class="ccaa-card">
+                        <h4>${cc.name}</h4>
+                        <div class="capital">${cc.cap}</div>
+                    </div>
+                `).join('')}
+            </div>
+            <p style="text-align:center;color:var(--text-secondary);font-size:0.85rem;margin-top:14px;">Espanya té <strong>17 comunitats autònomes</strong> i <strong>2 ciutats autònomes</strong> (Ceuta i Melilla). La capital de l'estat és <strong>Madrid</strong>.</p>
+        `;
+    } else {
+        c.innerHTML = `
+            <div class="quiz-box">
+                <h2>&#x1F3AF; Quiz infinit de capitals</h2>
+                <div class="quiz-mode">
+                    <button class="mode-btn active" onclick="setMode('ca->cap')">Comunitat → Capital</button>
+                    <button class="mode-btn" onclick="setMode('cap->ca')">Capital → Comunitat</button>
+                </div>
+                <div class="quiz-prompt" id="qP">...</div>
+                <div class="quiz-opts" id="qO"></div>
+                <div class="score" id="sc">Encerts: ${correct} &bull; Errors: ${wrong}</div>
+            </div>
+        `;
+        newQuiz();
+    }
+}
+
+function setMode(m) {
+    mode = m;
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    newQuiz();
+}
+
+function newQuiz() {
+    const correctItem = CCAA[Math.floor(Math.random() * CCAA.length)];
+    const others = CCAA.filter(c => c.name !== correctItem.name).sort(() => Math.random() - 0.5).slice(0, 3);
+    const pool = [...others, correctItem].sort(() => Math.random() - 0.5);
+
+    if (mode === 'ca->cap') {
+        document.getElementById('qP').textContent = `Quina és la capital de ${correctItem.name}?`;
+        const o = document.getElementById('qO');
+        o.innerHTML = '';
+        pool.forEach(c => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-opt';
+            btn.textContent = c.cap;
+            btn.onclick = () => {
+                if (c.name === correctItem.name) { btn.classList.add('correct'); correct++; setTimeout(newQuiz, 800); }
+                else { btn.classList.add('wrong'); wrong++; }
+                document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+            };
+            o.appendChild(btn);
+        });
+    } else {
+        document.getElementById('qP').textContent = `De quina comunitat és capital ${correctItem.cap.split('/')[0].trim()}?`;
+        const o = document.getElementById('qO');
+        o.innerHTML = '';
+        pool.forEach(c => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-opt';
+            btn.textContent = c.name;
+            btn.onclick = () => {
+                if (c.name === correctItem.name) { btn.classList.add('correct'); correct++; setTimeout(newQuiz, 800); }
+                else { btn.classList.add('wrong'); wrong++; }
+                document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+            };
+            o.appendChild(btn);
+        });
+    }
+}
+
+showTab('list');
+</script>
+</body>
+</html>

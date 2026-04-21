@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Europa - Geografia</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .geo-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .geo-nav { background: rgba(9, 9, 11, 0.75); }
+        .geo-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .geo-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .geo-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .geo-nav a.home { color: #0891b2; font-weight: 600; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #2563eb, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .tabs { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .tab-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .tab-btn:hover { border-color: #2563eb; color: #2563eb; }
+        .tab-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+        .countries-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+        .country-card { background: var(--bg-raised); border-radius: 10px; padding: 10px 12px; border: 1px solid var(--border-subtle); }
+        .country-card .flag { font-size: 1.6rem; display: block; }
+        .country-card .cname { font-weight: 700; color: var(--text-primary); font-size: 0.85rem; margin-top: 4px; }
+        .country-card .cap { color: var(--text-secondary); font-size: 0.78rem; }
+
+        .quiz-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; }
+        .quiz-box h2 { color: var(--text-primary); font-size: 1.1rem; margin-bottom: 14px; text-align: center; }
+        .quiz-mode { display: flex; gap: 6px; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+        .mode-btn { padding: 6px 12px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-base); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.78rem; }
+        .mode-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+        .quiz-prompt { text-align: center; padding: 18px; background: var(--bg-base); border-radius: 10px; margin-bottom: 12px; color: var(--text-primary); font-weight: 600; font-size: 1.05rem; }
+        .quiz-prompt .big-flag { font-size: 4rem; display: block; margin-bottom: 6px; }
+        .quiz-opts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .quiz-opt { padding: 12px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 600; color: var(--text-primary); font-size: 0.92rem; }
+        .quiz-opt:hover { border-color: #2563eb; }
+        .quiz-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; }
+        .quiz-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="geo-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="espanya.html">Espanya</a>
+    <a href="europa.html" class="active">Europa</a>
+    <a href="mon.html">Món</a>
+    <a href="fisic.html">Físic</a>
+</div>
+
+<div class="container">
+    <h1><span>Europa</span></h1>
+    <p class="subtitle">Països, banderes i capitals d'Europa. 27 estats de la UE marcats amb ⭐.</p>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('list')">Llista de països</button>
+        <button class="tab-btn" onclick="showTab('quiz')">Quiz de banderes</button>
+    </div>
+
+    <div id="content"></div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const EURO = [
+    { flag: '🇪🇸', name: 'Espanya', cap: 'Madrid', eu: true },
+    { flag: '🇫🇷', name: 'França', cap: 'París', eu: true },
+    { flag: '🇩🇪', name: 'Alemanya', cap: 'Berlín', eu: true },
+    { flag: '🇮🇹', name: 'Itàlia', cap: 'Roma', eu: true },
+    { flag: '🇵🇹', name: 'Portugal', cap: 'Lisboa', eu: true },
+    { flag: '🇬🇧', name: 'Regne Unit', cap: 'Londres', eu: false },
+    { flag: '🇮🇪', name: 'Irlanda', cap: 'Dublín', eu: true },
+    { flag: '🇳🇱', name: 'Països Baixos', cap: 'Amsterdam', eu: true },
+    { flag: '🇧🇪', name: 'Bèlgica', cap: 'Brussel·les', eu: true },
+    { flag: '🇱🇺', name: 'Luxemburg', cap: 'Luxemburg', eu: true },
+    { flag: '🇨🇭', name: 'Suïssa', cap: 'Berna', eu: false },
+    { flag: '🇦🇹', name: 'Àustria', cap: 'Viena', eu: true },
+    { flag: '🇩🇰', name: 'Dinamarca', cap: 'Copenhaguen', eu: true },
+    { flag: '🇸🇪', name: 'Suècia', cap: 'Estocolm', eu: true },
+    { flag: '🇳🇴', name: 'Noruega', cap: 'Oslo', eu: false },
+    { flag: '🇫🇮', name: 'Finlàndia', cap: 'Hèlsinki', eu: true },
+    { flag: '🇮🇸', name: 'Islàndia', cap: 'Reykjavík', eu: false },
+    { flag: '🇵🇱', name: 'Polònia', cap: 'Varsòvia', eu: true },
+    { flag: '🇨🇿', name: 'República Txeca', cap: 'Praga', eu: true },
+    { flag: '🇸🇰', name: 'Eslovàquia', cap: 'Bratislava', eu: true },
+    { flag: '🇭🇺', name: 'Hongria', cap: 'Budapest', eu: true },
+    { flag: '🇷🇴', name: 'Romania', cap: 'Bucarest', eu: true },
+    { flag: '🇧🇬', name: 'Bulgària', cap: 'Sofia', eu: true },
+    { flag: '🇬🇷', name: 'Grècia', cap: 'Atenes', eu: true },
+    { flag: '🇭🇷', name: 'Croàcia', cap: 'Zagreb', eu: true },
+    { flag: '🇷🇸', name: 'Sèrbia', cap: 'Belgrad', eu: false },
+    { flag: '🇺🇦', name: 'Ucraïna', cap: 'Kíiv', eu: false },
+    { flag: '🇷🇺', name: 'Rússia', cap: 'Moscou', eu: false },
+    { flag: '🇹🇷', name: 'Turquia', cap: 'Ankara', eu: false }
+];
+
+let mode = 'flag->country';
+let correct = 0, wrong = 0;
+
+function showTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event?.target?.classList?.add('active');
+    const c = document.getElementById('content');
+    if (tab === 'list') {
+        c.innerHTML = `
+            <div class="countries-grid">
+                ${EURO.map(e => `
+                    <div class="country-card">
+                        <span class="flag">${e.flag}</span>
+                        <div class="cname">${e.name}${e.eu ? ' ⭐' : ''}</div>
+                        <div class="cap">🏛️ ${e.cap}</div>
+                    </div>
+                `).join('')}
+            </div>
+            <p style="text-align:center;color:var(--text-secondary);font-size:0.85rem;margin-top:14px;">⭐ = membres de la <strong>Unió Europea</strong> (27 estats actualment).</p>
+        `;
+    } else {
+        c.innerHTML = `
+            <div class="quiz-box">
+                <h2>&#x1F3AF; Quiz infinit</h2>
+                <div class="quiz-mode">
+                    <button class="mode-btn active" onclick="setMode('flag->country')">Bandera → País</button>
+                    <button class="mode-btn" onclick="setMode('country->cap')">País → Capital</button>
+                    <button class="mode-btn" onclick="setMode('cap->country')">Capital → País</button>
+                </div>
+                <div class="quiz-prompt" id="qP"></div>
+                <div class="quiz-opts" id="qO"></div>
+                <div class="score" id="sc">Encerts: ${correct} &bull; Errors: ${wrong}</div>
+            </div>
+        `;
+        newQuiz();
+    }
+}
+
+function setMode(m) { mode = m; document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); newQuiz(); }
+
+function newQuiz() {
+    const item = EURO[Math.floor(Math.random() * EURO.length)];
+    const wrong3 = EURO.filter(e => e.name !== item.name).sort(() => Math.random() - 0.5).slice(0, 3);
+    const pool = [...wrong3, item].sort(() => Math.random() - 0.5);
+
+    const qP = document.getElementById('qP');
+    const qO = document.getElementById('qO');
+    qO.innerHTML = '';
+
+    if (mode === 'flag->country') {
+        qP.innerHTML = `<span class="big-flag">${item.flag}</span>De quin país és aquesta bandera?`;
+        pool.forEach(e => addOpt(e.name, e.name === item.name, qO));
+    } else if (mode === 'country->cap') {
+        qP.textContent = `Quina és la capital de ${item.name}?`;
+        pool.forEach(e => addOpt(e.cap, e.name === item.name, qO));
+    } else {
+        qP.textContent = `De quin país és capital ${item.cap}?`;
+        pool.forEach(e => addOpt(e.name, e.name === item.name, qO));
+    }
+}
+
+function addOpt(label, isCorrect, container) {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = label;
+    btn.onclick = () => {
+        if (isCorrect) { btn.classList.add('correct'); correct++; setTimeout(newQuiz, 800); }
+        else { btn.classList.add('wrong'); wrong++; }
+        document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+    };
+    container.appendChild(btn);
+}
+
+showTab('list');
+</script>
+</body>
+</html>

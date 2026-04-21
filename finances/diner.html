@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diner - Finances</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .fin-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .fin-nav { background: rgba(9, 9, 11, 0.75); }
+        .fin-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .fin-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .fin-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .fin-nav a.home { color: #ca8a04; font-weight: 600; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #ca8a04, #facc15); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .tabs { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .tab-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .tab-btn:hover { border-color: #ca8a04; color: #ca8a04; }
+        .tab-btn.active { background: #ca8a04; color: #fff; border-color: #ca8a04; }
+
+        .coins-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .coin-card { background: var(--bg-raised); border-radius: 12px; padding: 16px; border: 1px solid var(--border-subtle); text-align: center; }
+        .coin-card .value { font-size: 1.6rem; font-weight: 900; color: #ca8a04; }
+        .coin-card .type { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
+
+        .exercise { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-top: 16px; }
+        .exercise h2 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 14px; text-align: center; }
+        .ex-prompt { text-align: center; padding: 16px; background: var(--bg-base); border-radius: 10px; margin-bottom: 14px; font-size: 1rem; color: var(--text-primary); }
+        .ex-prompt .big-num { display: block; font-size: 2rem; color: #ca8a04; font-weight: 900; margin: 6px 0; }
+        .input-row { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+        .input-row input { padding: 10px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-primary); font-size: 1rem; font-weight: 700; max-width: 140px; text-align: center; }
+        .input-row input:focus { outline: none; border-color: #ca8a04; }
+        .btn { padding: 10px 20px; border-radius: var(--radius-full); border: none; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
+        .btn-check { background: #ca8a04; color: #fff; }
+        .btn-check:hover { background: #facc15; }
+        .btn-new { background: var(--bg-raised); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { border-color: #ca8a04; color: #ca8a04; }
+        .feedback { text-align: center; padding: 12px; border-radius: 10px; margin-top: 12px; font-weight: 600; display: none; }
+        .feedback.ok { background: rgba(34, 197, 94, 0.15); color: #16a34a; display: block; }
+        .feedback.ko { background: rgba(239, 68, 68, 0.15); color: #dc2626; display: block; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="fin-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="diner.html" class="active">Diner</a>
+    <a href="pressupost.html">Pressupost</a>
+    <a href="interes.html">Interès</a>
+    <a href="compres.html">Compres</a>
+</div>
+
+<div class="container">
+    <h1><span>El diner</span></h1>
+    <p class="subtitle">Monedes i bitllets d'euro. Aprèn a sumar i donar canvi.</p>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="show('list')">Monedes i bitllets</button>
+        <button class="tab-btn" onclick="show('sum')">Suma de diners</button>
+        <button class="tab-btn" onclick="show('change')">Calcular canvi</button>
+    </div>
+
+    <div id="content"></div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const COINS = [
+    { value: '1 cèntim', type: '🪙 moneda', num: 0.01 },
+    { value: '2 cèntims', type: '🪙 moneda', num: 0.02 },
+    { value: '5 cèntims', type: '🪙 moneda', num: 0.05 },
+    { value: '10 cèntims', type: '🪙 moneda', num: 0.10 },
+    { value: '20 cèntims', type: '🪙 moneda', num: 0.20 },
+    { value: '50 cèntims', type: '🪙 moneda', num: 0.50 },
+    { value: '1 €', type: '🪙 moneda', num: 1 },
+    { value: '2 €', type: '🪙 moneda', num: 2 },
+    { value: '5 €', type: '💵 bitllet', num: 5 },
+    { value: '10 €', type: '💵 bitllet', num: 10 },
+    { value: '20 €', type: '💵 bitllet', num: 20 },
+    { value: '50 €', type: '💵 bitllet', num: 50 },
+    { value: '100 €', type: '💵 bitllet', num: 100 },
+    { value: '200 €', type: '💵 bitllet', num: 200 },
+    { value: '500 €', type: '💵 bitllet', num: 500 }
+];
+
+let correct = 0, wrong = 0;
+let currentAnswer = 0;
+
+function show(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event?.target?.classList?.add('active');
+    const c = document.getElementById('content');
+    if (tab === 'list') {
+        c.innerHTML = `
+            <div class="coins-grid">
+                ${COINS.map(x => `<div class="coin-card"><div class="value">${x.value}</div><div class="type">${x.type}</div></div>`).join('')}
+            </div>
+            <p style="text-align:center;color:var(--text-secondary);font-size:0.88rem;">L'euro té <strong>8 monedes</strong> (1c, 2c, 5c, 10c, 20c, 50c, 1€, 2€) i <strong>7 bitllets</strong> (5€, 10€, 20€, 50€, 100€, 200€, 500€). Un euro equival a 100 cèntims.</p>
+        `;
+    } else if (tab === 'sum') {
+        c.innerHTML = `
+            <div class="exercise">
+                <h2>&#x2795; Quantes monedes tinc? (€)</h2>
+                <div class="ex-prompt" id="prompt"></div>
+                <div class="input-row">
+                    <input type="number" step="0.01" id="ans" placeholder="€" onkeyup="if(event.key==='Enter') checkSum()">
+                    <button class="btn btn-check" onclick="checkSum()">Comprovar</button>
+                    <button class="btn btn-new" onclick="newSum()">Nou</button>
+                </div>
+                <div class="feedback" id="fb"></div>
+                <div class="score" id="sc">Encerts: ${correct} &bull; Errors: ${wrong}</div>
+            </div>
+        `;
+        newSum();
+    } else {
+        c.innerHTML = `
+            <div class="exercise">
+                <h2>&#x1F4B8; Quin canvi m'han de tornar?</h2>
+                <div class="ex-prompt" id="prompt"></div>
+                <div class="input-row">
+                    <input type="number" step="0.01" id="ans" placeholder="€" onkeyup="if(event.key==='Enter') checkSum()">
+                    <button class="btn btn-check" onclick="checkSum()">Comprovar</button>
+                    <button class="btn btn-new" onclick="newChange()">Nou</button>
+                </div>
+                <div class="feedback" id="fb"></div>
+                <div class="score" id="sc">Encerts: ${correct} &bull; Errors: ${wrong}</div>
+            </div>
+        `;
+        newChange();
+    }
+}
+
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function newSum() {
+    const n = 3 + Math.floor(Math.random() * 4);
+    const chosen = [];
+    let total = 0;
+    for (let i = 0; i < n; i++) {
+        const c = pick(COINS);
+        chosen.push(c);
+        total += c.num;
+    }
+    total = Math.round(total * 100) / 100;
+    currentAnswer = total;
+    document.getElementById('prompt').innerHTML = `Tens: ${chosen.map(c => c.value).join(' + ')}<br><span class="big-num">? €</span>`;
+    document.getElementById('ans').value = '';
+    document.getElementById('ans').focus();
+    document.getElementById('fb').className = 'feedback';
+}
+
+function newChange() {
+    const price = Math.round((1 + Math.random() * 48) * 100) / 100;
+    const bills = [5, 10, 20, 50, 100];
+    const payment = bills.find(b => b > price) || 100;
+    currentAnswer = Math.round((payment - price) * 100) / 100;
+    document.getElementById('prompt').innerHTML = `Compres una cosa que val <strong>${price.toFixed(2)} €</strong>.<br>Pagues amb un bitllet de <strong>${payment} €</strong>.<br><span class="big-num">Canvi = ? €</span>`;
+    document.getElementById('ans').value = '';
+    document.getElementById('ans').focus();
+    document.getElementById('fb').className = 'feedback';
+}
+
+function checkSum() {
+    const v = parseFloat(document.getElementById('ans').value);
+    const fb = document.getElementById('fb');
+    if (Math.abs(v - currentAnswer) < 0.005) {
+        fb.className = 'feedback ok';
+        fb.textContent = `✓ Correcte! Són ${currentAnswer.toFixed(2)} €`;
+        correct++;
+    } else {
+        fb.className = 'feedback ko';
+        fb.textContent = `✗ No. La resposta era ${currentAnswer.toFixed(2)} €`;
+        wrong++;
+    }
+    document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+}
+
+show('list');
+</script>
+</body>
+</html>

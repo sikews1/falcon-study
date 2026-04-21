@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estats de la matèria</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .fq-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .fq-nav { background: rgba(9, 9, 11, 0.75); }
+        .fq-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .fq-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .fq-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .fq-nav a.home { color: #be185d; font-weight: 600; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #2563eb, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .states { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        @media (max-width: 640px) { .states { grid-template-columns: 1fr; } }
+        .state-card { background: var(--bg-raised); border-radius: var(--radius-lg); border: 2px solid var(--border-subtle); padding: 18px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .state-card:hover { transform: translateY(-3px); }
+        .state-card.active { border-color: #2563eb; background: rgba(37, 99, 235, 0.05); }
+        .state-card.solid { border-top: 4px solid #16a34a; }
+        .state-card.liquid { border-top: 4px solid #2563eb; }
+        .state-card.gas { border-top: 4px solid #ef4444; }
+        .state-card h3 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 4px; }
+        .state-card .emoji { font-size: 2.5rem; margin-bottom: 6px; }
+        .state-card .temp { color: var(--text-secondary); font-size: 0.8rem; }
+
+        .simulator { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 22px; margin-bottom: 14px; }
+        .simulator h2 { color: var(--text-primary); font-size: 1.1rem; margin-bottom: 14px; text-align: center; }
+
+        .canvas-box { background: var(--bg-base); border-radius: 12px; padding: 16px; position: relative; overflow: hidden; height: 250px; margin-bottom: 14px; }
+        .particle { position: absolute; width: 16px; height: 16px; background: #2563eb; border-radius: 50%; transition: all 0.6s ease-in-out; }
+
+        .temp-slider { margin: 14px 0; }
+        .temp-slider label { display: flex; justify-content: space-between; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 6px; }
+        .temp-slider input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: linear-gradient(90deg, #16a34a 0%, #2563eb 50%, #ef4444 100%); border-radius: 4px; outline: none; }
+        .temp-slider input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fff; border: 3px solid #be185d; border-radius: 50%; cursor: pointer; }
+
+        .current-state { text-align: center; padding: 14px; background: var(--bg-base); border-radius: 12px; font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
+        .current-state .emoji { font-size: 1.5rem; margin-right: 8px; }
+
+        .info-card { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 20px; margin-top: 14px; }
+        .info-card h3 { color: var(--text-primary); font-size: 1rem; margin-bottom: 10px; }
+        .info-card .changes { display: grid; gap: 8px; }
+        .info-card .change { display: flex; gap: 10px; align-items: center; padding: 10px 14px; background: var(--bg-base); border-radius: 10px; font-size: 0.9rem; color: var(--text-secondary); }
+        .info-card .change strong { color: var(--text-primary); }
+        .info-card .arrow { color: #be185d; font-weight: 700; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+
+<div class="fq-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="estats.html" class="active">Estats</a>
+    <a href="taula.html">Taula periòdica</a>
+    <a href="reaccions.html">Reaccions</a>
+    <a href="mecanica.html">Mecànica</a>
+</div>
+
+<div class="container">
+    <h1><span>Estats</span> de la matèria</h1>
+    <p class="subtitle">Sòlid, líquid, gas. Mou el termòmetre per veure com canvien les partícules.</p>
+
+    <div class="states">
+        <div class="state-card solid" onclick="setTemp(-10)">
+            <div class="emoji">🧊</div>
+            <h3>Sòlid</h3>
+            <div class="temp">Fred</div>
+        </div>
+        <div class="state-card liquid" onclick="setTemp(50)">
+            <div class="emoji">💧</div>
+            <h3>Líquid</h3>
+            <div class="temp">Temperatura mitjana</div>
+        </div>
+        <div class="state-card gas" onclick="setTemp(150)">
+            <div class="emoji">💨</div>
+            <h3>Gas</h3>
+            <div class="temp">Molt calent</div>
+        </div>
+    </div>
+
+    <div class="simulator">
+        <h2>&#x1F321;&#xFE0F; Simulador de partícules</h2>
+        <div class="canvas-box" id="canvas"></div>
+        <div class="temp-slider">
+            <label><span>Temperatura</span><span id="tempLabel">25°C</span></label>
+            <input type="range" id="temp" min="-30" max="200" value="25" oninput="setTemp(this.value)">
+        </div>
+        <div class="current-state" id="current">
+            <span class="emoji">💧</span>L'aigua està en estat <strong>líquid</strong>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <h3>🔄 Canvis d'estat</h3>
+        <div class="changes">
+            <div class="change">🧊 Sòlid <span class="arrow">→</span> 💧 Líquid &nbsp;&bull;&nbsp; <strong>Fusió</strong> (quan escalfes gel, es converteix en aigua)</div>
+            <div class="change">💧 Líquid <span class="arrow">→</span> 🧊 Sòlid &nbsp;&bull;&nbsp; <strong>Solidificació</strong> (aigua que es congela)</div>
+            <div class="change">💧 Líquid <span class="arrow">→</span> 💨 Gas &nbsp;&bull;&nbsp; <strong>Evaporació</strong> (aigua bullint que es torna vapor)</div>
+            <div class="change">💨 Gas <span class="arrow">→</span> 💧 Líquid &nbsp;&bull;&nbsp; <strong>Condensació</strong> (vapor d'aigua que forma gotes)</div>
+            <div class="change">🧊 Sòlid <span class="arrow">→</span> 💨 Gas &nbsp;&bull;&nbsp; <strong>Sublimació</strong> (gel sec, boletes de naftalina)</div>
+        </div>
+        <p style="margin-top: 14px; color: var(--text-secondary); font-size: 0.88rem; line-height: 1.7;">En l'<strong>aigua</strong>, el punt de fusió és <strong>0°C</strong> i el d'ebullició és <strong>100°C</strong> (a pressió atmosfèrica normal).</p>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const canvas = document.getElementById('canvas');
+const N = 20;
+const particles = [];
+
+for (let i = 0; i < N; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    canvas.appendChild(p);
+    particles.push(p);
+}
+
+function setTemp(t) {
+    t = parseFloat(t);
+    document.getElementById('temp').value = t;
+    document.getElementById('tempLabel').textContent = t + '°C';
+
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width - 20;
+    const h = rect.height - 20;
+
+    let state, emoji, stateLabel;
+    if (t < 0) { state = 'solid'; emoji = '🧊'; stateLabel = 'sòlid'; }
+    else if (t < 100) { state = 'liquid'; emoji = '💧'; stateLabel = 'líquid'; }
+    else { state = 'gas'; emoji = '💨'; stateLabel = 'gas'; }
+
+    document.getElementById('current').innerHTML = `<span class="emoji">${emoji}</span>L'aigua està en estat <strong>${stateLabel}</strong>`;
+    document.querySelectorAll('.state-card').forEach(c => c.classList.remove('active'));
+    document.querySelector('.state-card.' + state)?.classList.add('active');
+
+    particles.forEach((p, i) => {
+        let x, y;
+        if (state === 'solid') {
+            // Tight grid
+            const cols = 5;
+            x = (i % cols) * 30 + 10 + w * 0.25;
+            y = Math.floor(i / cols) * 30 + h - 120;
+            p.style.background = '#16a34a';
+        } else if (state === 'liquid') {
+            // Spread at bottom
+            x = Math.random() * w + 10;
+            y = Math.random() * (h / 2) + h / 2;
+            p.style.background = '#2563eb';
+        } else {
+            // Everywhere
+            x = Math.random() * w + 10;
+            y = Math.random() * h + 10;
+            p.style.background = '#ef4444';
+        }
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+    });
+}
+
+setTimeout(() => setTemp(25), 100);
+
+// Subtle wiggle for gas/liquid
+setInterval(() => {
+    const t = parseFloat(document.getElementById('temp').value);
+    if (t < 0) return;
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width - 20;
+    const h = rect.height - 20;
+    particles.forEach(p => {
+        const x = parseFloat(p.style.left);
+        const y = parseFloat(p.style.top);
+        const jitter = t < 100 ? 10 : 30;
+        const nx = Math.max(0, Math.min(w, x + (Math.random() - 0.5) * jitter));
+        const ny = t < 100 ? Math.max(h/2, Math.min(h, y + (Math.random() - 0.5) * jitter)) : Math.max(0, Math.min(h, y + (Math.random() - 0.5) * jitter));
+        p.style.left = nx + 'px';
+        p.style.top = ny + 'px';
+    });
+}, 700);
+</script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animals - Naturals</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .nat-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .nat-nav { background: rgba(9, 9, 11, 0.75); }
+        .nat-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .nat-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .nat-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .nat-nav a.home { color: #16a34a; font-weight: 600; }
+
+        .container { max-width: 760px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #ea580c, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .tabs { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .tab-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .tab-btn:hover { border-color: #ea580c; color: #ea580c; }
+        .tab-btn.active { background: #ea580c; color: #fff; border-color: #ea580c; }
+
+        .classes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .class-card { background: var(--bg-raised); border-radius: 12px; border: 1px solid var(--border-subtle); padding: 16px; text-align: center; transition: all 0.2s; }
+        .class-card:hover { border-color: #ea580c; transform: translateY(-2px); }
+        .class-card .emoji { font-size: 2rem; margin-bottom: 6px; }
+        .class-card h3 { font-size: 0.95rem; color: var(--text-primary); margin-bottom: 4px; }
+        .class-card p { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; }
+
+        .chain-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-bottom: 18px; }
+        .chain-box h2 { color: #ea580c; font-size: 1.15rem; margin-bottom: 12px; }
+        .chain { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; padding: 10px; }
+        .chain-link { background: var(--bg-base); padding: 12px; border-radius: 12px; text-align: center; min-width: 100px; border: 2px solid var(--border-subtle); }
+        .chain-link .emoji { font-size: 1.8rem; display: block; margin-bottom: 4px; }
+        .chain-link .name { font-size: 0.78rem; font-weight: 700; color: var(--text-primary); }
+        .chain-link .role { font-size: 0.68rem; color: var(--text-muted); }
+        .chain-arrow { color: #ea580c; font-weight: 900; font-size: 1.2rem; }
+
+        .quiz-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; }
+        .quiz-box h2 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 14px; }
+        .quiz-anim { text-align: center; margin-bottom: 10px; }
+        .quiz-emoji { font-size: 4rem; }
+        .quiz-prompt { text-align: center; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; }
+        .quiz-opts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .quiz-opt { padding: 12px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 600; color: var(--text-primary); font-size: 0.92rem; }
+        .quiz-opt:hover { border-color: #ea580c; }
+        .quiz-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; }
+        .quiz-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="nat-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="cos-huma.html">Cos humà</a>
+    <a href="sistemes.html">Sistemes</a>
+    <a href="animals.html" class="active">Animals</a>
+    <a href="plantes.html">Plantes</a>
+</div>
+
+<div class="container">
+    <h1><span>Animals</span></h1>
+    <p class="subtitle">Classificació, característiques i cadenes alimentàries</p>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('classes')">Classificació</button>
+        <button class="tab-btn" onclick="showTab('chains')">Cadenes alimentàries</button>
+        <button class="tab-btn" onclick="showTab('quiz')">Quiz de fotos</button>
+    </div>
+
+    <div id="content"></div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const CLASSES = [
+    { emoji: '🦒', name: 'Mamífers', key: ['tenen pèl', 'fan llet', 'vivípars'], desc: 'Tenen pèl, alimenten les cries amb llet. Neixen del ventre de la mare.', examples: ['🐶', '🐱', '🐘', '🦁', '🐴', '🐰', '🐒', '🐳'] },
+    { emoji: '🦅', name: 'Aus', key: ['plomes', 'bec', 'ous'], desc: 'Tenen plomes, bec i dues ales. Ponen ous.', examples: ['🦅', '🦉', '🐔', '🦆', '🦜', '🐧', '🕊️'] },
+    { emoji: '🐟', name: 'Peixos', key: ['escames', 'brànquies', 'aigua'], desc: 'Viuen a l\'aigua. Tenen escames i respiren per brànquies.', examples: ['🐠', '🐟', '🦈', '🐡', '🐙'] },
+    { emoji: '🐍', name: 'Rèptils', key: ['escames', 'sang freda', 'ous'], desc: 'Tenen la pell amb escames i sang freda (la seva temperatura depèn del sol).', examples: ['🐊', '🦎', '🐍', '🐢'] },
+    { emoji: '🐸', name: 'Amfibis', key: ['pell humida', 'aigua i terra'], desc: 'Viuen part de la vida a l\'aigua i part a la terra. Pell humida.', examples: ['🐸', '🦎', '🪰'] },
+    { emoji: '🦋', name: 'Invertebrats', key: ['sense columna', 'insectes, mol·luscs'], desc: 'No tenen columna vertebral. Inclou insectes, aranyes, cargols, estrelles de mar...', examples: ['🦋', '🐝', '🐜', '🕷️', '🦀', '🐌', '🦑'] }
+];
+
+const CHAINS = [
+    {
+        name: 'Cadena del bosc',
+        links: [
+            { emoji: '☀️', name: 'Sol', role: 'energia' },
+            { emoji: '🌳', name: 'Arbre', role: 'productor' },
+            { emoji: '🦌', name: 'Cérvol', role: 'consumidor 1r' },
+            { emoji: '🐺', name: 'Llop', role: 'consumidor 2n' },
+            { emoji: '🦠', name: 'Bacteris', role: 'descomponedor' }
+        ]
+    },
+    {
+        name: 'Cadena de l\'oceà',
+        links: [
+            { emoji: '☀️', name: 'Sol', role: 'energia' },
+            { emoji: '🌱', name: 'Algues', role: 'productor' },
+            { emoji: '🐟', name: 'Peix petit', role: 'consumidor 1r' },
+            { emoji: '🐡', name: 'Peix mitjà', role: 'consumidor 2n' },
+            { emoji: '🦈', name: 'Tauró', role: 'consumidor 3r' }
+        ]
+    },
+    {
+        name: 'Cadena del camp',
+        links: [
+            { emoji: '☀️', name: 'Sol', role: 'energia' },
+            { emoji: '🌾', name: 'Herba', role: 'productor' },
+            { emoji: '🐛', name: 'Cuc', role: 'consumidor 1r' },
+            { emoji: '🐦', name: 'Ocell', role: 'consumidor 2n' },
+            { emoji: '🦅', name: 'Àguila', role: 'consumidor 3r' }
+        ]
+    }
+];
+
+const QUIZ_POOL = [
+    { emoji: '🐘', correct: 'Mamífers' },
+    { emoji: '🦅', correct: 'Aus' },
+    { emoji: '🐟', correct: 'Peixos' },
+    { emoji: '🐊', correct: 'Rèptils' },
+    { emoji: '🐸', correct: 'Amfibis' },
+    { emoji: '🦋', correct: 'Invertebrats' },
+    { emoji: '🐺', correct: 'Mamífers' },
+    { emoji: '🦉', correct: 'Aus' },
+    { emoji: '🦈', correct: 'Peixos' },
+    { emoji: '🐍', correct: 'Rèptils' },
+    { emoji: '🦀', correct: 'Invertebrats' },
+    { emoji: '🐢', correct: 'Rèptils' },
+    { emoji: '🐳', correct: 'Mamífers' },
+    { emoji: '🐝', correct: 'Invertebrats' },
+    { emoji: '🐧', correct: 'Aus' },
+    { emoji: '🦑', correct: 'Invertebrats' }
+];
+
+let correct = 0, wrong = 0;
+
+function showTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event?.target?.classList?.add('active');
+    const c = document.getElementById('content');
+
+    if (tab === 'classes') {
+        c.innerHTML = `
+            <div class="classes-grid">
+                ${CLASSES.map(cl => `
+                    <div class="class-card">
+                        <div class="emoji">${cl.emoji}</div>
+                        <h3>${cl.name}</h3>
+                        <p>${cl.desc}</p>
+                        <p style="margin-top:8px;font-size:1.2rem;">${cl.examples.join(' ')}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    } else if (tab === 'chains') {
+        c.innerHTML = CHAINS.map(ch => `
+            <div class="chain-box">
+                <h2>${ch.name}</h2>
+                <div class="chain">
+                    ${ch.links.map((l, i) => `
+                        <div class="chain-link">
+                            <span class="emoji">${l.emoji}</span>
+                            <div class="name">${l.name}</div>
+                            <div class="role">${l.role}</div>
+                        </div>
+                        ${i < ch.links.length - 1 ? '<span class="chain-arrow">→</span>' : ''}
+                    `).join('')}
+                </div>
+            </div>
+        `).join('') + `<p style="text-align:center;color:var(--text-secondary);font-size:0.85rem;margin-top:10px;">L'<strong>energia</strong> sempre flueix del sol cap als productors, després als consumidors. Els <strong>descomponedors</strong> (bacteris, fongs) reciclen la matèria morta.</p>`;
+    } else {
+        c.innerHTML = `
+            <div class="quiz-box">
+                <h2>&#x1F3AF; A quin grup pertany?</h2>
+                <div class="quiz-anim"><div class="quiz-emoji" id="qE"></div></div>
+                <div class="quiz-prompt" id="qP">A quin grup pertany aquest animal?</div>
+                <div class="quiz-opts" id="qO"></div>
+                <div class="score" id="sc">Encerts: ${correct} &bull; Errors: ${wrong}</div>
+            </div>
+        `;
+        newQuiz();
+    }
+}
+
+function newQuiz() {
+    const item = QUIZ_POOL[Math.floor(Math.random() * QUIZ_POOL.length)];
+    const allGroups = CLASSES.map(c => c.name);
+    const wrong3 = allGroups.filter(g => g !== item.correct).sort(() => Math.random() - 0.5).slice(0, 3);
+    const opts = [...wrong3, item.correct].sort(() => Math.random() - 0.5);
+
+    document.getElementById('qE').textContent = item.emoji;
+    const oDiv = document.getElementById('qO');
+    oDiv.innerHTML = '';
+    opts.forEach(o => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = o;
+        btn.onclick = () => {
+            if (o === item.correct) { btn.classList.add('correct'); correct++; setTimeout(newQuiz, 800); }
+            else { btn.classList.add('wrong'); wrong++; }
+            document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+        oDiv.appendChild(btn);
+    });
+}
+
+showTab('classes');
+</script>
+</body>
+</html>

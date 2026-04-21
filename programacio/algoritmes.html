@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algoritmes - Programació</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .pr-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .pr-nav { background: rgba(9, 9, 11, 0.75); }
+        .pr-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .pr-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .pr-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .pr-nav a.home { color: #4338ca; font-weight: 600; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #ea580c, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .info { background: rgba(234, 88, 12, 0.06); border-left: 3px solid #ea580c; padding: 14px 18px; border-radius: 0 12px 12px 0; margin-bottom: 18px; color: var(--text-secondary); line-height: 1.7; font-size: 0.92rem; }
+        .info strong { color: var(--text-primary); }
+
+        .exercise { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-bottom: 14px; }
+        .exercise h2 { color: var(--text-primary); font-size: 1.1rem; margin-bottom: 10px; text-align: center; }
+        .exercise .desc { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 18px; }
+
+        .steps-area { display: flex; flex-direction: column; gap: 10px; min-height: 300px; }
+        .step-card {
+            background: var(--bg-base);
+            border: 2px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 14px 18px;
+            cursor: move;
+            transition: all 0.15s;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-primary);
+        }
+        .step-card:hover { border-color: #ea580c; background: var(--bg-raised); }
+        .step-card.dragging { opacity: 0.4; }
+        .step-card.over { border-color: #16a34a; background: rgba(34, 197, 94, 0.05); }
+        .step-card .handle { color: var(--text-muted); font-size: 1.2rem; }
+        .step-card .emoji { font-size: 1.4rem; }
+        .step-card .text { flex: 1; font-size: 0.95rem; }
+        .step-card .num { background: #ea580c; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+
+        .actions { display: flex; gap: 8px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+        .btn { padding: 10px 20px; border-radius: var(--radius-full); border: none; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
+        .btn-check { background: #ea580c; color: #fff; }
+        .btn-check:hover { background: #f97316; }
+        .btn-new { background: var(--bg-base); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { border-color: #ea580c; color: #ea580c; }
+
+        .feedback { text-align: center; padding: 12px; border-radius: 10px; margin-top: 12px; font-weight: 600; display: none; }
+        .feedback.ok { background: rgba(34, 197, 94, 0.15); color: #16a34a; display: block; }
+        .feedback.ko { background: rgba(239, 68, 68, 0.15); color: #dc2626; display: block; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="pr-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="logica.html">Lògica</a>
+    <a href="blocs.html">Blocs</a>
+    <a href="python.html">Python</a>
+    <a href="algoritmes.html" class="active">Algoritmes</a>
+</div>
+
+<div class="container">
+    <h1><span>Algoritmes</span></h1>
+    <p class="subtitle">Ordena els passos en la seqüència correcta. Arrossega les targetes!</p>
+
+    <div class="info">
+        Un <strong>algoritme</strong> és una sèrie de passos ordenats per resoldre un problema. Els ordinadors els segueixen al peu de la lletra. Si canvies l'ordre, no funciona!
+    </div>
+
+    <div class="exercise">
+        <h2 id="title"></h2>
+        <div class="desc" id="desc"></div>
+        <div class="steps-area" id="steps"></div>
+        <div class="actions">
+            <button class="btn btn-check" onclick="check()">✓ Comprovar ordre</button>
+            <button class="btn btn-new" onclick="loadExercise()">🔄 Nou algoritme</button>
+        </div>
+        <div class="feedback" id="fb"></div>
+        <div class="score" id="sc">Encerts: 0 &bull; Errors: 0</div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const ALGORITHMS = [
+    {
+        title: '🍳 Fer un ou ferrat',
+        desc: 'Quin és l\'ordre correcte per fer un ou ferrat?',
+        steps: [
+            { e: '🔥', t: 'Encendre el foc i posar la paella' },
+            { e: '🫒', t: 'Afegir una mica d\'oli' },
+            { e: '🥚', t: 'Trencar l\'ou a la paella' },
+            { e: '🧂', t: 'Afegir una mica de sal' },
+            { e: '🍳', t: 'Esperar fins que es cogui' },
+            { e: '🍽️', t: 'Servir-lo al plat' }
+        ]
+    },
+    {
+        title: '🦷 Rentar-se les dents',
+        desc: 'Posa els passos en ordre:',
+        steps: [
+            { e: '🚪', t: 'Entrar al bany' },
+            { e: '🪥', t: 'Agafar el raspall' },
+            { e: '🧴', t: 'Posar pasta de dents al raspall' },
+            { e: '🦷', t: 'Raspallar totes les dents 2 min' },
+            { e: '💧', t: 'Aclarir amb aigua' },
+            { e: '😊', t: 'Somriure al mirall' }
+        ]
+    },
+    {
+        title: '📚 Fer els deures',
+        desc: 'Com ho faries?',
+        steps: [
+            { e: '📖', t: 'Obrir l\'agenda' },
+            { e: '📝', t: 'Mirar quins deures cal fer' },
+            { e: '🎒', t: 'Treure els llibres de la motxilla' },
+            { e: '✏️', t: 'Fer els exercicis un per un' },
+            { e: '✅', t: 'Revisar que tot estigui bé' },
+            { e: '🎒', t: 'Guardar-ho tot a la motxilla' }
+        ]
+    },
+    {
+        title: '🛒 Fer la compra',
+        desc: 'L\'ordre lògic per anar al supermercat:',
+        steps: [
+            { e: '📋', t: 'Fer la llista del que cal' },
+            { e: '💰', t: 'Agafar els diners o targeta' },
+            { e: '🚶', t: 'Anar al supermercat' },
+            { e: '🛒', t: 'Posar els productes al carro' },
+            { e: '💳', t: 'Pagar a la caixa' },
+            { e: '🏠', t: 'Tornar a casa i guardar-ho tot' }
+        ]
+    },
+    {
+        title: '💾 Guardar un document',
+        desc: 'Què fas per guardar un treball a l\'ordinador?',
+        steps: [
+            { e: '⌨️', t: 'Acabar d\'escriure' },
+            { e: '📁', t: 'Clicar a Fitxer > Guardar com' },
+            { e: '📝', t: 'Triar el nom del document' },
+            { e: '📂', t: 'Triar la carpeta on desar-lo' },
+            { e: '✅', t: 'Clicar Guardar' },
+            { e: '🚪', t: 'Tancar el programa amb seguretat' }
+        ]
+    },
+    {
+        title: '🌱 Plantar una llavor',
+        desc: 'Com ho fas?',
+        steps: [
+            { e: '🪴', t: 'Agafar un test amb terra' },
+            { e: '🕳️', t: 'Fer un forat petit amb el dit' },
+            { e: '🌰', t: 'Posar la llavor al forat' },
+            { e: '🫘', t: 'Cobrir-la amb una mica de terra' },
+            { e: '💧', t: 'Regar amb aigua' },
+            { e: '☀️', t: 'Posar-lo al sol i esperar' }
+        ]
+    }
+];
+
+let currentAlg = null;
+let userOrder = [];
+let correct = 0, wrong = 0;
+
+function loadExercise() {
+    currentAlg = ALGORITHMS[Math.floor(Math.random() * ALGORITHMS.length)];
+    // Shuffle steps
+    userOrder = [...currentAlg.steps].sort(() => Math.random() - 0.5);
+    render();
+    document.getElementById('fb').className = 'feedback';
+}
+
+function render() {
+    document.getElementById('title').textContent = currentAlg.title;
+    document.getElementById('desc').textContent = currentAlg.desc;
+    const stepsDiv = document.getElementById('steps');
+    stepsDiv.innerHTML = '';
+    userOrder.forEach((s, i) => {
+        const card = document.createElement('div');
+        card.className = 'step-card';
+        card.draggable = true;
+        card.dataset.idx = i;
+        card.innerHTML = `
+            <div class="num">${i + 1}</div>
+            <span class="emoji">${s.e}</span>
+            <span class="text">${s.t}</span>
+            <span class="handle">⋮⋮</span>
+        `;
+        card.ondragstart = e => {
+            card.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        };
+        card.ondragend = () => {
+            card.classList.remove('dragging');
+            document.querySelectorAll('.step-card').forEach(c => c.classList.remove('over'));
+        };
+        card.ondragover = e => {
+            e.preventDefault();
+            card.classList.add('over');
+        };
+        card.ondragleave = () => card.classList.remove('over');
+        card.ondrop = e => {
+            e.preventDefault();
+            const dragging = document.querySelector('.dragging');
+            if (!dragging || dragging === card) return;
+            const from = parseInt(dragging.dataset.idx);
+            const to = parseInt(card.dataset.idx);
+            const moved = userOrder.splice(from, 1)[0];
+            userOrder.splice(to, 0, moved);
+            render();
+        };
+        stepsDiv.appendChild(card);
+    });
+}
+
+function check() {
+    const fb = document.getElementById('fb');
+    const isCorrect = userOrder.every((s, i) => s.t === currentAlg.steps[i].t);
+    if (isCorrect) {
+        fb.className = 'feedback ok';
+        fb.textContent = '✓ Perfecte! L\'ordre és correcte.';
+        correct++;
+    } else {
+        fb.className = 'feedback ko';
+        const firstWrong = userOrder.findIndex((s, i) => s.t !== currentAlg.steps[i].t);
+        fb.textContent = `✗ Revisa els passos. El primer error és al pas ${firstWrong + 1}.`;
+        wrong++;
+    }
+    document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+}
+
+loadExercise();
+</script>
+</body>
+</html>

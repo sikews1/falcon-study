@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educació Financera - Exercicis Interactius</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .fin-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .fin-nav { background: rgba(9, 9, 11, 0.75); }
+        .fin-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .fin-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .fin-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .fin-nav a.home { color: #ca8a04; font-weight: 600; }
+
+        .hero { text-align: center; padding: 48px 24px 40px; border-bottom: 1px solid var(--border-subtle); }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+        .hero h1 span { background: linear-gradient(135deg, #ca8a04, #facc15); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--text-secondary); font-size: 0.95rem; }
+        .hero .badge { display: inline-block; margin-top: 12px; padding: 6px 16px; border-radius: var(--radius-full); background: rgba(202, 138, 4, 0.1); color: #ca8a04; font-size: 0.8rem; font-weight: 600; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+        .section-title { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; margin-top: 20px; }
+        .section-title span { padding: 4px 12px; border-radius: 12px; font-size: .75rem; color: #fff; }
+
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 14px; }
+
+        .course-card { background: var(--bg-raised); border-radius: var(--radius-lg); padding: 22px; border: 1px solid var(--border-subtle); transition: all 0.25s; text-decoration: none; color: inherit; display: block; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+        .course-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .course-card:hover { border-color: var(--border-default); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .course-card .card-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 12px; color: #fff; }
+        .course-card h3 { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+        .course-card p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+
+        .card-yellow::before { background: linear-gradient(90deg, #ca8a04, #facc15); } .card-yellow .card-icon { background: linear-gradient(135deg, #ca8a04, #facc15); } .card-yellow:hover { border-color: #facc15; }
+        .card-green::before { background: linear-gradient(90deg, #16a34a, #22c55e); } .card-green .card-icon { background: linear-gradient(135deg, #16a34a, #22c55e); } .card-green:hover { border-color: #22c55e; }
+        .card-blue::before { background: linear-gradient(90deg, #2563eb, #3b82f6); } .card-blue .card-icon { background: linear-gradient(135deg, #2563eb, #3b82f6); } .card-blue:hover { border-color: #3b82f6; }
+        .card-orange::before { background: linear-gradient(90deg, #ea580c, #f97316); } .card-orange .card-icon { background: linear-gradient(135deg, #ea580c, #f97316); } .card-orange:hover { border-color: #f97316; }
+
+        .footer { text-align: center; padding: 30px 20px; color: var(--text-muted); font-size: 0.8rem; }
+        @media (max-width: 640px) { .courses-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+
+<div class="fin-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html" class="active">Inici</a>
+    <a href="diner.html">Diner</a>
+    <a href="pressupost.html">Pressupost</a>
+    <a href="interes.html">Interès</a>
+    <a href="compres.html">Compres</a>
+</div>
+
+<div class="hero">
+    <h1><span>Educació</span> financera</h1>
+    <p>Diner, pressupostos, interessos i compres intel·ligents</p>
+    <div class="badge">&#x1F4B0; Aprèn a gestionar els diners</div>
+</div>
+
+<div class="container">
+
+    <h2 class="section-title"><span style="background:#22c55e;">PRIMÀRIA</span> 8 - 12 anys</h2>
+    <div class="courses-grid">
+        <a href="diner.html" class="course-card card-yellow"><div class="card-icon">&#x1F4B6;</div><h3>Monedes i bitllets</h3><p>Reconeix l'euro, calcula canvi, suma quantitats</p></a>
+        <a href="compres.html?level=easy" class="course-card card-green"><div class="card-icon">&#x1F6D2;</div><h3>Compres simples</h3><p>Descomptes, quant val en total, quant em queda</p></a>
+        <a href="pressupost.html?level=easy" class="course-card card-blue"><div class="card-icon">&#x1F4CA;</div><h3>El meu pressupost</h3><p>Planifica la paga setmanal: quant estalvio, quant gasto</p></a>
+    </div>
+
+    <h2 class="section-title"><span style="background:#3b82f6;">ESO</span> 12 - 16 anys</h2>
+    <div class="courses-grid">
+        <a href="pressupost.html" class="course-card card-blue"><div class="card-icon">&#x1F4CA;</div><h3>Pressupost personal</h3><p>Ingressos, despeses fixes i variables. Simulador</p></a>
+        <a href="interes.html" class="course-card card-orange"><div class="card-icon">&#x1F4C8;</div><h3>Interès simple i compost</h3><p>Com creixen els teus estalvis amb el temps</p></a>
+        <a href="compres.html" class="course-card card-green"><div class="card-icon">&#x1F3F7;&#xFE0F;</div><h3>Ser un consumidor intel·ligent</h3><p>Descomptes, marques blanques, pensament crític amb la publicitat</p></a>
+    </div>
+
+</div>
+
+<div class="footer">Educació Financera &mdash; Habilitats per a la vida real</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+</body>
+</html>

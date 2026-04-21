@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geografia física</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .geo-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .geo-nav { background: rgba(9, 9, 11, 0.75); }
+        .geo-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .geo-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .geo-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .geo-nav a.home { color: #0891b2; font-weight: 600; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #16a34a, #22c55e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .tabs { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .tab-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .tab-btn:hover { border-color: #16a34a; color: #16a34a; }
+        .tab-btn.active { background: #16a34a; color: #fff; border-color: #16a34a; }
+
+        .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+        .item-card { background: var(--bg-raised); border-radius: 12px; padding: 16px; border: 1px solid var(--border-subtle); }
+        .item-card .icon { font-size: 1.6rem; margin-bottom: 6px; }
+        .item-card h4 { color: #16a34a; font-size: 0.95rem; margin-bottom: 4px; }
+        .item-card p { color: var(--text-secondary); font-size: 0.82rem; line-height: 1.5; }
+        .item-card .detail { font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; }
+        .item-card .detail strong { color: var(--text-primary); }
+
+        .quiz-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-top: 16px; }
+        .quiz-box h2 { color: var(--text-primary); font-size: 1.1rem; margin-bottom: 14px; text-align: center; }
+        .quiz-prompt { text-align: center; padding: 14px; background: var(--bg-base); border-radius: 10px; margin-bottom: 12px; color: var(--text-primary); font-weight: 600; }
+        .quiz-opts { display: grid; gap: 8px; }
+        .quiz-opt { padding: 12px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 600; color: var(--text-primary); font-size: 0.92rem; text-align: left; }
+        .quiz-opt:hover { border-color: #16a34a; }
+        .quiz-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; }
+        .quiz-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="geo-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="espanya.html">Espanya</a>
+    <a href="europa.html">Europa</a>
+    <a href="mon.html">Món</a>
+    <a href="fisic.html" class="active">Físic</a>
+</div>
+
+<div class="container">
+    <h1><span>Geografia</span> física</h1>
+    <p class="subtitle">Oceans, rius, muntanyes, climes i biomes del planeta</p>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="show('oceans')">Oceans i mars</button>
+        <button class="tab-btn" onclick="show('muntanyes')">Muntanyes</button>
+        <button class="tab-btn" onclick="show('rius')">Rius</button>
+        <button class="tab-btn" onclick="show('climat')">Climes</button>
+        <button class="tab-btn" onclick="show('quiz')">Quiz</button>
+    </div>
+
+    <div id="content"></div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const DATA = {
+    oceans: [
+        { icon: '🌊', name: 'Oceà Pacífic', desc: 'El més gran del món. Ocupa un terç de la Terra.', detail: 'Àrea: 165 milions km²' },
+        { icon: '🌊', name: 'Oceà Atlàntic', desc: 'Separa Europa i Àfrica d\'Amèrica.', detail: 'Àrea: 106 milions km²' },
+        { icon: '🌊', name: 'Oceà Índic', desc: 'Entre Àfrica, Àsia i Austràlia.', detail: 'Àrea: 73 milions km²' },
+        { icon: '❄️', name: 'Oceà Àrtic', desc: 'El més petit, al voltant del Pol Nord.', detail: 'Àrea: 14 milions km²' },
+        { icon: '🐧', name: 'Oceà Antàrtic', desc: 'Envolta l\'Antàrtida.', detail: 'Àrea: 20 milions km²' },
+        { icon: '🇪🇸', name: 'Mar Mediterrani', desc: 'Entre Europa, Àfrica i Àsia.', detail: 'Àrea: 2.5 milions km²' },
+        { icon: '🏝️', name: 'Mar del Carib', desc: 'Entre Amèrica Central i Sud.', detail: 'Àrea: 2.7 milions km²' }
+    ],
+    muntanyes: [
+        { icon: '🏔️', name: 'Everest', desc: 'Cim més alt del món (Himàlaia).', detail: '8.849 metres' },
+        { icon: '🏔️', name: 'Mont Blanc', desc: 'El més alt dels Alps, a Europa.', detail: '4.808 metres' },
+        { icon: '⛰️', name: 'Aneto', desc: 'Cim més alt dels Pirineus.', detail: '3.404 metres' },
+        { icon: '⛰️', name: 'Teide', desc: 'Cim més alt d\'Espanya (Tenerife).', detail: '3.715 metres' },
+        { icon: '🌋', name: 'Kilimanjaro', desc: 'Cim més alt d\'Àfrica (Tanzània).', detail: '5.895 metres' },
+        { icon: '🏔️', name: 'Aconcagua', desc: 'Cim més alt d\'Amèrica (Argentina).', detail: '6.961 metres' },
+        { icon: '🌋', name: 'Denali', desc: 'Cim més alt d\'Amèrica del Nord (Alaska).', detail: '6.190 metres' }
+    ],
+    rius: [
+        { icon: '🌊', name: 'Nil', desc: 'Travessa Àfrica fins al Mediterrani.', detail: '6.650 km (antigament el més llarg)' },
+        { icon: '🌿', name: 'Amazones', desc: 'El riu més cabalós del món, a Sud-amèrica.', detail: '6.400 km' },
+        { icon: '🐉', name: 'Iang-Tsé', desc: 'El riu més llarg d\'Àsia (Xina).', detail: '6.300 km' },
+        { icon: '💧', name: 'Mississipí-Missouri', desc: 'Principal riu dels EUA.', detail: '6.275 km' },
+        { icon: '🏔️', name: 'Ebre', desc: 'El riu més cabalós d\'Espanya.', detail: '930 km' },
+        { icon: '🏛️', name: 'Tajo', desc: 'El riu més llarg de la península Ibèrica.', detail: '1.038 km' },
+        { icon: '🌳', name: 'Danubi', desc: 'Travessa 10 països d\'Europa.', detail: '2.860 km' }
+    ],
+    climat: [
+        { icon: '☀️', name: 'Equatorial', desc: 'Càlid i humit tot l\'any. Selves tropicals (Amazònia, Congo).', detail: 'T: 25-30°C' },
+        { icon: '🏜️', name: 'Desèrtic', desc: 'Molt sec, amb canvis extrems dia-nit.', detail: 'Sàhara, Atacama' },
+        { icon: '🌴', name: 'Tropical', desc: 'Càlid amb estació seca i humida.', detail: 'Àfrica subsahariana, Índia' },
+        { icon: '🌸', name: 'Mediterrani', desc: 'Estius càlids i secs, hiverns suaus i plujosos.', detail: 'Espanya, Grècia, Califòrnia' },
+        { icon: '☔', name: 'Oceànic', desc: 'Temperatures suaus i moltes pluges.', detail: 'Regne Unit, nord de França' },
+        { icon: '🍂', name: 'Continental', desc: 'Estius càlids i hiverns molt freds.', detail: 'Rússia, centre EUA' },
+        { icon: '❄️', name: 'Polar', desc: 'Sempre molt fred, amb poca vegetació.', detail: 'Groenlàndia, Antàrtida' }
+    ]
+};
+
+const QUIZ = [
+    { q: 'Quin és l\'oceà més gran del món?', opts: ['Atlàntic', 'Pacífic', 'Índic', 'Àrtic'], a: 1 },
+    { q: 'El cim més alt del món és...', opts: ['Mont Blanc', 'Kilimanjaro', 'Everest', 'Aconcagua'], a: 2 },
+    { q: 'El riu més cabalós del món és...', opts: ['Nil', 'Amazones', 'Iang-Tsé', 'Mississipí'], a: 1 },
+    { q: 'Quin clima té Espanya en gran part del seu territori?', opts: ['Tropical', 'Desèrtic', 'Mediterrani', 'Oceànic'], a: 2 },
+    { q: 'Quin mar està entre Europa i Àfrica?', opts: ['Mar del Nord', 'Mar Mediterrani', 'Mar Negre', 'Mar Bàltic'], a: 1 },
+    { q: 'Quin és el cim més alt d\'Espanya?', opts: ['Aneto', 'Teide', 'Mulhacén', 'Veleta'], a: 1 },
+    { q: 'El Danubi travessa quants països?', opts: ['3', '5', '10', '15'], a: 2 },
+    { q: 'Quin clima fa a les selves tropicals?', opts: ['Sec i fred', 'Càlid i humit', 'Fred i humit', 'Temperat'], a: 1 }
+];
+
+let correct = 0, wrong = 0;
+
+function show(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event?.target?.classList?.add('active');
+    const c = document.getElementById('content');
+    if (tab === 'quiz') {
+        c.innerHTML = `
+            <div class="quiz-box">
+                <h2>&#x1F3AF; Quiz de geografia física</h2>
+                <div class="quiz-prompt" id="qP"></div>
+                <div class="quiz-opts" id="qO"></div>
+                <div class="score" id="sc">Encerts: ${correct} &bull; Errors: ${wrong}</div>
+            </div>
+        `;
+        newQuiz();
+    } else {
+        c.innerHTML = `
+            <div class="item-grid">
+                ${DATA[tab].map(d => `
+                    <div class="item-card">
+                        <div class="icon">${d.icon}</div>
+                        <h4>${d.name}</h4>
+                        <p>${d.desc}</p>
+                        <div class="detail">${d.detail}</div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+}
+
+function newQuiz() {
+    const q = QUIZ[Math.floor(Math.random() * QUIZ.length)];
+    document.getElementById('qP').textContent = q.q;
+    const o = document.getElementById('qO');
+    o.innerHTML = '';
+    q.opts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = opt;
+        btn.onclick = () => {
+            if (i === q.a) { btn.classList.add('correct'); correct++; setTimeout(newQuiz, 800); }
+            else { btn.classList.add('wrong'); document.querySelectorAll('.quiz-opt')[q.a].classList.add('correct'); wrong++; }
+            document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+        o.appendChild(btn);
+    });
+}
+
+show('oceans');
+</script>
+</body>
+</html>

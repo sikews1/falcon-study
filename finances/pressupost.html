@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pressupost - Finances</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .fin-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .fin-nav { background: rgba(9, 9, 11, 0.75); }
+        .fin-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .fin-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .fin-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .fin-nav a.home { color: #ca8a04; font-weight: 600; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #2563eb, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .info-box { background: rgba(37, 99, 235, 0.06); border-left: 3px solid #2563eb; padding: 14px 18px; border-radius: 0 12px 12px 0; margin-bottom: 18px; color: var(--text-secondary); line-height: 1.7; font-size: 0.92rem; }
+        .info-box strong { color: var(--text-primary); }
+
+        .simulator { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-bottom: 18px; }
+        .simulator h2 { color: var(--text-primary); font-size: 1.1rem; margin-bottom: 14px; }
+
+        .budget-section { margin-bottom: 18px; }
+        .budget-section h3 { font-size: 0.85rem; color: #2563eb; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+
+        .row { display: grid; grid-template-columns: 1fr 120px 40px; gap: 8px; margin-bottom: 8px; align-items: center; }
+        .row input[type="text"], .row input[type="number"] { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-subtle); background: var(--bg-base); color: var(--text-primary); font-size: 0.9rem; }
+        .row input:focus { outline: none; border-color: #2563eb; }
+        .row button { padding: 10px; border-radius: 10px; border: none; background: var(--bg-base); color: var(--text-muted); cursor: pointer; font-size: 1rem; }
+        .row button:hover { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
+
+        .add-btn { padding: 8px 16px; border-radius: var(--radius-full); background: var(--bg-base); border: 1px dashed var(--border-default); color: var(--text-secondary); cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+        .add-btn:hover { border-color: #2563eb; color: #2563eb; }
+
+        .summary { background: var(--bg-base); border-radius: 12px; padding: 18px; margin-top: 18px; }
+        .summary .line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle); font-size: 0.95rem; }
+        .summary .line:last-child { border-bottom: none; border-top: 2px solid var(--border-default); font-weight: 700; font-size: 1.05rem; margin-top: 6px; padding-top: 14px; }
+        .summary .label { color: var(--text-secondary); }
+        .summary .value { font-weight: 700; font-family: 'Courier New', monospace; }
+        .summary .positive { color: #16a34a; }
+        .summary .negative { color: #dc2626; }
+
+        .tip { background: linear-gradient(135deg, rgba(250, 204, 21, 0.08), rgba(234, 179, 8, 0.06)); border: 1px solid rgba(234, 179, 8, 0.2); border-radius: 12px; padding: 14px 18px; margin-top: 14px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+        .tip strong { color: #ca8a04; }
+    </style>
+</head>
+<body>
+
+<div class="fin-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="diner.html">Diner</a>
+    <a href="pressupost.html" class="active">Pressupost</a>
+    <a href="interes.html">Interès</a>
+    <a href="compres.html">Compres</a>
+</div>
+
+<div class="container">
+    <h1><span>Pressupost</span> personal</h1>
+    <p class="subtitle">Simulador per planificar ingressos i despeses</p>
+
+    <div class="info-box">
+        Un <strong>pressupost</strong> és un pla per saber on va el teu diner. Apuntes tots els <strong>ingressos</strong> (paga, feines puntuals...) i totes les <strong>despeses</strong> (menjar, transport, oci...). Si els ingressos són més grans que les despeses, <em>sobra diner per estalviar</em>. Si no, has d'ajustar.
+    </div>
+
+    <div class="simulator">
+        <h2>&#x1F4CA; Pressupost mensual</h2>
+
+        <div class="budget-section">
+            <h3>Ingressos (€/mes)</h3>
+            <div id="incomes"></div>
+            <button class="add-btn" onclick="addRow('incomes', 'Nou ingrés', 0)">+ Afegir ingrés</button>
+        </div>
+
+        <div class="budget-section">
+            <h3>Despeses (€/mes)</h3>
+            <div id="expenses"></div>
+            <button class="add-btn" onclick="addRow('expenses', 'Nova despesa', 0)">+ Afegir despesa</button>
+        </div>
+
+        <div class="summary" id="summary"></div>
+
+        <div class="tip" id="tip"></div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+let incomes = [
+    { name: 'Paga setmanal x 4', amount: 40 },
+    { name: 'Feines puntuals', amount: 20 }
+];
+let expenses = [
+    { name: 'Transport', amount: 15 },
+    { name: 'Menjar fora', amount: 25 },
+    { name: 'Oci (cinema, jocs)', amount: 15 },
+    { name: 'Mòbil', amount: 10 }
+];
+
+function render() {
+    renderList('incomes', incomes);
+    renderList('expenses', expenses);
+    calculate();
+}
+
+function renderList(id, list) {
+    const el = document.getElementById(id);
+    el.innerHTML = '';
+    list.forEach((item, i) => {
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `
+            <input type="text" value="${item.name}" oninput="updateName('${id}', ${i}, this.value)">
+            <input type="number" value="${item.amount}" min="0" step="0.5" oninput="updateAmount('${id}', ${i}, this.value)">
+            <button onclick="removeItem('${id}', ${i})">×</button>
+        `;
+        el.appendChild(row);
+    });
+}
+
+function updateName(id, i, v) {
+    const list = id === 'incomes' ? incomes : expenses;
+    list[i].name = v;
+}
+
+function updateAmount(id, i, v) {
+    const list = id === 'incomes' ? incomes : expenses;
+    list[i].amount = parseFloat(v) || 0;
+    calculate();
+}
+
+function removeItem(id, i) {
+    const list = id === 'incomes' ? incomes : expenses;
+    list.splice(i, 1);
+    render();
+}
+
+function addRow(id, name, amount) {
+    const list = id === 'incomes' ? incomes : expenses;
+    list.push({ name, amount });
+    render();
+}
+
+function calculate() {
+    const totalIn = incomes.reduce((s, x) => s + x.amount, 0);
+    const totalOut = expenses.reduce((s, x) => s + x.amount, 0);
+    const diff = totalIn - totalOut;
+    const sumDiv = document.getElementById('summary');
+    sumDiv.innerHTML = `
+        <div class="line"><span class="label">Total ingressos</span><span class="value positive">+${totalIn.toFixed(2)} €</span></div>
+        <div class="line"><span class="label">Total despeses</span><span class="value negative">-${totalOut.toFixed(2)} €</span></div>
+        <div class="line"><span class="label">${diff >= 0 ? 'Estalvi' : 'Dèficit'}</span><span class="value ${diff >= 0 ? 'positive' : 'negative'}">${diff >= 0 ? '+' : ''}${diff.toFixed(2)} €</span></div>
+    `;
+
+    const tip = document.getElementById('tip');
+    if (diff > 0) {
+        const pct = totalIn > 0 ? Math.round((diff / totalIn) * 100) : 0;
+        tip.innerHTML = `<strong>Ho estàs fent bé!</strong> Estalvies un ${pct}% del que ingresses. Els experts recomanen estalviar almenys un <strong>10-20%</strong>. Si guardes aquest import cada mes durant un any, tindràs <strong>${(diff * 12).toFixed(0)} €</strong>.`;
+    } else if (diff === 0) {
+        tip.innerHTML = `Estàs <strong>al límit</strong>: gastes exactament el que ingresses. Si apareix una despesa imprevista (avaria, regal), no tens marge. Intenta retallar <strong>almenys un 10%</strong> d'alguna despesa.`;
+    } else {
+        tip.innerHTML = `<strong>Atenció!</strong> Gastes <strong>${Math.abs(diff).toFixed(2)} € més</strong> del que ingresses. Si segueix així, hauràs de demanar diners o usar estalvis. Retalla despeses variables (oci, menjar fora) primer.`;
+    }
+}
+
+render();
+</script>
+</body>
+</html>

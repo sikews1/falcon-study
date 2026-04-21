@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistemes del cos - Naturals</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .nat-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .nat-nav { background: rgba(9, 9, 11, 0.75); }
+        .nat-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .nat-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .nat-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .nat-nav a.home { color: #16a34a; font-weight: 600; }
+
+        .container { max-width: 760px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #2563eb, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .syst-picker { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 20px; }
+        .syst-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .syst-btn:hover { border-color: #2563eb; color: #2563eb; }
+        .syst-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+        .system-card { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 28px; margin-bottom: 16px; }
+        .system-card h2 { color: #2563eb; font-size: 1.3rem; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .system-card .emoji { font-size: 2rem; }
+        .system-card .question { font-weight: 700; color: var(--text-primary); margin: 14px 0 6px; }
+        .system-card p { color: var(--text-secondary); line-height: 1.75; font-size: 0.93rem; margin-bottom: 12px; }
+        .system-card p strong { color: var(--text-primary); }
+
+        .organs-list { display: grid; gap: 8px; margin-top: 10px; }
+        .organ-item { background: var(--bg-base); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--border-subtle); }
+        .organ-item .organ-emoji { font-size: 1.6rem; }
+        .organ-item .organ-info { flex: 1; }
+        .organ-item .organ-name { font-weight: 700; color: var(--text-primary); font-size: 0.92rem; }
+        .organ-item .organ-desc { color: var(--text-secondary); font-size: 0.83rem; line-height: 1.5; }
+
+        .flow-diagram { background: var(--bg-base); border-radius: 12px; padding: 16px; margin: 14px 0; text-align: center; }
+        .flow-step { display: inline-block; padding: 8px 14px; background: var(--bg-raised); border: 2px solid #2563eb; border-radius: 20px; margin: 4px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
+        .flow-arrow { display: inline-block; margin: 0 4px; color: #2563eb; font-weight: 700; }
+
+        .quiz-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-top: 16px; }
+        .quiz-box h2 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 14px; }
+        .quiz-prompt { text-align: center; padding: 14px; background: var(--bg-base); border-radius: 10px; margin-bottom: 12px; color: var(--text-primary); font-weight: 600; }
+        .quiz-opts { display: grid; gap: 8px; }
+        .quiz-opt { padding: 12px 14px; border-radius: 10px; border: 2px solid var(--border-subtle); background: var(--bg-base); cursor: pointer; font-weight: 600; color: var(--text-primary); font-size: 0.92rem; text-align: left; }
+        .quiz-opt:hover { border-color: #2563eb; }
+        .quiz-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #16a34a; }
+        .quiz-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #dc2626; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="nat-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="cos-huma.html">Cos humà</a>
+    <a href="sistemes.html" class="active">Sistemes</a>
+    <a href="animals.html">Animals</a>
+    <a href="plantes.html">Plantes</a>
+</div>
+
+<div class="container">
+    <h1><span>Sistemes</span> del cos humà</h1>
+    <p class="subtitle">Com funciona per dins? Tria un sistema i descobreix-ho.</p>
+
+    <div class="syst-picker" id="systPicker"></div>
+    <div id="systContent"></div>
+
+    <div class="quiz-box">
+        <h2>&#x1F3AF; Quiz del sistema actual</h2>
+        <div class="quiz-prompt" id="quizPrompt"></div>
+        <div class="quiz-opts" id="quizOpts"></div>
+        <div class="score" id="score">Encerts: 0 &bull; Errors: 0</div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const SYSTEMS = {
+    digestiu: {
+        label: 'Digestiu',
+        emoji: '🫀',
+        description: `El <strong>sistema digestiu</strong> agafa els aliments que mengem, els trenca en trossets molt petits (nutrients) perquè el cos els pugui fer servir, i expulsa el que no necessita.`,
+        flow: ['Boca', 'Esòfag', 'Estómac', 'Intestí prim', 'Intestí gros', 'Anus'],
+        organs: [
+            { emoji: '👄', name: 'Boca', desc: 'Mastega i barreja el menjar amb saliva.' },
+            { emoji: '🌊', name: 'Esòfag', desc: 'Conducte que porta el menjar de la boca a l\'estómac.' },
+            { emoji: '🫃', name: 'Estómac', desc: 'Tritura el menjar amb sucs àcids durant 2-4 hores.' },
+            { emoji: '🧵', name: 'Intestí prim', desc: 'On s\'absorbeixen els nutrients (uns 6 metres de llarg!).' },
+            { emoji: '🔴', name: 'Intestí gros', desc: 'Absorbeix aigua i forma les caques.' },
+            { emoji: '🧪', name: 'Fetge i pàncrees', desc: 'Fabriquen sucs digestius que ajuden a trencar el menjar.' }
+        ],
+        quiz: [
+            { q: 'Quin òrgan tritura el menjar amb sucs àcids?', opts: ['Boca', 'Estómac', 'Intestí prim', 'Fetge'], a: 1 },
+            { q: 'On s\'absorbeixen els nutrients?', opts: ['Esòfag', 'Estómac', 'Intestí prim', 'Anus'], a: 2 },
+            { q: 'Què fa l\'esòfag?', opts: ['Tritura menjar', 'Absorbeix aigua', 'Porta el menjar de boca a estómac', 'Fabrica saliva'], a: 2 },
+            { q: 'Quant mesura l\'intestí prim?', opts: ['50 cm', '1 metre', '6 metres', '15 metres'], a: 2 }
+        ]
+    },
+    respiratori: {
+        label: 'Respiratori',
+        emoji: '🫁',
+        description: `El <strong>sistema respiratori</strong> agafa l\'oxigen de l\'aire (que necessites per viure) i treu el diòxid de carboni (que el cos no vol).`,
+        flow: ['Nas/Boca', 'Faringe', 'Laringe', 'Tràquea', 'Bronquis', 'Pulmons (alvèols)'],
+        organs: [
+            { emoji: '👃', name: 'Nas', desc: 'L\'aire entra per aquí. Un filtre amb pèls atrapa la pols.' },
+            { emoji: '🧵', name: 'Tràquea', desc: 'Tub que porta l\'aire dels nas als pulmons.' },
+            { emoji: '🌳', name: 'Bronquis', desc: 'La tràquea es divideix en dos branques (com un arbre cap per avall).' },
+            { emoji: '🫁', name: 'Pulmons', desc: 'Dos òrgans esponjosos plens de bossetes minúscules (alvèols) on es fa l\'intercanvi d\'aire.' },
+            { emoji: '💪', name: 'Diafragma', desc: 'Múscul sota els pulmons que puja i baixa per fer-nos respirar.' }
+        ],
+        quiz: [
+            { q: 'Què fa el sistema respiratori?', opts: ['Digerir menjar', 'Bombejar sang', 'Agafar oxigen i treure CO₂', 'Controlar el cos'], a: 2 },
+            { q: 'Com es diuen les bossetes petites dels pulmons?', opts: ['Bronquis', 'Alvèols', 'Càpsules', 'Vesícules'], a: 1 },
+            { q: 'Quin múscul ens ajuda a respirar?', opts: ['Bíceps', 'Cor', 'Diafragma', 'Tríceps'], a: 2 },
+            { q: 'Per on entra l\'aire normalment?', opts: ['Per l\'estómac', 'Pel nas', 'Pels ulls', 'Per les orelles'], a: 1 }
+        ]
+    },
+    circulatori: {
+        label: 'Circulatori',
+        emoji: '❤️',
+        description: `El <strong>sistema circulatori</strong> reparteix la sang (amb oxigen i nutrients) per tot el cos. El cor és la bomba que no para mai.`,
+        flow: ['Cor (aurícules)', 'Cor (ventricles)', 'Artèries', 'Capil·lars', 'Venes', 'Tornada al cor'],
+        organs: [
+            { emoji: '❤️', name: 'Cor', desc: 'Bomba muscular amb 4 cavitats. Batega 100.000 cops al dia.' },
+            { emoji: '🔴', name: 'Artèries', desc: 'Vasos que porten la sang rica en oxigen des del cor a tot el cos.' },
+            { emoji: '🔵', name: 'Venes', desc: 'Vasos que tornen la sang (amb CO₂) al cor.' },
+            { emoji: '⚪', name: 'Capil·lars', desc: 'Vasos molt fins on la sang intercanvia nutrients i deixalles amb les cèl·lules.' },
+            { emoji: '🧬', name: 'Sang', desc: 'Líquid amb 3 tipus de cèl·lules: glòbuls vermells (oxigen), blancs (defensa) i plaquetes (cicatritzar).' }
+        ],
+        quiz: [
+            { q: 'Quin òrgan és la bomba del sistema circulatori?', opts: ['Cervell', 'Pulmons', 'Cor', 'Fetge'], a: 2 },
+            { q: 'Quins vasos porten la sang des del cor?', opts: ['Venes', 'Artèries', 'Capil·lars', 'Bronquis'], a: 1 },
+            { q: 'Quants cops batega el cor al dia?', opts: ['1.000', '10.000', '100.000', '1.000.000'], a: 2 },
+            { q: 'Quin tipus de cèl·lula transporta l\'oxigen?', opts: ['Glòbuls vermells', 'Glòbuls blancs', 'Plaquetes', 'Neurones'], a: 0 }
+        ]
+    },
+    nervios: {
+        label: 'Nerviós',
+        emoji: '🧠',
+        description: `El <strong>sistema nerviós</strong> controla tot el cos. És com el cablejat elèctric que envia missatges entre el cervell i la resta de parts.`,
+        flow: ['Estímul (ex: tocar calent)', 'Nervi sensitiu', 'Medul·la espinal', 'Cervell', 'Ordre de resposta', 'Múscul (apartar la mà)'],
+        organs: [
+            { emoji: '🧠', name: 'Cervell', desc: 'Centre de control. Pensa, recorda, ordena moviments i gestiona emocions.' },
+            { emoji: '🔽', name: 'Medul·la espinal', desc: 'Autopista de nervis dins la columna vertebral que connecta cervell i cos.' },
+            { emoji: '⚡', name: 'Nervis', desc: 'Fils que porten els missatges elèctrics per tot el cos.' },
+            { emoji: '🔬', name: 'Neurones', desc: 'Cèl·lules del sistema nerviós. En tenim uns 86.000 milions!' }
+        ],
+        quiz: [
+            { q: 'Quin òrgan és el centre de control del sistema nerviós?', opts: ['Cor', 'Cervell', 'Estómac', 'Pulmó'], a: 1 },
+            { q: 'Com es diuen les cèl·lules del sistema nerviós?', opts: ['Glòbuls', 'Neurones', 'Plaquetes', 'Òvuls'], a: 1 },
+            { q: 'Què connecta el cervell amb la resta del cos?', opts: ['Artèries', 'Medul·la espinal', 'Intestí', 'Tràquea'], a: 1 },
+            { q: 'Quantes neurones tens al cervell?', opts: ['86 mil', '86 milions', '86.000 milions', '86 bilions'], a: 2 }
+        ]
+    }
+};
+
+let current = 'digestiu';
+let correct = 0, wrong = 0;
+
+function renderPicker() {
+    const p = document.getElementById('systPicker');
+    p.innerHTML = '';
+    Object.keys(SYSTEMS).forEach(k => {
+        const b = document.createElement('button');
+        b.className = 'syst-btn' + (k === current ? ' active' : '');
+        b.textContent = SYSTEMS[k].emoji + ' ' + SYSTEMS[k].label;
+        b.onclick = () => { current = k; render(); newQuiz(); };
+        p.appendChild(b);
+    });
+}
+
+function render() {
+    renderPicker();
+    const s = SYSTEMS[current];
+    document.getElementById('systContent').innerHTML = `
+        <div class="system-card">
+            <h2><span class="emoji">${s.emoji}</span> Sistema ${s.label}</h2>
+            <p>${s.description}</p>
+            <div class="question">Com va el recorregut?</div>
+            <div class="flow-diagram">
+                ${s.flow.map((step, i) => `<span class="flow-step">${step}</span>${i < s.flow.length - 1 ? '<span class="flow-arrow">→</span>' : ''}`).join('')}
+            </div>
+            <div class="question">Òrgans principals</div>
+            <div class="organs-list">
+                ${s.organs.map(o => `<div class="organ-item"><span class="organ-emoji">${o.emoji}</span><div class="organ-info"><div class="organ-name">${o.name}</div><div class="organ-desc">${o.desc}</div></div></div>`).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function newQuiz() {
+    const list = SYSTEMS[current].quiz;
+    const q = list[Math.floor(Math.random() * list.length)];
+    document.getElementById('quizPrompt').textContent = q.q;
+    const opts = document.getElementById('quizOpts');
+    opts.innerHTML = '';
+    q.opts.forEach((o, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = o;
+        btn.onclick = () => {
+            if (i === q.a) { btn.classList.add('correct'); correct++; setTimeout(newQuiz, 900); }
+            else { btn.classList.add('wrong'); document.querySelectorAll('.quiz-opt')[q.a].classList.add('correct'); wrong++; }
+            document.getElementById('score').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+        opts.appendChild(btn);
+    });
+}
+
+render();
+newQuiz();
+</script>
+</body>
+</html>

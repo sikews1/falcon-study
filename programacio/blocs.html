@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blocs - Programació</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .pr-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .pr-nav { background: rgba(9, 9, 11, 0.75); }
+        .pr-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .pr-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .pr-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .pr-nav a.home { color: #4338ca; font-weight: 600; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #2563eb, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .info { background: rgba(37, 99, 235, 0.06); border-left: 3px solid #2563eb; padding: 14px 18px; border-radius: 0 12px 12px 0; margin-bottom: 18px; color: var(--text-secondary); line-height: 1.6; font-size: 0.92rem; }
+        .info strong { color: var(--text-primary); }
+
+        .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media (max-width: 720px) { .layout { grid-template-columns: 1fr; } }
+
+        .panel { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 18px; }
+        .panel h3 { color: var(--text-primary); font-size: 0.95rem; margin-bottom: 10px; }
+
+        .maze { display: grid; gap: 2px; background: var(--bg-hover); padding: 8px; border-radius: 10px; width: fit-content; margin: 0 auto; }
+        .cell { width: 38px; height: 38px; background: var(--bg-base); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+        .cell.wall { background: #4338ca; }
+        .cell.goal { background: rgba(34, 197, 94, 0.2); border: 2px solid #16a34a; }
+
+        .available-blocks { display: grid; gap: 6px; margin-bottom: 14px; }
+        .blk { padding: 10px 14px; border-radius: 10px; color: #fff; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.92rem; border: none; text-align: left; }
+        .blk-up { background: #16a34a; }
+        .blk-down { background: #dc2626; }
+        .blk-left { background: #ea580c; }
+        .blk-right { background: #2563eb; }
+        .blk:hover { transform: translateX(3px); }
+
+        .program { background: var(--bg-base); border-radius: 10px; padding: 12px; min-height: 150px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; }
+        .program .placeholder { color: var(--text-muted); font-style: italic; text-align: center; padding: 30px 0; font-size: 0.88rem; }
+        .prog-blk { padding: 8px 12px; border-radius: 8px; color: #fff; font-weight: 600; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
+        .prog-blk button { background: rgba(0,0,0,0.2); color: #fff; border: none; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-weight: 700; }
+
+        .controls { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn { padding: 10px 18px; border-radius: var(--radius-full); border: none; font-weight: 700; cursor: pointer; font-size: 0.88rem; }
+        .btn-run { background: #16a34a; color: #fff; }
+        .btn-run:hover { background: #22c55e; }
+        .btn-clear { background: var(--bg-base); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-clear:hover { border-color: #dc2626; color: #dc2626; }
+        .btn-new { background: var(--bg-base); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { border-color: #2563eb; color: #2563eb; }
+
+        .status { text-align: center; margin-top: 12px; padding: 10px; border-radius: 10px; font-weight: 600; font-size: 0.92rem; }
+        .status.ok { background: rgba(34, 197, 94, 0.15); color: #16a34a; }
+        .status.ko { background: rgba(239, 68, 68, 0.15); color: #dc2626; }
+    </style>
+</head>
+<body>
+
+<div class="pr-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="logica.html">Lògica</a>
+    <a href="blocs.html" class="active">Blocs</a>
+    <a href="python.html">Python</a>
+    <a href="algoritmes.html">Algoritmes</a>
+</div>
+
+<div class="container">
+    <h1><span>Blocs</span> de programació</h1>
+    <p class="subtitle">Fes arribar el conill 🐰 a la pastanaga 🥕 combinant blocs de direcció</p>
+
+    <div class="info">
+        <strong>Com funciona?</strong> Clica els blocs de l'esquerra per afegir passos al teu programa. Després prem "▶ Executar" i veuràs si el conill arriba a la pastanaga. Cada bloc mou 1 casella.
+    </div>
+
+    <div class="layout">
+        <div class="panel">
+            <h3>🎮 Laberint</h3>
+            <div class="maze" id="maze"></div>
+            <div id="status" class="status" style="display:none;"></div>
+            <div style="text-align:center;margin-top:10px;"><button class="btn btn-new" onclick="newMaze()">🔄 Nou laberint</button></div>
+        </div>
+
+        <div class="panel">
+            <h3>🧱 Blocs disponibles</h3>
+            <div class="available-blocks">
+                <button class="blk blk-up" onclick="addBlock('up')">⬆️ Moure amunt</button>
+                <button class="blk blk-down" onclick="addBlock('down')">⬇️ Moure avall</button>
+                <button class="blk blk-left" onclick="addBlock('left')">⬅️ Moure esquerra</button>
+                <button class="blk blk-right" onclick="addBlock('right')">➡️ Moure dreta</button>
+            </div>
+
+            <h3>📋 El teu programa</h3>
+            <div class="program" id="program"><div class="placeholder">Afegeix blocs clicant a dalt</div></div>
+
+            <div class="controls">
+                <button class="btn btn-run" onclick="run()">▶️ Executar</button>
+                <button class="btn btn-clear" onclick="clearProgram()">🗑️ Netejar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const MAZES = [
+    { grid: [
+        ['S', 0, 0, 0, 'G'],
+        [1, 1, 0, 1, 0],
+        [0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0]
+    ], start: [0, 0], goal: [0, 4] },
+    { grid: [
+        ['S', 1, 0, 0, 0],
+        [0, 1, 0, 1, 0],
+        [0, 0, 0, 1, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 'G']
+    ], start: [0, 0], goal: [4, 4] },
+    { grid: [
+        [0, 0, 0, 0, 'G'],
+        [0, 1, 1, 1, 0],
+        [0, 1, 0, 0, 0],
+        [0, 1, 0, 1, 1],
+        ['S', 0, 0, 0, 0]
+    ], start: [4, 0], goal: [0, 4] },
+    { grid: [
+        ['S', 0, 1, 0, 0],
+        [1, 0, 1, 0, 1],
+        [0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 'G']
+    ], start: [0, 0], goal: [4, 4] }
+];
+
+let mazeIdx = 0;
+let program = [];
+let playerPos = [0, 0];
+
+function newMaze() {
+    mazeIdx = Math.floor(Math.random() * MAZES.length);
+    clearProgram();
+    drawMaze();
+}
+
+function drawMaze() {
+    const m = MAZES[mazeIdx];
+    const cols = m.grid[0].length;
+    const mazeDiv = document.getElementById('maze');
+    mazeDiv.style.gridTemplateColumns = `repeat(${cols}, 38px)`;
+    mazeDiv.innerHTML = '';
+    for (let r = 0; r < m.grid.length; r++) {
+        for (let c = 0; c < m.grid[r].length; c++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            const v = m.grid[r][c];
+            if (v === 1) cell.classList.add('wall');
+            else if (v === 'G') { cell.classList.add('goal'); cell.textContent = '🥕'; }
+            if (playerPos[0] === r && playerPos[1] === c) cell.textContent = '🐰';
+            mazeDiv.appendChild(cell);
+        }
+    }
+}
+
+function addBlock(dir) {
+    program.push(dir);
+    renderProgram();
+}
+
+function renderProgram() {
+    const p = document.getElementById('program');
+    if (program.length === 0) {
+        p.innerHTML = '<div class="placeholder">Afegeix blocs clicant a dalt</div>';
+        return;
+    }
+    p.innerHTML = program.map((dir, i) => {
+        const colors = { up: '#16a34a', down: '#dc2626', left: '#ea580c', right: '#2563eb' };
+        const arrows = { up: '⬆️ Amunt', down: '⬇️ Avall', left: '⬅️ Esquerra', right: '➡️ Dreta' };
+        return `<div class="prog-blk" style="background:${colors[dir]}"><span>${i + 1}. ${arrows[dir]}</span><button onclick="remBlock(${i})">×</button></div>`;
+    }).join('');
+}
+
+function remBlock(i) { program.splice(i, 1); renderProgram(); }
+
+function clearProgram() {
+    program = [];
+    playerPos = [...MAZES[mazeIdx].start];
+    renderProgram();
+    drawMaze();
+    document.getElementById('status').style.display = 'none';
+}
+
+function run() {
+    const m = MAZES[mazeIdx];
+    playerPos = [...m.start];
+    drawMaze();
+    let i = 0;
+    const step = () => {
+        if (i >= program.length) {
+            finish();
+            return;
+        }
+        const dir = program[i];
+        const next = [...playerPos];
+        if (dir === 'up') next[0]--;
+        else if (dir === 'down') next[0]++;
+        else if (dir === 'left') next[1]--;
+        else if (dir === 'right') next[1]++;
+
+        // Check bounds and walls
+        if (next[0] < 0 || next[0] >= m.grid.length || next[1] < 0 || next[1] >= m.grid[0].length) {
+            showStatus('✗ Has sortit del laberint al pas ' + (i + 1), false);
+            return;
+        }
+        if (m.grid[next[0]][next[1]] === 1) {
+            showStatus('✗ Has xocat amb una paret al pas ' + (i + 1), false);
+            return;
+        }
+
+        playerPos = next;
+        drawMaze();
+        i++;
+        setTimeout(step, 400);
+    };
+    setTimeout(step, 200);
+
+    function finish() {
+        const g = m.goal;
+        if (playerPos[0] === g[0] && playerPos[1] === g[1]) showStatus('✓ Fet! Has arribat a la pastanaga! 🎉', true);
+        else showStatus('✗ Has acabat però no has arribat al final', false);
+    }
+}
+
+function showStatus(msg, ok) {
+    const s = document.getElementById('status');
+    s.textContent = msg;
+    s.className = 'status ' + (ok ? 'ok' : 'ko');
+    s.style.display = 'block';
+}
+
+newMaze();
+</script>
+</body>
+</html>

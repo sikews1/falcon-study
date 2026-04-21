@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lògica - Programació</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .pr-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .pr-nav { background: rgba(9, 9, 11, 0.75); }
+        .pr-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .pr-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .pr-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .pr-nav a.home { color: #4338ca; font-weight: 600; }
+
+        .container { max-width: 700px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #4338ca, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .mode-picker { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+        .mode-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .mode-btn:hover { border-color: #4338ca; color: #4338ca; }
+        .mode-btn.active { background: #4338ca; color: #fff; border-color: #4338ca; }
+
+        .ex-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 28px; margin-bottom: 14px; }
+        .ex-box h2 { color: var(--text-primary); font-size: 1.1rem; margin-bottom: 14px; text-align: center; }
+
+        .sequence { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .seq-item { width: 64px; height: 64px; background: var(--bg-base); border: 2px solid var(--border-subtle); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+        .seq-item.missing { background: #fff; border: 2px dashed #4338ca; color: transparent; }
+
+        .quiz-opts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .quiz-opt { padding: 16px; border-radius: 12px; border: 2px solid var(--border-subtle); background: var(--bg-raised); cursor: pointer; font-size: 2rem; transition: all 0.2s; }
+        .quiz-opt:hover { border-color: #4338ca; transform: scale(1.05); }
+        .quiz-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; }
+        .quiz-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; }
+
+        .truth-table { background: var(--bg-base); padding: 14px; border-radius: 12px; margin: 10px 0; }
+        .truth-table table { width: 100%; border-collapse: collapse; font-family: 'Courier New', monospace; font-size: 0.92rem; }
+        .truth-table th, .truth-table td { padding: 8px 14px; border-bottom: 1px solid var(--border-subtle); text-align: center; }
+        .truth-table th { color: #4338ca; font-weight: 700; }
+        .truth-table td.t { color: #16a34a; font-weight: 700; }
+        .truth-table td.f { color: #dc2626; font-weight: 700; }
+
+        .bool-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .bool-opt { padding: 16px; border-radius: 12px; border: 2px solid var(--border-subtle); background: var(--bg-raised); cursor: pointer; font-weight: 800; font-size: 1.2rem; transition: all 0.2s; font-family: 'Courier New', monospace; }
+        .bool-opt.t-btn { color: #16a34a; }
+        .bool-opt.f-btn { color: #dc2626; }
+        .bool-opt:hover { transform: scale(1.05); }
+        .bool-opt.correct { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; }
+        .bool-opt.wrong { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; }
+
+        .prompt { text-align: center; padding: 16px; background: var(--bg-base); border-radius: 12px; margin-bottom: 14px; font-size: 1.1rem; color: var(--text-primary); font-family: 'Courier New', monospace; font-weight: 700; }
+
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+        .info-box { background: rgba(67, 56, 202, 0.06); border-left: 3px solid #4338ca; padding: 12px 16px; border-radius: 0 10px 10px 0; margin-bottom: 14px; color: var(--text-secondary); line-height: 1.6; font-size: 0.92rem; }
+        .info-box strong { color: var(--text-primary); }
+    </style>
+</head>
+<body>
+
+<div class="pr-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="logica.html" class="active">Lògica</a>
+    <a href="blocs.html">Blocs</a>
+    <a href="python.html">Python</a>
+    <a href="algoritmes.html">Algoritmes</a>
+</div>
+
+<div class="container">
+    <h1><span>Lògica</span> i patrons</h1>
+    <p class="subtitle">Endevina el següent de la seqüència o resol operacions booleanes</p>
+
+    <div class="mode-picker">
+        <button class="mode-btn active" onclick="setMode('seq')">Seqüències</button>
+        <button class="mode-btn" onclick="setMode('bool')">Booleana (AND/OR/NOT)</button>
+    </div>
+
+    <div id="content"></div>
+    <div class="score" id="sc">Encerts: 0 &bull; Errors: 0</div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+let mode = 'seq';
+let correct = 0, wrong = 0;
+let currentAnswer = null;
+
+const SEQS = [
+    ['🔴', '🔵', '🔴', '🔵', '?'],
+    ['🐶', '🐱', '🐭', '🐶', '🐱', '?'],
+    ['⭐', '⭐', '❤️', '⭐', '⭐', '?'],
+    ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '?'],
+    ['🟨', '🟧', '🟥', '🟨', '🟧', '?'],
+    ['☀️', '🌤️', '⛅', '🌥️', '?'],
+    ['🍎', '🍌', '🍎', '🍌', '🍎', '?'],
+    ['🔺', '🔻', '🔺', '🔻', '?']
+];
+
+const SEQ_ANSWERS = {
+    0: '🔴', 1: '🐭', 2: '❤️', 3: '5️⃣', 4: '🟥', 5: '☁️', 6: '🍌', 7: '🔺'
+};
+
+const BOOL_OPS = [
+    { expr: 'true AND true', ans: 'true' },
+    { expr: 'true AND false', ans: 'false' },
+    { expr: 'false AND false', ans: 'false' },
+    { expr: 'true OR true', ans: 'true' },
+    { expr: 'true OR false', ans: 'true' },
+    { expr: 'false OR false', ans: 'false' },
+    { expr: 'NOT true', ans: 'false' },
+    { expr: 'NOT false', ans: 'true' },
+    { expr: '(true AND false) OR true', ans: 'true' },
+    { expr: 'NOT (true AND true)', ans: 'false' },
+    { expr: '(false OR true) AND false', ans: 'false' },
+    { expr: 'NOT (true OR false)', ans: 'false' }
+];
+
+function setMode(m) {
+    mode = m;
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    render();
+}
+
+function render() {
+    if (mode === 'seq') renderSeq();
+    else renderBool();
+}
+
+function renderSeq() {
+    const seqIdx = Math.floor(Math.random() * SEQS.length);
+    const seq = SEQS[seqIdx];
+    currentAnswer = SEQ_ANSWERS[seqIdx];
+
+    // Generate wrong options
+    const allEmojis = ['🔴', '🔵', '🟢', '🟡', '🟥', '🟦', '🟨', '🟧', '🐶', '🐱', '🐭', '⭐', '❤️', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '☀️', '🌤️', '⛅', '🌥️', '☁️', '🍎', '🍌', '🍓', '🔺', '🔻', '🔶', '🔷'];
+    const wrongs = allEmojis.filter(e => e !== currentAnswer).sort(() => Math.random() - 0.5).slice(0, 3);
+    const opts = [...wrongs, currentAnswer].sort(() => Math.random() - 0.5);
+
+    const c = document.getElementById('content');
+    c.innerHTML = `
+        <div class="ex-box">
+            <h2>&#x1F9E9; Quin és el següent?</h2>
+            <div class="sequence">
+                ${seq.map(s => `<div class="seq-item ${s === '?' ? 'missing' : ''}">${s}</div>`).join('')}
+            </div>
+            <div class="quiz-opts">
+                ${opts.map(o => `<button class="quiz-opt" data-emoji="${o}">${o}</button>`).join('')}
+            </div>
+        </div>
+    `;
+    document.querySelectorAll('.quiz-opt').forEach(btn => {
+        btn.onclick = () => {
+            if (btn.dataset.emoji === currentAnswer) { btn.classList.add('correct'); correct++; setTimeout(render, 900); }
+            else { btn.classList.add('wrong'); wrong++; }
+            document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+    });
+}
+
+function renderBool() {
+    const op = BOOL_OPS[Math.floor(Math.random() * BOOL_OPS.length)];
+    currentAnswer = op.ans;
+    const c = document.getElementById('content');
+    c.innerHTML = `
+        <div class="info-box">
+            <strong>AND</strong>: és cert només si <em>tots dos</em> són certs.<br>
+            <strong>OR</strong>: és cert si <em>almenys un</em> és cert.<br>
+            <strong>NOT</strong>: inverteix (<em>true</em> → <em>false</em> i al revés).
+        </div>
+        <div class="truth-table">
+            <table>
+                <tr><th>A</th><th>B</th><th>A AND B</th><th>A OR B</th></tr>
+                <tr><td class="t">true</td><td class="t">true</td><td class="t">true</td><td class="t">true</td></tr>
+                <tr><td class="t">true</td><td class="f">false</td><td class="f">false</td><td class="t">true</td></tr>
+                <tr><td class="f">false</td><td class="t">true</td><td class="f">false</td><td class="t">true</td></tr>
+                <tr><td class="f">false</td><td class="f">false</td><td class="f">false</td><td class="f">false</td></tr>
+            </table>
+        </div>
+        <div class="ex-box">
+            <h2>&#x1F9E0; Resol:</h2>
+            <div class="prompt">${op.expr} = ?</div>
+            <div class="bool-opts">
+                <button class="bool-opt t-btn" data-ans="true">true</button>
+                <button class="bool-opt f-btn" data-ans="false">false</button>
+            </div>
+        </div>
+    `;
+    document.querySelectorAll('.bool-opt').forEach(btn => {
+        btn.onclick = () => {
+            if (btn.dataset.ans === currentAnswer) { btn.classList.add('correct'); correct++; setTimeout(render, 1000); }
+            else { btn.classList.add('wrong'); wrong++; }
+            document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+        };
+    });
+}
+
+render();
+</script>
+</body>
+</html>

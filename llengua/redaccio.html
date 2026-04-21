@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redacció - Llengua</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .ll-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .ll-nav { background: rgba(9, 9, 11, 0.75); }
+        .ll-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .ll-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .ll-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .ll-nav a.home { color: #7c3aed; font-weight: 600; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #ea580c, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .type-picker { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .type-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .type-btn:hover { border-color: #ea580c; color: #ea580c; }
+        .type-btn.active { background: #ea580c; color: #fff; border-color: #ea580c; }
+
+        .guide-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-bottom: 14px; }
+        .guide-box h2 { color: #ea580c; font-size: 1.15rem; margin-bottom: 8px; }
+        .guide-box .desc { color: var(--text-secondary); font-style: italic; margin-bottom: 14px; line-height: 1.6; font-size: 0.92rem; }
+        .guide-box h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #ea580c; margin: 14px 0 8px; }
+        .guide-box ol, .guide-box ul { padding-left: 22px; color: var(--text-secondary); line-height: 1.75; font-size: 0.92rem; }
+        .guide-box ol li, .guide-box ul li { margin-bottom: 6px; }
+        .guide-box ol li strong, .guide-box ul li strong { color: var(--text-primary); }
+
+        .prompt-box { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 20px; margin-bottom: 14px; }
+        .prompt-box h3 { font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+        .prompt-box .prompt { font-size: 1.1rem; color: var(--text-primary); font-weight: 600; line-height: 1.6; }
+        .prompt-box .btn-new { background: var(--bg-base); color: var(--text-secondary); border: 1px solid var(--border-subtle); padding: 6px 14px; border-radius: var(--radius-full); cursor: pointer; font-size: 0.8rem; font-weight: 600; margin-top: 10px; }
+        .prompt-box .btn-new:hover { border-color: #ea580c; color: #ea580c; }
+
+        .editor { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 20px; }
+        .editor h3 { font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+        .editor textarea { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-base); color: var(--text-primary); font-size: 1rem; min-height: 200px; resize: vertical; line-height: 1.7; font-family: 'Georgia', serif; }
+        .editor textarea:focus { outline: none; border-color: #ea580c; }
+        .editor .stats { margin-top: 10px; color: var(--text-muted); font-size: 0.82rem; display: flex; justify-content: space-between; gap: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="ll-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="ortografia.html">Ortografia</a>
+    <a href="dictats.html">Dictats</a>
+    <a href="comprensio.html">Comprensió</a>
+    <a href="redaccio.html" class="active">Redacció</a>
+</div>
+
+<div class="container">
+    <h1><span>Redacció</span></h1>
+    <p class="subtitle">Plantilles i prompts per escriure diferents tipus de textos</p>
+
+    <div class="type-picker" id="picker"></div>
+    <div id="guide"></div>
+    <div class="prompt-box">
+        <h3>Exercici d'avui</h3>
+        <div class="prompt" id="prompt"></div>
+        <button class="btn-new" onclick="newPrompt()">Canviar exercici</button>
+    </div>
+    <div class="editor">
+        <h3>Escriu aquí el teu text</h3>
+        <textarea id="text" placeholder="Escriu aquí..." oninput="updateStats()"></textarea>
+        <div class="stats">
+            <span>Paraules: <strong id="words">0</strong></span>
+            <span>Caràcters: <strong id="chars">0</strong></span>
+        </div>
+    </div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const TYPES = {
+    descripcio: {
+        label: '📝 Descripció',
+        desc: 'Descriu com és una persona, un lloc o un objecte amb detall.',
+        guide: `
+            <h3>Estructura d'una descripció</h3>
+            <ol>
+                <li><strong>Introducció:</strong> presenta què (o qui) descriuràs en 1-2 frases.</li>
+                <li><strong>Aspecte general:</strong> la primera impressió que fa.</li>
+                <li><strong>Detalls concrets:</strong> parts, colors, textures, dimensions.</li>
+                <li><strong>Sensacions:</strong> què et fa sentir o què et recorda.</li>
+                <li><strong>Conclusió:</strong> una frase final que ressumeixi l'essència.</li>
+            </ol>
+            <h3>Consells</h3>
+            <ul>
+                <li>Utilitza els <strong>5 sentits</strong>: vista, oïda, olfacte, tacte, gust.</li>
+                <li>Evita adjectius buits com "bonic" o "guai": busca paraules més precises.</li>
+                <li>Compara: "blau com el mar", "alt com una torre".</li>
+            </ul>
+        `,
+        prompts: [
+            'Descriu la teva habitació: mobles, colors, olors, sons que s\'hi senten.',
+            'Descriu una persona important per a tu sense dir el seu nom.',
+            'Descriu el teu pla ideal per a una tarda d\'estiu.',
+            'Descriu un plat de menjar que t\'encanta: aspecte, aroma, textura, gust.',
+            'Descriu un lloc que et transmeti tranquil·litat.'
+        ]
+    },
+    narracio: {
+        label: '📖 Narració',
+        desc: 'Explica una història amb inici, nus i desenllaç.',
+        guide: `
+            <h3>Estructura clàssica (inici – nus – desenllaç)</h3>
+            <ol>
+                <li><strong>Plantejament:</strong> qui, on, quan. Presenta personatges i context.</li>
+                <li><strong>Complicació:</strong> un problema o conflicte apareix.</li>
+                <li><strong>Desenvolupament:</strong> els personatges intenten resoldre-ho.</li>
+                <li><strong>Clímax:</strong> el moment de més tensió.</li>
+                <li><strong>Desenllaç:</strong> com acaba tot.</li>
+            </ol>
+            <h3>Consells</h3>
+            <ul>
+                <li>Usa <strong>verbs d'acció</strong> (correr, saltar, descobrir).</li>
+                <li>Alterna <strong>diàleg i narració</strong> per dinamitzar.</li>
+                <li>Fes servir temps verbals consistents (tot en passat, o tot en present).</li>
+                <li>Comença amb una frase que enganxi. Evita "Hi havia una vegada" si vols ser més original.</li>
+            </ul>
+        `,
+        prompts: [
+            'Explica una aventura que vas viure el dia més estrany de la teva vida.',
+            'Un dia et lleves amb un superpoder inesperat. Què passa?',
+            'Inventa una història on un ocell parlant visiti la teva escola.',
+            'Relata un somni que t\'hagi impactat. Pot ser real o inventat.',
+            'Una carta arriba del futur: qui te l\'envia i què diu?'
+        ]
+    },
+    argumentacio: {
+        label: '⚖️ Argumentació',
+        desc: 'Defensa una opinió amb raons i exemples.',
+        guide: `
+            <h3>Estructura d'un text argumentatiu</h3>
+            <ol>
+                <li><strong>Tesi:</strong> la teva opinió, clarament formulada.</li>
+                <li><strong>Arguments a favor:</strong> 2-3 raons amb exemples o dades.</li>
+                <li><strong>Contraarguments:</strong> reconeix objeccions i les rebat.</li>
+                <li><strong>Conclusió:</strong> reforça la teva tesi amb nous matisos.</li>
+            </ol>
+            <h3>Connectors útils</h3>
+            <ul>
+                <li><strong>Afegir:</strong> a més, d'altra banda, també.</li>
+                <li><strong>Exemplificar:</strong> per exemple, posem per cas, com ara.</li>
+                <li><strong>Oposar:</strong> en canvi, tanmateix, però, tot i això.</li>
+                <li><strong>Concloure:</strong> per tant, en conclusió, en definitiva.</li>
+            </ul>
+        `,
+        prompts: [
+            'Els mòbils s\'haurien de permetre a l\'escola? Dona la teva opinió amb arguments.',
+            'És millor llegir un llibre o veure la versió en pel·lícula?',
+            'Els uniformes escolars: a favor o en contra?',
+            'La setmana hauria de tenir 4 dies laborals i 3 de festa?',
+            'Hauríem de deixar de menjar carn per protegir el planeta?'
+        ]
+    },
+    carta: {
+        label: '✉️ Carta / correu',
+        desc: 'Escriu una carta o correu formal o personal.',
+        guide: `
+            <h3>Estructura d'una carta</h3>
+            <ol>
+                <li><strong>Encapçalament:</strong> destinatari (Sr./Sra., nom, càrrec).</li>
+                <li><strong>Salutació:</strong> "Benvolgut/da...", "Hola...".</li>
+                <li><strong>Introducció:</strong> per què escrius (una frase).</li>
+                <li><strong>Cos:</strong> desenvolupa el motiu, pregunta o explicació.</li>
+                <li><strong>Tancament:</strong> "Cordialment", "Una abraçada", "Atentament".</li>
+                <li><strong>Signatura:</strong> el teu nom.</li>
+            </ol>
+            <h3>Formal vs informal</h3>
+            <ul>
+                <li><strong>Formal:</strong> tractament "vostè", sense abreviatures, vocabulari neutre.</li>
+                <li><strong>Informal:</strong> tractament "tu", emotes si s'escau, més proximitat.</li>
+            </ul>
+        `,
+        prompts: [
+            'Escriu una carta al teu jo del futur (d\'aquí 10 anys).',
+            'Carta formal a l\'ajuntament demanant una nova pista de bàsquet al teu barri.',
+            'Escriu a una amiga que fa temps que no veus per explicar-li les novetats.',
+            'Correu al director de l\'escola proposant una activitat nova.',
+            'Carta d\'agraïment a un professor/a que t\'ha marcat.'
+        ]
+    }
+};
+
+let current = 'descripcio';
+
+function renderPicker() {
+    const p = document.getElementById('picker');
+    p.innerHTML = '';
+    Object.keys(TYPES).forEach(k => {
+        const b = document.createElement('button');
+        b.className = 'type-btn' + (k === current ? ' active' : '');
+        b.textContent = TYPES[k].label;
+        b.onclick = () => { current = k; render(); newPrompt(); };
+        p.appendChild(b);
+    });
+}
+
+function render() {
+    renderPicker();
+    const t = TYPES[current];
+    document.getElementById('guide').innerHTML = `
+        <div class="guide-box">
+            <h2>${t.label.substring(2)}</h2>
+            <p class="desc">${t.desc}</p>
+            ${t.guide}
+        </div>
+    `;
+}
+
+function newPrompt() {
+    const prompts = TYPES[current].prompts;
+    document.getElementById('prompt').textContent = prompts[Math.floor(Math.random() * prompts.length)];
+}
+
+function updateStats() {
+    const text = document.getElementById('text').value;
+    document.getElementById('chars').textContent = text.length;
+    document.getElementById('words').textContent = text.trim() ? text.trim().split(/\s+/).length : 0;
+}
+
+render();
+newPrompt();
+</script>
+</body>
+</html>

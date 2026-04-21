@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compres - Finances</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .fin-nav { background: rgba(240,240,243, 0.85); backdrop-filter: blur(20px); padding: 12px 20px; display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 0; z-index: 200; }
+        [data-theme="dark"] .fin-nav { background: rgba(9, 9, 11, 0.75); }
+        .fin-nav a { padding: 8px 16px; border-radius: var(--radius-full); color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
+        .fin-nav a:hover { color: var(--text-primary); background: var(--bg-hover); }
+        .fin-nav a.active { background: var(--text-primary); color: var(--bg-base); font-weight: 600; }
+        .fin-nav a.home { color: #ca8a04; font-weight: 600; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 24px 20px; }
+        h1 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        h1 span { background: linear-gradient(135deg, #16a34a, #22c55e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px; }
+
+        .tabs { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .tab-btn { padding: 8px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 0.82rem; }
+        .tab-btn:hover { border-color: #16a34a; color: #16a34a; }
+        .tab-btn.active { background: #16a34a; color: #fff; border-color: #16a34a; }
+
+        .tip-card { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 22px; margin-bottom: 12px; }
+        .tip-card h3 { color: #16a34a; font-size: 1rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .tip-card h3 .num { background: #16a34a; color: #fff; padding: 2px 10px; border-radius: 10px; font-size: 0.78rem; }
+        .tip-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+        .tip-card p strong { color: var(--text-primary); }
+
+        .exercise { background: var(--bg-raised); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); padding: 24px; margin-top: 14px; }
+        .exercise h2 { color: var(--text-primary); font-size: 1.05rem; margin-bottom: 14px; text-align: center; }
+        .prompt { text-align: center; padding: 16px; background: var(--bg-base); border-radius: 10px; margin-bottom: 14px; font-size: 0.95rem; color: var(--text-primary); line-height: 1.7; }
+        .input-row { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+        .input-row input { padding: 10px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--bg-raised); color: var(--text-primary); font-size: 1rem; font-weight: 700; max-width: 140px; text-align: center; }
+        .input-row input:focus { outline: none; border-color: #16a34a; }
+        .btn { padding: 10px 20px; border-radius: var(--radius-full); border: none; font-weight: 700; cursor: pointer; font-size: 0.9rem; }
+        .btn-check { background: #16a34a; color: #fff; }
+        .btn-check:hover { background: #22c55e; }
+        .btn-new { background: var(--bg-raised); color: var(--text-primary); border: 1px solid var(--border-subtle); }
+        .btn-new:hover { border-color: #16a34a; color: #16a34a; }
+        .feedback { text-align: center; padding: 12px; border-radius: 10px; margin-top: 12px; font-weight: 600; display: none; }
+        .feedback.ok { background: rgba(34, 197, 94, 0.15); color: #16a34a; display: block; }
+        .feedback.ko { background: rgba(239, 68, 68, 0.15); color: #dc2626; display: block; }
+        .score { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="fin-nav">
+    <a href="../index.html" class="home">&#8592; Cursos</a>
+    <a href="index.html">Inici</a>
+    <a href="diner.html">Diner</a>
+    <a href="pressupost.html">Pressupost</a>
+    <a href="interes.html">Interès</a>
+    <a href="compres.html" class="active">Compres</a>
+</div>
+
+<div class="container">
+    <h1><span>Compres</span> intel·ligents</h1>
+    <p class="subtitle">Consells per comprar bé i exercicis de descomptes</p>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="show('tips')">Consells</button>
+        <button class="tab-btn" onclick="show('descomptes')">Càlcul de descomptes</button>
+        <button class="tab-btn" onclick="show('compara')">Compara preus</button>
+    </div>
+
+    <div id="content"></div>
+</div>
+
+<script src="../theme.js"></script>
+<script src="../auth.js"></script>
+<script>
+const TIPS = [
+    { n: 1, title: 'Pensa abans de comprar', body: 'Abans d\'una compra, pregunta\'t: <strong>Ho necessito de veritat?</strong> Espera 24 hores. Si encara t\'agrada, valora comprar-ho. Molts impulsos desapareixen.' },
+    { n: 2, title: 'Compara preus', body: 'El mateix producte pot costar molt diferent en llocs diferents. <strong>Mira 2-3 botigues</strong> abans de comprar. Fins i tot a internet: el primer resultat no sempre és el millor.' },
+    { n: 3, title: 'Marques blanques', body: 'Les marques del supermercat (Hacendado, Eroski, Carrefour...) solen costar un <strong>30-50% menys</strong> que marques famoses. Moltes vegades el fabricant és el mateix!' },
+    { n: 4, title: 'Cuidat amb els descomptes enganyosos', body: 'Un "<strong>50% de descompte!</strong>" pot ser mentida: potser han pujat primer el preu. Compara el preu final amb altres botigues, no només el % de descompte.' },
+    { n: 5, title: 'La publicitat manipula', body: 'Els anuncis fan que vulguis coses que no necessites. Demana\'t: <strong>Qui em diu que ho he de comprar? Per què?</strong> Sovint és pura publicitat.' },
+    { n: 6, title: 'Preu per unitat', body: 'A vegades el format gran no és el més barat. Calcula el <strong>preu per kg o per litre</strong> (sol estar a l\'etiqueta del supermercat, amb lletra petita). Compara per unitat.' },
+    { n: 7, title: 'No pots comprar tot el que vols', body: 'Si gastes tot el que tens, no pots estalviar. <strong>Regla 50/30/20:</strong> 50% necessitats, 30% oci, 20% estalvi.' }
+];
+
+let correct = 0, wrong = 0;
+let currentAnswer = 0;
+
+function show(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event?.target?.classList?.add('active');
+    const c = document.getElementById('content');
+    if (tab === 'tips') {
+        c.innerHTML = TIPS.map(t => `
+            <div class="tip-card">
+                <h3><span class="num">${t.n}</span> ${t.title}</h3>
+                <p>${t.body}</p>
+            </div>
+        `).join('');
+    } else if (tab === 'descomptes') {
+        c.innerHTML = `
+            <div class="exercise">
+                <h2>&#x1F3F7;&#xFE0F; Calcula el preu final</h2>
+                <div class="prompt" id="p"></div>
+                <div class="input-row">
+                    <input type="number" step="0.01" id="ans" placeholder="€" onkeyup="if(event.key==='Enter') checkDesc()">
+                    <button class="btn btn-check" onclick="checkDesc()">Comprovar</button>
+                    <button class="btn btn-new" onclick="newDesc()">Nou</button>
+                </div>
+                <div class="feedback" id="fb"></div>
+                <div class="score" id="sc">Encerts: ${correct} &bull; Errors: ${wrong}</div>
+            </div>
+        `;
+        newDesc();
+    } else {
+        c.innerHTML = `
+            <div class="exercise">
+                <h2>&#x1F50D; Quina opció és més barata?</h2>
+                <div class="prompt" id="p"></div>
+                <div id="opts"></div>
+                <div class="score" id="sc" style="margin-top:16px;">Encerts: ${correct} &bull; Errors: ${wrong}</div>
+            </div>
+        `;
+        newCompare();
+    }
+}
+
+function newDesc() {
+    const price = Math.round((10 + Math.random() * 90) * 100) / 100;
+    const disc = [10, 15, 20, 25, 30, 40, 50][Math.floor(Math.random() * 7)];
+    const final = Math.round(price * (1 - disc / 100) * 100) / 100;
+    currentAnswer = final;
+    document.getElementById('p').innerHTML = `Una cosa val <strong>${price.toFixed(2)} €</strong>.<br>Et fan un descompte del <strong>${disc}%</strong>.<br><br>Quant pagaràs? <strong>(en €)</strong>`;
+    document.getElementById('ans').value = '';
+    document.getElementById('ans').focus();
+    document.getElementById('fb').className = 'feedback';
+}
+
+function checkDesc() {
+    const v = parseFloat(document.getElementById('ans').value);
+    const fb = document.getElementById('fb');
+    if (Math.abs(v - currentAnswer) < 0.01) {
+        fb.className = 'feedback ok';
+        fb.textContent = `✓ Correcte! Són ${currentAnswer.toFixed(2)} €`;
+        correct++;
+    } else {
+        fb.className = 'feedback ko';
+        fb.textContent = `✗ No. La resposta era ${currentAnswer.toFixed(2)} €`;
+        wrong++;
+    }
+    document.getElementById('sc').textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+}
+
+function newCompare() {
+    const products = [
+        { name: 'Paquet de galetes', unit: 'g' },
+        { name: 'Ampolla de llet', unit: 'ml' },
+        { name: 'Bossa d\'arròs', unit: 'g' },
+        { name: 'Paquet de pasta', unit: 'g' },
+        { name: 'Ampolla de suc', unit: 'ml' }
+    ];
+    const p = products[Math.floor(Math.random() * products.length)];
+    const sizes = [[300, 500], [750, 1500], [500, 1000]][Math.floor(Math.random() * 3)];
+    const basePrice = 1 + Math.random() * 2.5;
+
+    // Option A: small, cheaper per total but more expensive per unit
+    const sizeA = sizes[0];
+    const priceA = Math.round(basePrice * 100) / 100;
+    // Option B: big, more total but cheaper per unit
+    const sizeB = sizes[1];
+    const priceB = Math.round((basePrice * 1.8 + Math.random() * 0.3) * 100) / 100;
+
+    const perUnitA = priceA / sizeA;
+    const perUnitB = priceB / sizeB;
+    const cheaper = perUnitA < perUnitB ? 'A' : 'B';
+
+    document.getElementById('p').innerHTML = `<strong>${p.name}</strong><br>Quina opció surt més barata per unitat?`;
+    const optsDiv = document.getElementById('opts');
+    optsDiv.innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <button onclick="checkComp('A','${cheaper}')" class="btn-new" style="padding:18px;border-radius:12px;border:2px solid var(--border-subtle);background:var(--bg-raised);cursor:pointer;font-weight:600;color:var(--text-primary);">
+                <div style="font-size:2rem;">🅰️</div>
+                <div style="font-size:0.9rem;margin-top:4px;">${sizeA} ${p.unit}</div>
+                <div style="font-size:1.2rem;color:#16a34a;margin-top:4px;">${priceA.toFixed(2)} €</div>
+            </button>
+            <button onclick="checkComp('B','${cheaper}')" class="btn-new" style="padding:18px;border-radius:12px;border:2px solid var(--border-subtle);background:var(--bg-raised);cursor:pointer;font-weight:600;color:var(--text-primary);">
+                <div style="font-size:2rem;">🅱️</div>
+                <div style="font-size:0.9rem;margin-top:4px;">${sizeB} ${p.unit}</div>
+                <div style="font-size:1.2rem;color:#16a34a;margin-top:4px;">${priceB.toFixed(2)} €</div>
+            </button>
+        </div>
+    `;
+}
+
+function checkComp(chosen, correctOpt) {
+    const sc = document.getElementById('sc');
+    if (chosen === correctOpt) { correct++; alert('✓ Correcte! Opció ' + correctOpt + ' és més barata per unitat.'); }
+    else { wrong++; alert('✗ No. Era l\'opció ' + correctOpt + '. Calcula preu/unitat, no el preu total!'); }
+    sc.textContent = `Encerts: ${correct} • Errors: ${wrong}`;
+    newCompare();
+}
+
+show('tips');
+</script>
+</body>
+</html>
